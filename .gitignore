@@ -5,3 +5,10 @@ CMakeFiles
 cmake_install.cmake
 Makefile
 *.TMP
+
+# Clion
+/.idea
+/cmake-build-debug
+
+# record movements
+movements.txt
