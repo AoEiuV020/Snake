@@ -20,8 +20,6 @@ public:
         SNAKE_BODY,
         SNAKE_HEAD,
         SNAKE_TAIL,
-        TEST_VISIT,
-        TEST_PATH
     };
 
     Point();
