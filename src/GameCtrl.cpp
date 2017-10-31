@@ -1,9 +1,6 @@
 #include "GameCtrl.h"
 #include "util/util.h"
-#include <stdexcept>
-#include <cstdio>
-#include <chrono>
-#include <cstdlib>
+
 #ifdef _WIN32
 #include <Windows.h>
 #endif
@@ -53,10 +50,6 @@ void GameCtrl::setRecordMovements(const bool b) {
     recordMovements = b;
 }
 
-void GameCtrl::setRunTest(const bool b) {
-    runTest = b;
-}
-
 void GameCtrl::setMapRow(const SizeType n) {
     mapRowCnt = n;
 }
@@ -68,9 +61,6 @@ void GameCtrl::setMapCol(const SizeType n) {
 int GameCtrl::run() {
     try {
         init();
-        if (runTest) {
-            test();
-        }
         while (runMainThread) {}
         return 0;
     } catch (const std::exception &e) {
@@ -161,12 +151,10 @@ void GameCtrl::writeMapToFile() const {
 void GameCtrl::init() {
     Console::clear();
     initMap();
-    if (!runTest) {
         initSnake();
         if (recordMovements) {
             initFiles();
         }
-    }
     startThreads();
 }
 
@@ -213,10 +201,8 @@ void GameCtrl::startThreads() {
     drawThread.detach();
     keyboardThread = std::thread(&GameCtrl::keyboard, this);
     keyboardThread.detach();
-    if (!runTest) {
         moveThread = std::thread(&GameCtrl::autoMove, this);
         moveThread.detach();
-    }
 }
 
 void GameCtrl::draw() {
@@ -255,34 +241,12 @@ void GameCtrl::drawMapContent() const {
                 case Point::Type::SNAKE_TAIL:
                     Console::writeWithColor("  ", ConsoleColor(BLUE, BLUE, true, true));
                     break;
-                case Point::Type::TEST_VISIT:
-                    drawTestPoint(point, ConsoleColor(BLUE, GREEN, true, true));
-                    break;
-                case Point::Type::TEST_PATH:
-                    drawTestPoint(point, ConsoleColor(BLUE, RED, true, true));
-                    break;
                 default:
                     break;
             }
         }
         Console::write("\n");
     }
-}
-
-void GameCtrl::drawTestPoint(const Point &p, const ConsoleColor &consoleColor) const {
-    string pointStr = "";
-    if (p.getDist() == Point::MAX_VALUE) {
-        pointStr = "In";
-    } else if (p.getDist() == EMPTY_VALUE) {
-        pointStr = "  ";
-    } else {
-        Point::ValueType dist = p.getDist();
-        pointStr = util::toString(p.getDist());
-        if (dist / 10 == 0) {
-            pointStr.insert(0, " ");
-        } 
-    }
-    Console::writeWithColor(pointStr, consoleColor);
 }
 
 void GameCtrl::keyboard() {
@@ -346,69 +310,4 @@ void GameCtrl::autoMove() {
     } catch (const std::exception &e) {
         exitGameErr(e.what());
     }
-}
-
-void GameCtrl::test() {
-    //testFood();
-    testSearch();
-    //testHamilton();
-}
-
-void GameCtrl::testFood() {
-    SizeType cnt = 0;
-    while (runMainThread && cnt++ < map->getSize()) {
-        map->createRandFood();
-        sleepFPS();
-    }
-    exitGame("testFood() finished.");
-}
-
-void GameCtrl::testSearch() {
-    if (mapRowCnt != 20 || mapColCnt != 20) {
-        throw std::range_error("GameCtrl.testSearch(): Require map size 20*20.");
-    }
-
-    list<Direction> path;
-    snake.setMap(map);
-
-    // Add walls for testing
-    for (int i = 4; i < 16; ++i) {
-        map->getPoint(Pos(i, 9)).setType(Point::Type::WALL);   // vertical
-        map->getPoint(Pos(4, i)).setType(Point::Type::WALL);   // horizontal #1
-        map->getPoint(Pos(15, i)).setType(Point::Type::WALL);  // horizontal #2
-    }
-   
-    Pos from(6, 7), to(14, 13);
-    snake.testMinPath(from, to, path);
-    //snake.testMaxPath(from, to, path);
-
-    // Print path info
-    string info = "Path from " + from.toString() + " to " + to.toString()
-        + " of length " + util::toString(path.size()) + ":\n";
-    for (const Direction &d : path) {
-        switch (d) {
-            case LEFT:
-                info += "L "; break;
-            case UP:
-                info += "U "; break;
-            case RIGHT:
-                info += "R "; break;
-            case DOWN:
-                info += "D "; break;
-            case NONE:
-            default:
-                info += "NONE "; break;
-        }
-    }
-    info += "\ntestSearch() finished.";
-    exitGame(info);
-}
-
-void GameCtrl::testHamilton() {
-    snake.setMap(map);
-    snake.addBody(Pos(1, 3));
-    snake.addBody(Pos(1, 2));
-    snake.addBody(Pos(1, 1));
-    snake.testHamilton();
-    exitGame("testHamilton() finished.");
 }

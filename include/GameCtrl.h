@@ -30,7 +30,6 @@ public:
     void setEnableHamilton(const bool enableHamilton_);
     void setMoveInterval(const long ms);
     void setRecordMovements(const bool b);
-    void setRunTest(const bool b);
     void setMapRow(const SizeType n);
     void setMapCol(const SizeType n);
 
@@ -53,7 +52,6 @@ private:
     bool enableHamilton = true;
     long moveInterval = 30;
     bool recordMovements = true;
-    bool runTest = false;
     SizeType mapRowCnt = 10;
     SizeType mapColCnt = 10;
 
@@ -124,7 +122,6 @@ private:
     */
     void draw();
     void drawMapContent() const;
-    void drawTestPoint(const Point &p, const ConsoleColor &consoleColor) const;
 
     /*
     Keyboard thread.
@@ -137,13 +134,6 @@ private:
     */
     void autoMove();
 
-    /*
-    Test functions.
-    */
-    void test();
-    void testFood();
-    void testSearch();
-    void testHamilton();
 };
 
 #endif

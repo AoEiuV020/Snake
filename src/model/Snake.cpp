@@ -3,7 +3,6 @@
 #include "GameCtrl.h"
 #include <queue>
 #include <algorithm>
-#include <stdexcept>
 
 using std::vector;
 using std::list;
@@ -28,41 +27,6 @@ Direction Snake::getDirection() const {
 
 bool Snake::isDead() const {
     return dead;
-}
-
-void Snake::testMinPath(const Pos &from, const Pos &to, std::list<Direction> &path) {
-    map->setTestEnabled(true);
-    findMinPath(from, to, path);
-    map->showPath(from, path);
-    map->setTestEnabled(false);
-}
-
-void Snake::testMaxPath(const Pos &from, const Pos &to, std::list<Direction> &path) {
-    map->setTestEnabled(true);
-    findMaxPath(from, to, path);
-    Pos cur = from;
-    for (const Direction d : path) {
-        map->getPoint(cur).setDist(GameCtrl::EMPTY_VALUE);
-        cur = cur.getAdj(d);
-    }
-    map->getPoint(from).setDist(0);
-    map->getPoint(to).setDist(1);
-    map->showPath(from, path);
-    map->setTestEnabled(false);
-}
-
-void Snake::testHamilton() {
-    map->setTestEnabled(true);
-    enableHamilton();
-    SizeType row = map->getRowCount(), col = map->getColCount();
-    for (SizeType i = 1; i < row - 1; ++i) {
-        for (SizeType j = 1; j < col - 1; ++j) {
-            Pos pos = Pos(i, j);
-            Point &point = map->getPoint(pos);
-            point.setDist(point.getIndex());
-            map->showPos(pos);
-        }
-    }
 }
 
 void Snake::addBody(const Pos &p) {
@@ -255,7 +219,6 @@ void Snake::findMinPath(const Pos &from, const Pos &to, list<Direction> &path) {
         Pos curPos = openList.front();
         const Point &curPoint = map->getPoint(curPos);
         openList.pop();
-        map->showPos(curPos);
         if (curPos == to) {
             buildPath(from, to, path);
             break;
@@ -284,10 +247,7 @@ void Snake::findMinPath(const Pos &from, const Pos &to, list<Direction> &path) {
 
 void Snake::findMaxPath(const Pos &from, const Pos &to, list<Direction> &path) {
     // Get the shortest path
-    bool oriEnabled = map->isTestEnabled();
-    map->setTestEnabled(false);
     findMinPath(from, to, path);
-    map->setTestEnabled(oriEnabled);
     // Init
     SizeType row = map->getRowCount(), col = map->getColCount();
     for (SizeType i = 1; i < row - 1; ++i) {
@@ -398,11 +358,8 @@ void Snake::buildHamilton() {
     Point &bodyPoint = map->getPoint(bodyPos);
     map->getPoint(*(++bodies.begin())).setType(Point::Type::WALL);
     // Get the longest path
-    bool oriEnabled = map->isTestEnabled();
-    map->setTestEnabled(false);
     list<Direction> maxPath;
     findMaxPathToTail(maxPath);
-    map->setTestEnabled(oriEnabled);
     bodyPoint.setType(Point::Type::SNAKE_BODY);
     // Initialize the first three incides of the cycle
     Point::ValueType index = 0;

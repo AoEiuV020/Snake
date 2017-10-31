@@ -19,13 +19,6 @@ public:
     bool isDead() const;
 
     /*
-    Testing methods.
-    */
-    void testMinPath(const Pos &from, const Pos &to, std::list<Direction> &path);
-    void testMaxPath(const Pos &from, const Pos &to, std::list<Direction> &path);
-    void testHamilton();
-
-    /*
     Add a new snake body.
 
     @param p The position of the new bodies

@@ -44,14 +44,6 @@ Map::SizeType Map::getSize() const {
     return size;
 }
 
-void Map::setTestEnabled(const bool e) {
-    testEnabled = e;
-}
-
-bool Map::isTestEnabled() const {
-    return testEnabled;
-}
-
 bool Map::isInside(const Pos &p) const {
     return p.getX() > 0 && p.getY() > 0
         && p.getX() < getRowCount() - 1
@@ -121,28 +113,6 @@ Map::SizeType Map::distance(const Pos &from, const Pos &to) {
     SizeType dx = fromX > toX ? fromX - toX : toX - fromX;
     SizeType dy = fromY > toY ? fromY - toY : toY - fromY;
     return dx + dy;
-}
-
-void Map::testPos(const Pos &p, const Point::Type type) {
-    getPoint(p).setType(type);
-    util::sleep(TEST_INTERVAL);
-}
-
-void Map::showPos(const Pos &p) {
-    if (testEnabled) {
-        testPos(p, Point::Type::TEST_VISIT);
-    }
-}
-
-void Map::showPath(const Pos &start, const list<Direction> &path) {
-    if (testEnabled) {
-        Pos tmp = start;
-        for (const Direction &d : path) {
-            testPos(tmp, Point::Type::TEST_PATH);
-            tmp = tmp.getAdj(d);
-        }
-        testPos(tmp, Point::Type::TEST_PATH);
-    }
 }
 
 vector<Pos> Map::getEmptyPoints() const {
