@@ -2,6 +2,7 @@
 // Created by AoEiuV020 on 2017.10.31-15:41:44.
 //
 
+#include <ai/SnakeAI.h>
 #include "presenter/SnakePresenter.h"
 #include "view/ConsoleView.h"
 
@@ -105,6 +106,7 @@ void SnakePresenter::init() {
         Console::clear();
         initMap();
         initSnake();
+        initAI();
         view->draw(map);
         if (recordMovements) {
         }
@@ -133,8 +135,14 @@ void SnakePresenter::initSnake() {
     snake.addBody(Pos(1, 3));
     snake.addBody(Pos(1, 2));
     snake.addBody(Pos(1, 1));
+}
+
+void SnakePresenter::initAI() {
+    snakeAI = new SnakeAI();
+    snakeAI->setMap(map);
+    snakeAI->setSnake(&snake);
     if (enableHamilton) {
-        snake.enableHamilton();
+        snakeAI->enableHamilton();
     }
 }
 
@@ -156,5 +164,6 @@ int SnakePresenter::getExitCode() {
 }
 
 void SnakePresenter::decideNext() {
-    snake.decideNext();
+    snakeAI->decideNext(&snake);
 }
+

@@ -3,6 +3,8 @@
 //
 
 #include <view/FileView.h>
+#include <ai/SnakeAI.h>
+#include <util/util.h>
 #include "Game.h"
 #include "presenter/SnakePresenter.h"
 #include "view/ConsoleView.h"
@@ -42,14 +44,14 @@ int Game::launch() {
     viewWrapper->setPresenter(presenter);
     presenter->attach(viewWrapper);
 
-    presenter->init();
+    // Set map's size(including boundaries). Default is 10*10. Minimum is 5*5.
+    presenter->setMapRow(10);
+    presenter->setMapCol(10);
 
     // Set whether to use a hamiltonian cycle to guide the AI. Default is true.
     presenter->setEnableHamilton(true);
 
-    // Set map's size(including boundaries). Default is 10*10. Minimum is 5*5.
-    presenter->setMapRow(10);
-    presenter->setMapCol(10);
+    presenter->init();
 
     // 开始绘图，
     view->start();

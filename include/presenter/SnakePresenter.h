@@ -30,7 +30,6 @@ public:
 
     void attach(SnakeView *view_);
 
-
     void setEnableHamilton(const bool enableHamilton_);
 
     void setMapRow(const SizeType n);
@@ -110,6 +109,9 @@ private:
     void initSnake();
 
     int exitCode;
+    SnakeAI *snakeAI;
+
+    void initAI();
 };
 
 
