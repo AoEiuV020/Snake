@@ -50,7 +50,7 @@ void SnakeAI::buildHamilton() {
     }
 }
 
-void SnakeAI::decideNext(Snake *snake) {
+void SnakeAI::decideNext() {
     if (snake->isDead()) {
         return;
     } else if (!map->hasFood()) {

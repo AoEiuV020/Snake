@@ -16,7 +16,7 @@ public:
 
     void setMap(Map *map_);
 
-    void decideNext(Snake *snake);
+    void decideNext();
 
     void setSnake(Snake *snake_);
 

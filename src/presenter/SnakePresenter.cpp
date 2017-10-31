@@ -196,7 +196,7 @@ int SnakePresenter::getExitCode() {
 }
 
 void SnakePresenter::decideNext() {
-    snakeAI->decideNext(&snake);
+    snakeAI->decideNext();
 }
 
 void SnakePresenter::pauseToggle() {
