@@ -48,8 +48,36 @@ void SnakePresenter::setMapCol(const SizeType n) {
     mapColCnt = n;
 }
 
+void SnakePresenter::setMoveInterval(long moveInterval_) {
+    moveInterval = moveInterval_;
+}
+
+void SnakePresenter::setEnableAI(bool enableAI_) {
+    enableAI = enableAI_;
+}
+
 void SnakePresenter::run() {
+    runMoveThread = true;
+    moveThread = std::thread(&SnakePresenter::autoMoveCallable, this);
+    moveThread.detach();
+
     while (runMainThread) {}
+}
+
+void SnakePresenter::autoMoveCallable() {
+    try {
+        while (runMoveThread) {
+            util::sleep(moveInterval);
+            if (!pause) {
+                if (enableAI) {
+                    decideNext();
+                }
+                moveSnake();
+            }
+        }
+    } catch (const std::exception &e) {
+        exitGameErr(e.what());
+    }
 }
 
 void SnakePresenter::exitGame() {
@@ -59,13 +87,17 @@ void SnakePresenter::exitGame() {
 void SnakePresenter::exitGame(const std::string &msg) {
     mutexExit.lock();
     if (runMainThread) {
+        // 游戏结果，
         util::sleep(100);
+        // 自动移动线程停止，
+        runMoveThread = false;
+        // 停止绘图，
         view->stop();
         util::sleep(100);
         printMsg(msg);
     }
-    mutexExit.unlock();
     runMainThread = false;
+    mutexExit.unlock();
 }
 
 void SnakePresenter::exitGameErr(const std::string &err) {
@@ -147,15 +179,15 @@ void SnakePresenter::initAI() {
 }
 
 void SnakePresenter::move(Direction direction) {
-    snake.setDirection(direction);
-    moveSnake();  // Accelerate
-}
-
-void SnakePresenter::setDirection(Direction direction) {
-    if (snake.getDirection() == direction) {
-        moveSnake();  // Accelerate
-    } else {
+    if (pause) {
         snake.setDirection(direction);
+        moveSnake();  // Accelerate
+    } else if (!enableAI) {
+        if (snake.getDirection() == direction) {
+            moveSnake();  // Accelerate
+        } else {
+            snake.setDirection(direction);
+        }
     }
 }
 
@@ -165,5 +197,9 @@ int SnakePresenter::getExitCode() {
 
 void SnakePresenter::decideNext() {
     snakeAI->decideNext(&snake);
+}
+
+void SnakePresenter::pauseToggle() {
+    pause = !pause;
 }
 

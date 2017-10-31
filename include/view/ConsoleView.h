@@ -21,14 +21,10 @@ public:
 
     void setFPS(double fps_);
 
-    void setMoveInterval(int moveInterval_);
-
-    void setEnableAI(bool enableAI_);
-
 private:
     void drawCallable();
 
-    volatile bool runSubThread = false;   // Switch of sub-threads
+    volatile bool gameRunning = false;   // Switch of sub-threads
 
     void drawMapContent();
 
@@ -38,14 +34,9 @@ private:
 
     std::thread drawThread;
     std::thread keyboardThread;  // Thread to receive keyboard instructions
-    std::thread moveThread;      // Thread to move the snake
     void keyboardCallable();
 
-    void autoMoveCallable();
-
-    long moveInterval = 30;
     volatile bool pause = false;  // Control pause/resume game
-    bool enableAI;
 
     void keyboardMove(Direction direction);
 };

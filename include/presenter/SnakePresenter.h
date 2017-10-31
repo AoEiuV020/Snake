@@ -60,16 +60,13 @@ public:
 
     int getExitCode();
 
-    void setDirection(Direction direction);
-
-    /*
-    Move the snake and check if the game is over.
-    */
-    void moveSnake();
-
-    void decideNext();
-
     void move(Direction direction);
+
+    void setMoveInterval(long moveInterval_);
+
+    void setEnableAI(bool enableAI_);
+
+    void pauseToggle();
 
 private:
     static const std::string MSG_BAD_ALLOC;
@@ -112,6 +109,21 @@ private:
     SnakeAI *snakeAI;
 
     void initAI();
+
+    void decideNext();
+
+    /*
+    Move the snake and check if the game is over.
+    */
+    void moveSnake();
+
+    void autoMoveCallable();
+
+    std::thread moveThread;      // Thread to move the snake
+    volatile bool runMoveThread = false;   // Switch of sub-threads
+    long moveInterval = 30;
+    bool pause;
+    bool enableAI;
 };
 
 

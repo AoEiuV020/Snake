@@ -16,8 +16,6 @@ Game *Game::getInstance() {
 }
 
 int Game::launch() {
-    SnakePresenter *presenter = SnakePresenter::getInstance();
-
     SnakeView *view;
     auto *viewWrapper = new ViewWrapper();
     view = viewWrapper;
@@ -27,29 +25,31 @@ int Game::launch() {
     // Set FPS. Default is 60.0
     consoleView->setFPS(60.0);
 
-    // Set the interval time between each snake's movement. Default is 30 ms.
-    // To play classic snake presenter, set to 150 ms is perfect.
-    consoleView->setMoveInterval(30);
-
-    // Set whether to enable the snake AI. Default is true.
-    consoleView->setEnableAI(true);
-
     viewWrapper->addView(consoleView);
 
 
-    auto *fileView = new FileView();
-    viewWrapper->addView(fileView);
+//    auto *fileView = new FileView();
+//    viewWrapper->addView(fileView);
 
 
-    viewWrapper->setPresenter(presenter);
-    presenter->attach(viewWrapper);
+    SnakePresenter *presenter = SnakePresenter::getInstance();
 
     // Set map's size(including boundaries). Default is 10*10. Minimum is 5*5.
     presenter->setMapRow(10);
     presenter->setMapCol(10);
 
+    // Set the interval time between each snake's movement. Default is 30 ms.
+    // To play classic snake presenter, set to 150 ms is perfect.
+    presenter->setMoveInterval(30);
+
+    // Set whether to enable the snake AI. Default is true.
+    presenter->setEnableAI(true);
+
     // Set whether to use a hamiltonian cycle to guide the AI. Default is true.
     presenter->setEnableHamilton(true);
+
+    viewWrapper->setPresenter(presenter);
+    presenter->attach(viewWrapper);
 
     presenter->init();
 

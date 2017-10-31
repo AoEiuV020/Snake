@@ -18,7 +18,7 @@ void ConsoleView::printMsg(const std::string &msg) {
 
 void ConsoleView::drawCallable() {
     try {
-        while (runSubThread) {
+        while (gameRunning) {
             drawMapContent();
             sleepFPS();
         }
@@ -62,7 +62,7 @@ void ConsoleView::drawMapContent() {
 
 void ConsoleView::keyboardCallable() {
     try {
-        while (runSubThread) {
+        while (gameRunning) {
             if (Console::kbhit()) {
                 switch (Console::getch()) {
                     case 'w':
@@ -78,7 +78,7 @@ void ConsoleView::keyboardCallable() {
                         keyboardMove(Direction::RIGHT);
                         break;
                     case ' ':
-                        pause = !pause;
+                        presenter->pauseToggle();
                         break;
                     case 27:  // Esc
                         presenter->exitGame();
@@ -93,56 +93,26 @@ void ConsoleView::keyboardCallable() {
     }
 }
 
-void ConsoleView::autoMoveCallable() {
-    try {
-        while (runSubThread) {
-            util::sleep(moveInterval);
-            if (!pause) {
-                if (enableAI) {
-                    presenter->decideNext();
-                }
-                presenter->moveSnake();
-            }
-        }
-    } catch (const std::exception &e) {
-        presenter->exitGameErr(e.what());
-    }
-}
-
 void ConsoleView::sleepFPS() {
     util::sleep((long)((1.0 / fps) * 1000));
 }
 
 void ConsoleView::start() {
-    runSubThread = true;
+    gameRunning = true;
     drawThread = std::thread(&ConsoleView::drawCallable, this);
     drawThread.detach();
     keyboardThread = std::thread(&ConsoleView::keyboardCallable, this);
     keyboardThread.detach();
-    moveThread = std::thread(&ConsoleView::autoMoveCallable, this);
-    moveThread.detach();
 }
 
 void ConsoleView::setFPS(double fps_) {
     fps = fps_;
 }
 
-void ConsoleView::setMoveInterval(int moveInterval_) {
-    moveInterval = moveInterval_;
-}
-
 void ConsoleView::stop() {
-    runSubThread = false;
-}
-
-void ConsoleView::setEnableAI(bool enableAI_) {
-    enableAI = enableAI_;
+    gameRunning = false;
 }
 
 void ConsoleView::keyboardMove(Direction direction) {
-    if (pause) {
-        presenter->move(direction);
-    } else if (!enableAI) {
-        presenter->setDirection(direction);
-    }
+    presenter->move(direction);
 }
