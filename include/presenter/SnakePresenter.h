@@ -77,7 +77,6 @@ private:
     SnakeView *view;
 
     bool enableHamilton = true;
-    bool recordMovements = true;
     SizeType mapRowCnt = 10;
     SizeType mapColCnt = 10;
 

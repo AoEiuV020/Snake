@@ -119,8 +119,6 @@ void SnakePresenter::moveSnake() {
     } else {
         try {
             snake.move();
-            if (recordMovements && snake.getDirection() != NONE) {
-            }
             if (!map->hasFood()) {
                 map->createRandFood();
             }
@@ -140,8 +138,6 @@ void SnakePresenter::init() {
         initSnake();
         initAI();
         view->draw(map);
-        if (recordMovements) {
-        }
     } catch (const std::exception &e) {
         exitGameErr(e.what());
         exitCode = -1;
