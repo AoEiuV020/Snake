@@ -18,17 +18,12 @@ const string SnakePresenter::MSG_BAD_ALLOC = "Not enough memory to run the game.
 const string SnakePresenter::MSG_LOSE = "Oops! You lose!";
 const string SnakePresenter::MSG_WIN = "Congratulations! You Win!";
 const string SnakePresenter::MSG_ESC = "Game ended.";
-const string SnakePresenter::MAP_INFO_FILENAME = "movements.txt";
 
 SnakePresenter::SnakePresenter() {}
 
 SnakePresenter::~SnakePresenter() {
     delete map;
     map = nullptr;
-    if (movementFile) {
-        fclose(movementFile);
-        movementFile = nullptr;
-    }
 }
 
 SnakePresenter *SnakePresenter::getInstance() {
@@ -36,16 +31,12 @@ SnakePresenter *SnakePresenter::getInstance() {
     return &instance;
 }
 
-void SnakePresenter::attach(ConsoleView *view_) {
+void SnakePresenter::attach(SnakeView *view_) {
     view = view_;
 }
 
 void SnakePresenter::setEnableHamilton(const bool enableHamilton_) {
     enableHamilton = enableHamilton_;
-}
-
-void SnakePresenter::setRecordMovements(const bool b) {
-    recordMovements = b;
 }
 
 void SnakePresenter::setMapRow(const SizeType n) {
@@ -96,7 +87,6 @@ void SnakePresenter::moveSnake() {
         try {
             snake.move();
             if (recordMovements && snake.getDirection() != NONE) {
-                writeMapToFile();
             }
             if (!map->hasFood()) {
                 map->createRandFood();
@@ -110,41 +100,6 @@ void SnakePresenter::moveSnake() {
     }
 }
 
-void SnakePresenter::writeMapToFile() const {
-    if (!movementFile) {
-        return;
-    }
-    SizeType rows = map->getRowCount(), cols = map->getColCount();
-    for (SizeType i = 0; i < rows; ++i) {
-        for (SizeType j = 0; j < cols; ++j) {
-            switch (map->getPoint(Pos(i, j)).getType()) {
-                case Point::Type::EMPTY:
-                    fwrite("  ", sizeof(char), 2, movementFile);
-                    break;
-                case Point::Type::WALL:
-                    fwrite("# ", sizeof(char), 2, movementFile);
-                    break;
-                case Point::Type::FOOD:
-                    fwrite("F ", sizeof(char), 2, movementFile);
-                    break;
-                case Point::Type::SNAKE_HEAD:
-                    fwrite("H ", sizeof(char), 2, movementFile);
-                    break;
-                case Point::Type::SNAKE_BODY:
-                    fwrite("B ", sizeof(char), 2, movementFile);
-                    break;
-                case Point::Type::SNAKE_TAIL:
-                    fwrite("T ", sizeof(char), 2, movementFile);
-                    break;
-                default:
-                    break;
-            }
-        }
-        fwrite("\n", sizeof(char), 1, movementFile);
-    }
-    fwrite("\n", sizeof(char), 1, movementFile);
-}
-
 void SnakePresenter::init() {
     try {
         Console::clear();
@@ -152,7 +107,6 @@ void SnakePresenter::init() {
         initSnake();
         view->draw(map);
         if (recordMovements) {
-            initFiles();
         }
     } catch (const std::exception &e) {
         exitGameErr(e.what());
@@ -181,19 +135,6 @@ void SnakePresenter::initSnake() {
     snake.addBody(Pos(1, 1));
     if (enableHamilton) {
         snake.enableHamilton();
-    }
-}
-
-void SnakePresenter::initFiles() {
-    movementFile = fopen(MAP_INFO_FILENAME.c_str(), "w");
-    if (!movementFile) {
-        throw std::runtime_error("SnakePresenter.initFiles(): Fail to open file: " + MAP_INFO_FILENAME);
-    } else {
-        // Write content description to the file
-        string str = "Content description:\n";
-        str += "#: wall\nH: snake head\nB: snake body\nT: snake tail\nF: food\n\n";
-        str += "Movements:\n\n";
-        fwrite(str.c_str(), sizeof(char), str.length(), movementFile);
     }
 }
 

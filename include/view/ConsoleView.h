@@ -5,7 +5,6 @@
 #ifndef SNAKE_CONSOLEVIEW_H
 #define SNAKE_CONSOLEVIEW_H
 
-#include "model/Map.h"
 #include "view/SnakeView.h"
 #include <thread>
 
@@ -14,25 +13,19 @@ class SnakePresenter;
 class ConsoleView : public SnakeView {
 
 public:
-    void start();
-    void draw(Map *map);
+    void start() override;
 
-    void printMsg(const std::string &msg);
+    void stop() override;
+
+    void printMsg(const std::string &msg) override;
 
     void setFPS(double fps_);
-
-    void setPresenter(SnakePresenter *presenter_);
-
-    void stop();
 
     void setMoveInterval(int moveInterval_);
 
     void setEnableAI(bool enableAI_);
 
 private:
-    Map *map;
-    SnakePresenter *presenter;
-
     void drawCallable();
 
     volatile bool runSubThread = false;   // Switch of sub-threads

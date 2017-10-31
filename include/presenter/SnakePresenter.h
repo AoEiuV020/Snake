@@ -10,7 +10,7 @@
 #include <thread>
 #include <mutex>
 
-class ConsoleView;
+class SnakeView;
 
 /*
 Game controller.
@@ -28,12 +28,10 @@ public:
     */
     static SnakePresenter *getInstance();
 
-    void attach(ConsoleView *view_);
+    void attach(SnakeView *view_);
 
 
     void setEnableHamilton(const bool enableHamilton_);
-
-    void setRecordMovements(const bool b);
 
     void setMapRow(const SizeType n);
 
@@ -79,9 +77,8 @@ private:
     static const std::string MSG_LOSE;
     static const std::string MSG_WIN;
     static const std::string MSG_ESC;
-    static const std::string MAP_INFO_FILENAME;
 
-    ConsoleView *view;
+    SnakeView *view;
 
     bool enableHamilton = true;
     bool recordMovements = true;
@@ -96,8 +93,6 @@ private:
     std::mutex mutexMove;  // Mutex of moveSnake()
     std::mutex mutexExit;  // Mutex of exitGame()
 
-    FILE *movementFile = nullptr;  // File to save snake movements
-
     SnakePresenter();
 
     /*
@@ -110,16 +105,9 @@ private:
     */
     void printMsg(const std::string &msg);
 
-    /*
-    Write the map content to file.
-    */
-    void writeMapToFile() const;
-
     void initMap();
 
     void initSnake();
-
-    void initFiles();
 
     int exitCode;
 };

@@ -7,10 +7,6 @@
 #include "view/ConsoleView.h"
 #include "presenter/SnakePresenter.h"
 
-void ConsoleView::draw(Map *map_) {
-    map = map_;
-}
-
 void ConsoleView::printMsg(const std::string &msg) {
     int mapRowCnt = 0;
     if (map != nullptr) {
@@ -133,11 +129,6 @@ void ConsoleView::setFPS(double fps_) {
 
 void ConsoleView::setMoveInterval(int moveInterval_) {
     moveInterval = moveInterval_;
-}
-
-void ConsoleView::setPresenter(SnakePresenter *presenter_) {
-    presenter = presenter_;
-    presenter->attach(this);
 }
 
 void ConsoleView::stop() {
