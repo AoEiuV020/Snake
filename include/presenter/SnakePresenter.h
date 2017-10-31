@@ -1,36 +1,42 @@
-#ifndef SNAKE_GAMECTRL_H_
-#define SNAKE_GAMECTRL_H_
+//
+// Created by AoEiuV020 on 2017.10.31-15:41:44.
+//
+
+#ifndef SNAKE_SNAKEPRESENTER_H
+#define SNAKE_SNAKEPRESENTER_H
 
 #include "model/Snake.h"
 #include "util/Console.h"
 #include <thread>
 #include <mutex>
 
+class ConsoleView;
+
 /*
 Game controller.
 */
-class GameCtrl {
+class SnakePresenter {
 public:
     typedef Map::SizeType SizeType;
 
     static const Point::ValueType EMPTY_VALUE = 99999;
 
-    ~GameCtrl();
+    ~SnakePresenter();
 
     /*
     Return the only instance.
     */
-    static GameCtrl* getInstance();
+    static SnakePresenter *getInstance();
 
-    /*
-    Game configuration setters.
-    */
-    void setFPS(const double fps_);
-    void setEnableAI(const bool enableAI_);
+    void attach(ConsoleView *view_);
+
+
     void setEnableHamilton(const bool enableHamilton_);
-    void setMoveInterval(const long ms);
+
     void setRecordMovements(const bool b);
+
     void setMapRow(const SizeType n);
+
     void setMapCol(const SizeType n);
 
     /*
@@ -38,7 +44,35 @@ public:
 
     @return The exit status of the program.
     */
-    int run();
+    void run();
+
+    /*
+    Print an error message and exit the game.
+    */
+    void exitGameErr(const std::string &err);
+
+    /**
+     * 正常退出游戏，
+     */
+    void exitGame();
+
+    /*
+    Initialize.
+    */
+    void init();
+
+    int getExitCode();
+
+    void setDirection(Direction direction);
+
+    /*
+    Move the snake and check if the game is over.
+    */
+    void moveSnake();
+
+    void decideNext();
+
+    void move(Direction direction);
 
 private:
     static const std::string MSG_BAD_ALLOC;
@@ -47,10 +81,9 @@ private:
     static const std::string MSG_ESC;
     static const std::string MAP_INFO_FILENAME;
 
-    double fps = 60.0;
-    bool enableAI = true;
+    ConsoleView *view;
+
     bool enableHamilton = true;
-    long moveInterval = 30;
     bool recordMovements = true;
     SizeType mapRowCnt = 10;
     SizeType mapColCnt = 10;
@@ -58,26 +91,14 @@ private:
     Map *map = nullptr;
     Snake snake;
 
-    volatile bool pause = false;  // Control pause/resume game
-
     volatile bool runMainThread = true;  // Switch of the main thread
-    volatile bool runSubThread = true;   // Switch of sub-threads
-
-    std::thread drawThread;      // Thread to draw the map
-    std::thread keyboardThread;  // Thread to receive keyboard instructions
-    std::thread moveThread;      // Thread to move the snake
 
     std::mutex mutexMove;  // Mutex of moveSnake()
     std::mutex mutexExit;  // Mutex of exitGame()
 
     FILE *movementFile = nullptr;  // File to save snake movements
 
-    GameCtrl();
-
-    /*
-    Sleep for a few time according to FPS.
-    */
-    void sleepFPS() const;
+    SnakePresenter();
 
     /*
     Print a message and exit the game.
@@ -85,55 +106,23 @@ private:
     void exitGame(const std::string &msg);
 
     /*
-    Print an error message and exit the game.
-    */
-    void exitGameErr(const std::string &err);
-
-    /*
     Print a message to the terminal.
     */
     void printMsg(const std::string &msg);
-
-    /*
-    Move the snake and check if the game is over.
-    */
-    void moveSnake();
 
     /*
     Write the map content to file.
     */
     void writeMapToFile() const;
 
-    /*
-    Initialize.
-    */
-    void init();
     void initMap();
+
     void initSnake();
+
     void initFiles();
 
-    /*
-    Start all threads.
-    */
-    void startThreads();
-
-    /*
-    Draw thread.
-    */
-    void draw();
-    void drawMapContent() const;
-
-    /*
-    Keyboard thread.
-    */
-    void keyboard();
-    void keyboardMove(Snake &s, const Direction d);
-
-    /*
-    Move thread
-    */
-    void autoMove();
-
+    int exitCode;
 };
 
-#endif
+
+#endif //SNAKE_SNAKEPRESENTER_H

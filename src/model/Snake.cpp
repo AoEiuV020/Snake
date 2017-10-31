@@ -1,6 +1,5 @@
 #include "model/Snake.h"
 #include "util/util.h"
-#include "GameCtrl.h"
 #include <queue>
 #include <algorithm>
 
