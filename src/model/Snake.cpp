@@ -41,44 +41,34 @@ void Snake::addBody(const Pos &p) {
     bodies.push_back(p);
 }
 
-void Snake::move() {
-    if (isDead() || direc == NONE) {
-        return;
-    }
+void Snake::move(bool eatenFood) {
     map->getPoint(getHead()).setType(Point::Type::SNAKE_BODY);
     Pos newHead = getHead().getAdj(direc);
     bodies.push_front(newHead);
-    if (!map->isSafe(newHead)) {
-        dead = true;
-    } else {
-        if (map->getPoint(newHead).getType() != Point::Type::FOOD) {
-            removeTail();
-        } else {
-            map->removeFood();
-        }
+    if (!eatenFood) {
+        removeTail();
     }
-    map->getPoint(newHead).setType(Point::Type::SNAKE_HEAD);
+    map->getPoint(newHead).setType(Point::SNAKE_HEAD);
 }
 
-void Snake::move(const std::list<Direction> &path) {
-    for (const Direction &d : path) {
-        setDirection(d);
-        move();
-    }
-}
-
-const Pos& Snake::getHead() const {
+const Pos &Snake::getHead() const {
     return *bodies.begin();
 }
 
-const Pos& Snake::getTail() const {
+const Pos &Snake::getTail() const {
     return *bodies.rbegin();
 }
 
 void Snake::removeTail() {
-    map->getPoint(getTail()).setType(Point::Type::EMPTY);
+    if (map->getPoint(getTail()).getType() == Point::Type::SNAKE_TAIL) {
+        map->getPoint(getTail()).setType(Point::Type::EMPTY);
+    }
     bodies.pop_back();
     if (bodies.size() > 1) {
         map->getPoint(getTail()).setType(Point::Type::SNAKE_TAIL);
     }
+}
+
+void Snake::setDead(bool isDead) {
+    dead = isDead;
 }

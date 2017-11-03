@@ -38,3 +38,9 @@ void ViewWrapper::printMsg(const std::string &msg) {
         view->printMsg(msg);
     }
 }
+
+void ViewWrapper::onScoreChanged(int score) {
+    for (auto &view : viewList) {
+        view->onScoreChanged(score);
+    }
+}

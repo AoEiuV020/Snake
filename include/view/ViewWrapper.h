@@ -27,8 +27,10 @@ public:
 
     void printMsg(const std::string &msg) override;
 
+    void onScoreChanged(int score) override;
+
 private:
-    std::vector<SnakeView*> viewList;
+    std::vector<SnakeView *> viewList;
 };
 
 

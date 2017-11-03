@@ -23,10 +23,21 @@ public:
 
     virtual void printMsg(const std::string &msg);
 
+    virtual void onScoreChanged(int score_);
+
 protected:
     Map *map = nullptr;
     SnakePresenter *presenter = nullptr;
 
+    /**
+     * 标记当前的map是否已经绘制，避免重复绘制，
+     */
+    bool drown;
+
+    /**
+     * 缓存得分，
+     */
+    int score;
 };
 
 

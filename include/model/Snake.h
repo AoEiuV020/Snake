@@ -29,14 +29,16 @@ public:
     void addBody(const Pos &p);
 
     /*
-    Move the snake at current direction.
-    */
-    void move();
-
-    /*
     Move the snake along a given path.
     */
-    void move(const std::list<Direction> &path);
+    void move(bool eatenFood);
+
+/*
+Get the head position.
+*/
+const Pos& getHead() const;
+
+    void setDead(bool isDead);
 
 private:
     Map *map = nullptr;
@@ -50,11 +52,6 @@ private:
     Remove the snake tail.
     */
     void removeTail();
-
-    /*
-    Get the head position.
-    */
-    const Pos& getHead() const;
 
     /*
     Get the tail position.

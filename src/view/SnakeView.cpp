@@ -7,6 +7,7 @@
 
 void SnakeView::draw(Map *map_) {
     map = map_;
+    drown = false;
 }
 
 void SnakeView::setPresenter(SnakePresenter *presenter_) {
@@ -24,4 +25,8 @@ void SnakeView::stop() {
 void SnakeView::printMsg(const std::string &msg) {
     // 无意义语句，只为避免一个警告，
     (void)msg;
+}
+
+void SnakeView::onScoreChanged(int score_) {
+    score = score_;
 }

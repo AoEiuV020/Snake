@@ -58,6 +58,9 @@ void SnakePresenter::setEnableAI(bool enableAI_) {
 
 void SnakePresenter::run() {
     runMoveThread = true;
+
+    map->createRandFood();
+
     moveThread = std::thread(&SnakePresenter::autoMoveCallable, this);
     moveThread.detach();
 
@@ -113,27 +116,41 @@ void SnakePresenter::moveSnake() {
     if (map->isAllBody()) {
         mutexMove.unlock();
         exitGame(MSG_WIN);
-    } else if (snake.isDead()) {
-        mutexMove.unlock();
-        exitGame(MSG_LOSE);
-    } else {
-        try {
-            snake.move();
-            if (!map->hasFood()) {
-                map->createRandFood();
+        return;
+    }
+    try {
+        Direction d = snake.getDirection();
+        if (!snake.isDead() && d != NONE) {
+            Pos nextPos = snake.getHead().getAdj(d);
+            Point nextPoint = map->getPoint(nextPos);
+            if (!map->isSafe(nextPos)) {
+                snake.setDead(true);
+                exitGame(MSG_LOSE);
+            } else {
+                if (nextPoint.getType() == Point::FOOD) {
+                    snake.move(true);
+                    onEatenFood();
+                } else {
+                    snake.move(false);
+                }
             }
             view->draw(map);
-            mutexMove.unlock();
-        } catch (const std::exception) {
-            mutexMove.unlock();
-            throw;
         }
+        mutexMove.unlock();
+    } catch (const std::exception &e) {
+        mutexMove.unlock();
+        throw;
     }
+}
+
+void SnakePresenter::onEatenFood() {
+    score += 1;
+    view->onScoreChanged(score);
+    map->createRandFood();
 }
 
 void SnakePresenter::init() {
     try {
-        Console::clear();
         initMap();
         initSnake();
         initAI();
@@ -175,6 +192,25 @@ void SnakePresenter::initAI() {
 }
 
 void SnakePresenter::move(Direction direction) {
+    // 蛇头只能前进左右拐，不能后退，反正后退必死，
+    if(direction != snake.getDirection()) {
+        switch (snake.getDirection()) {
+            case UP:
+            case DOWN:
+                if (direction == UP || direction == DOWN) {
+                    return;
+                }
+                break;
+            case LEFT:
+            case RIGHT:
+                if (direction == LEFT || direction == RIGHT) {
+                    return;
+                }
+                break;
+            default:
+                break;
+        }
+    }
     if (pause) {
         snake.setDirection(direction);
         moveSnake();  // Accelerate
