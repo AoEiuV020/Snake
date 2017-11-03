@@ -116,32 +116,30 @@ void SnakePresenter::moveSnake() {
     if (map->isAllBody()) {
         mutexMove.unlock();
         exitGame(MSG_WIN);
-    } else if (snake.isDead()) {
-        mutexMove.unlock();
-        exitGame(MSG_LOSE);
-    } else {
-        try {
-            Direction d = snake.getDirection();
-            if (!snake.isDead() && d != NONE) {
-                Pos nextPos = snake.getHead().getAdj(d);
-                Point nextPoint = map->getPoint(nextPos);
-                if (!map->isSafe(nextPos)) {
-                    snake.setDead(true);
+        return;
+    }
+    try {
+        Direction d = snake.getDirection();
+        if (!snake.isDead() && d != NONE) {
+            Pos nextPos = snake.getHead().getAdj(d);
+            Point nextPoint = map->getPoint(nextPos);
+            if (!map->isSafe(nextPos)) {
+                snake.setDead(true);
+                exitGame(MSG_LOSE);
+            } else {
+                if (nextPoint.getType() == Point::FOOD) {
+                    snake.move(true);
+                    map->createRandFood();
                 } else {
-                    if (nextPoint.getType() == Point::FOOD) {
-                        snake.move(true);
-                        map->createRandFood();
-                    } else {
-                        snake.move(false);
-                    }
+                    snake.move(false);
                 }
-                view->draw(map);
             }
-            mutexMove.unlock();
-        } catch (const std::exception &e) {
-            mutexMove.unlock();
-            throw;
+            view->draw(map);
         }
+        mutexMove.unlock();
+    } catch (const std::exception &e) {
+        mutexMove.unlock();
+        throw;
     }
 }
 
