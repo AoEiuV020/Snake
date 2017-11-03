@@ -78,6 +78,7 @@ void ConsoleView::sleepFPS() {
 
 void ConsoleView::start() {
     gameRunning = true;
+    Console::clear();
     drawThread = std::thread(&ConsoleView::drawCallable, this);
     drawThread.detach();
     keyboardThread = std::thread(&ConsoleView::keyboardCallable, this);

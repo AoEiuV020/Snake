@@ -133,7 +133,6 @@ void SnakePresenter::moveSnake() {
 
 void SnakePresenter::init() {
     try {
-        Console::clear();
         initMap();
         initSnake();
         initAI();
