@@ -2,6 +2,7 @@
 // Created by AoEiuV020 on 2017.10.31-19:32:13.
 //
 
+#include <cstdio>
 #include "view/FileView.h"
 
 const std::string FileView::MAP_INFO_FILENAME = "movements.txt";
