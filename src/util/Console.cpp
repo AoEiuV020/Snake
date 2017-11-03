@@ -101,7 +101,7 @@ void Console::setCursor(const int x, const int y) {
 
 void Console::clear() {
 #ifdef LINUX_OR_APPLE
-    if (system("clear")) {}
+    printf("\033[2J\033[1;1H");
 #elif _WIN32
     if (system("cls")) {}
 #else
