@@ -192,6 +192,25 @@ void SnakePresenter::initAI() {
 }
 
 void SnakePresenter::move(Direction direction) {
+    // 蛇头只能前进左右拐，不能后退，反正后退必死，
+    if(direction != snake.getDirection()) {
+        switch (snake.getDirection()) {
+            case UP:
+            case DOWN:
+                if (direction == UP || direction == DOWN) {
+                    return;
+                }
+                break;
+            case LEFT:
+            case RIGHT:
+                if (direction == LEFT || direction == RIGHT) {
+                    return;
+                }
+                break;
+            default:
+                break;
+        }
+    }
     if (pause) {
         snake.setDirection(direction);
         moveSnake();  // Accelerate
