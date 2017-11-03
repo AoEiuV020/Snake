@@ -2,8 +2,8 @@
 // Created by AoEiuV020 on 2017.10.31-16:20:31.
 //
 
-#include <util/Console.h>
-#include <util/util.h>
+#include "util/Console.h"
+#include "util/util.h"
 #include "view/ConsoleView.h"
 #include "presenter/SnakePresenter.h"
 

@@ -2,11 +2,11 @@
 // Created by AoEiuV020 on 2017.10.31-21:08:32.
 //
 
-#include <model/Pos.h>
-#include <model/Point.h>
+#include "model/Pos.h"
+#include "model/Point.h"
 #include <stdexcept>
-#include <model/Snake.h>
-#include <util/util.h>
+#include "model/Snake.h"
+#include "util/util.h"
 #include <queue>
 #include "ai/SnakeAI.h"
 

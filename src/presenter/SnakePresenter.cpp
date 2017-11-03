@@ -2,7 +2,7 @@
 // Created by AoEiuV020 on 2017.10.31-15:41:44.
 //
 
-#include <ai/SnakeAI.h>
+#include "ai/SnakeAI.h"
 #include "presenter/SnakePresenter.h"
 #include "view/ConsoleView.h"
 
