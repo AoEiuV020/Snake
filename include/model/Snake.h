@@ -38,12 +38,6 @@ public:
     */
     void move(const std::list<Direction> &path);
 
-    /*
-    Decide the next moving direction. After its execution,
-    the next moving direction will be stored in field 'direc'.
-    */
-    void decideNext();
-
 private:
     Map *map = nullptr;
     std::list<Pos> bodies;

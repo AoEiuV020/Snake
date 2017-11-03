@@ -2,11 +2,11 @@
 // Created by AoEiuV020 on 2017.10.31-21:08:32.
 //
 
-#include <model/Pos.h>
-#include <model/Point.h>
+#include "model/Pos.h"
+#include "model/Point.h"
 #include <stdexcept>
-#include <model/Snake.h>
-#include <util/util.h>
+#include "model/Snake.h"
+#include "util/util.h"
 #include <queue>
 #include "ai/SnakeAI.h"
 
@@ -58,84 +58,17 @@ void SnakeAI::decideNext() {
         return;
     }
 
-    if (hamiltonEnabled) {  // AI based on the Hamiltonian cycle
-
-        SizeType size = map->getSize();
-        Pos head = snake->getHead(), tail = snake->getTail();
-        Point::ValueType tailIndex = map->getPoint(tail).getIndex();
-        Point::ValueType headIndex = map->getPoint(head).getIndex();
-        // Try to take shortcuts when the snake is not long enough
-        if (snake->bodies.size() < size * 3 / 4) {
-            std::list<Direction> minPath;
-            findMinPathToFood(minPath);
-            if (!minPath.empty()) {
-                Direction nextDirec = *minPath.begin();
-                Pos nextPos = head.getAdj(nextDirec);
-                Point::ValueType nextIndex = map->getPoint(nextPos).getIndex();
-                Point::ValueType foodIndex = map->getPoint(map->getFood()).getIndex();
-                headIndex = util::getDistance(tailIndex, headIndex, (Point::ValueType) size);
-                nextIndex = util::getDistance(tailIndex, nextIndex, (Point::ValueType) size);
-                foodIndex = util::getDistance(tailIndex, foodIndex, (Point::ValueType) size);
-                if (nextIndex > headIndex && nextIndex <= foodIndex) {
-                    snake->direc = nextDirec;
-                    return;
-                }
-            }
-        }
-        // Move along the hamitonian cycle
-        headIndex = map->getPoint(head).getIndex();
-        std::vector<Pos> adjPositions = head.getAllAdj();
-        for (const Pos &adjPos : adjPositions) {
-            const Point &adjPoint = map->getPoint(adjPos);
-            Point::ValueType adjIndex = adjPoint.getIndex();
-            if (adjIndex == (headIndex + 1) % size) {
-                snake->direc = head.getDirectionTo(adjPos);
-            }
-        }
-
-    } else {  // AI based on graph search
-
-        std::list<Direction> pathToFood, pathToTail;
-        // Create a virtual snake
-        Map tmpMap = *map;
-        Snake tmpSnake(*snake);
-        tmpSnake.setMap(&tmpMap);
-        // Step 1
-        findMinPathToFood(pathToFood);
-        if (!pathToFood.empty()) {
-            // Step 2
-            tmpSnake.move(pathToFood);
-            if (tmpMap.isAllBody()) {
-                snake->setDirection(*(pathToFood.begin()));
-                return;
-            } else {
-                // Step 3
-                findMaxPathToTail(pathToTail);
-                if (pathToTail.size() > 1) {
-                    snake->setDirection(*(pathToFood.begin()));
-                    return;
-                }
-            }
-        }
-        // Step 4
-        this->findMaxPathToTail(pathToTail);
-        if (pathToTail.size() > 1) {
-            snake->setDirection(*(pathToTail.begin()));
-            return;
-        }
-        // Step 5
-        snake->direc = Direction::DOWN;  // A default direction
-        SizeType max = 0;
-        Pos head = snake->getHead();
-        std::vector<Pos> adjPositions = head.getAllAdj();
-        for (const Pos &adjPos : adjPositions) {
-            if (map->isSafe(adjPos)) {
-                SizeType dist = Map::distance(adjPos, map->getFood());
-                if (dist >= max) {
-                    max = dist;
-                    snake->direc = head.getDirectionTo(adjPos);
-                }
-            }
+    SizeType size = map->getSize();
+    Pos head = snake->getHead(), tail = snake->getTail();
+    Point::ValueType headIndex = map->getPoint(head).getIndex();
+    // Move along the hamitonian cycle
+    headIndex = map->getPoint(head).getIndex();
+    std::vector<Pos> adjPositions = head.getAllAdj();
+    for (const Pos &adjPos : adjPositions) {
+        const Point &adjPoint = map->getPoint(adjPos);
+        Point::ValueType adjIndex = adjPoint.getIndex();
+        if (adjIndex == (headIndex + 1) % size) {
+            snake->direc = head.getDirectionTo(adjPos);
         }
     }
 }

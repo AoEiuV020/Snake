@@ -36,8 +36,6 @@ private:
     std::thread keyboardThread;  // Thread to receive keyboard instructions
     void keyboardCallable();
 
-    volatile bool pause = false;  // Control pause/resume game
-
     void keyboardMove(Direction direction);
 };
 
