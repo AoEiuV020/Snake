@@ -61,7 +61,7 @@ void ConsoleView::drawMapContent() {
         }
         Console::write("\n");
     }
-    Console::write(util::toString(score));
+    Console::write("Score: " + util::toString(score));
     Console::write("\n");
 }
 
