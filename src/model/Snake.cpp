@@ -60,7 +60,9 @@ const Pos &Snake::getTail() const {
 }
 
 void Snake::removeTail() {
-    map->getPoint(getTail()).setType(Point::Type::EMPTY);
+    if (map->getPoint(getTail()).getType() == Point::Type::SNAKE_TAIL) {
+        map->getPoint(getTail()).setType(Point::Type::EMPTY);
+    }
     bodies.pop_back();
     if (bodies.size() > 1) {
         map->getPoint(getTail()).setType(Point::Type::SNAKE_TAIL);

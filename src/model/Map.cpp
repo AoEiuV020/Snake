@@ -6,7 +6,7 @@ using std::string;
 using std::list;
 
 Map::Map(const SizeType rowCnt_, const SizeType colCnt_)
-    : content(rowCnt_, vector<Point>(colCnt_)) {
+        : content(rowCnt_, vector<Point>(colCnt_)) {
     size = (rowCnt_ - 2) * (colCnt_ - 2);
     // Add boundary walls
     SizeType row = getRowCount(), col = getColCount();
@@ -24,11 +24,11 @@ Map::Map(const SizeType rowCnt_, const SizeType colCnt_)
 
 Map::~Map() {}
 
-Point& Map::getPoint(const Pos &p) {
+Point &Map::getPoint(const Pos &p) {
     return content[p.getX()][p.getY()];
 }
 
-const Point& Map::getPoint(const Pos &p) const {
+const Point &Map::getPoint(const Pos &p) const {
     return content[p.getX()][p.getY()];
 }
 
@@ -46,8 +46,8 @@ Map::SizeType Map::getSize() const {
 
 bool Map::isInside(const Pos &p) const {
     return p.getX() > 0 && p.getY() > 0
-        && p.getX() < getRowCount() - 1
-        && p.getY() < getColCount() - 1;
+           && p.getX() < getRowCount() - 1
+           && p.getY() < getColCount() - 1;
 }
 
 bool Map::isEmpty(const Pos &p) const {
@@ -60,8 +60,9 @@ bool Map::isEmptyNotVisit(const Pos &p) const {
 
 bool Map::isSafe(const Pos &p) const {
     const Point &point = getPoint(p);
-    return isInside(p) && (point.getType() == Point::Type::EMPTY 
-                           || point.getType() == Point::Type::FOOD);
+    return isInside(p) && (point.getType() == Point::Type::EMPTY
+                           || point.getType() == Point::Type::FOOD
+                           || point.getType() == Point::Type::SNAKE_TAIL);
 }
 
 bool Map::isAllBody() const {
@@ -70,8 +71,8 @@ bool Map::isAllBody() const {
         for (SizeType j = 1; j < col - 1; ++j) {
             Point::Type type = content[i][j].getType();
             if (!(type == Point::Type::SNAKE_HEAD
-                || type == Point::Type::SNAKE_BODY
-                || type == Point::Type::SNAKE_TAIL)) {
+                  || type == Point::Type::SNAKE_BODY
+                  || type == Point::Type::SNAKE_TAIL)) {
                 return false;
             }
         }
@@ -83,7 +84,7 @@ void Map::createRandFood() {
     auto random = util::Random<>::getInstance();
     vector<Pos> emptyPoints = getEmptyPoints();
     if (!emptyPoints.empty()) {
-        SizeType i = random->nextInt((SizeType)0, emptyPoints.size() - 1);
+        SizeType i = random->nextInt((SizeType) 0, emptyPoints.size() - 1);
         createFood(emptyPoints[i]);
     }
 }
@@ -103,7 +104,7 @@ bool Map::hasFood() const {
     return isInside(food) && getPoint(food).getType() == Point::Type::FOOD;
 }
 
-const Pos& Map::getFood() const {
+const Pos &Map::getFood() const {
     return food;
 }
 
