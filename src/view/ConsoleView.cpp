@@ -12,7 +12,7 @@ void ConsoleView::printMsg(const std::string &msg) {
     if (map != nullptr) {
         mapRowCnt = (int) map->getRowCount();
     }
-    Console::setCursor(0, mapRowCnt);
+    Console::setCursor(0, mapRowCnt + 1);
     Console::writeWithColor(msg + "\n", ConsoleColor(WHITE, BLACK, true, false));
 }
 
@@ -61,6 +61,8 @@ void ConsoleView::drawMapContent() {
         }
         Console::write("\n");
     }
+    Console::write(util::toString(score));
+    Console::write("\n");
 }
 
 void ConsoleView::keyboardCallable() {

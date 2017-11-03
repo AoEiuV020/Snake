@@ -123,6 +123,13 @@ private:
     long moveInterval = 30;
     bool pause;
     bool enableAI;
+
+    void onEatenFood();
+
+    /**
+     * 得分，
+     */
+    int score;
 };
 
 

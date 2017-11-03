@@ -129,7 +129,7 @@ void SnakePresenter::moveSnake() {
             } else {
                 if (nextPoint.getType() == Point::FOOD) {
                     snake.move(true);
-                    map->createRandFood();
+                    onEatenFood();
                 } else {
                     snake.move(false);
                 }
@@ -141,6 +141,12 @@ void SnakePresenter::moveSnake() {
         mutexMove.unlock();
         throw;
     }
+}
+
+void SnakePresenter::onEatenFood() {
+    score += 1;
+    view->onScoreChanged(score);
+    map->createRandFood();
 }
 
 void SnakePresenter::init() {
