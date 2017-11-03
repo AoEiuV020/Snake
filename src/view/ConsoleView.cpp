@@ -64,28 +64,7 @@ void ConsoleView::keyboardCallable() {
     try {
         while (gameRunning) {
             if (Console::kbhit()) {
-                switch (Console::getch()) {
-                    case 'w':
-                        keyboardMove(Direction::UP);
-                        break;
-                    case 'a':
-                        keyboardMove(Direction::LEFT);
-                        break;
-                    case 's':
-                        keyboardMove(Direction::DOWN);
-                        break;
-                    case 'd':
-                        keyboardMove(Direction::RIGHT);
-                        break;
-                    case ' ':
-                        presenter->pauseToggle();
-                        break;
-                    case 27:  // Esc
-                        presenter->exitGame();
-                        break;
-                    default:
-                        break;
-                }
+                onKeyboardHit(Console::getch());
             }
         }
     } catch (const std::exception &e) {
@@ -94,7 +73,7 @@ void ConsoleView::keyboardCallable() {
 }
 
 void ConsoleView::sleepFPS() {
-    util::sleep((long)((1.0 / fps) * 1000));
+    util::sleep((long) ((1.0 / fps) * 1000));
 }
 
 void ConsoleView::start() {
@@ -115,4 +94,53 @@ void ConsoleView::stop() {
 
 void ConsoleView::keyboardMove(Direction direction) {
     presenter->move(direction);
+}
+
+void ConsoleView::onKeyboardHit(char key) {
+    static char cachedKey[3];
+
+    // 方向键第一个字符，Esc,
+    if (key == 27) {
+        cachedKey[0] = key;
+        cachedKey[1] = 0;
+        cachedKey[2] = 0;
+        return;
+    }
+    // 方向键第二个字符，91,
+    if (cachedKey[0] == 27 && key == 91) {
+        cachedKey[1] = key;
+        cachedKey[2] = 0;
+        return;
+    }
+    // 方向键第二个字符，65 - 68,
+    if (cachedKey[0] == 27 && cachedKey[1] == 91
+            && key>=65 && key <= 68) {
+        Direction d;
+        switch (key) {
+            case 65:
+                d = Direction::UP;
+                break;
+            case 66:
+                d = Direction::DOWN;
+                break;
+            case 68:
+                d = Direction::LEFT;
+                break;
+            case 67:
+                d = Direction::RIGHT;
+                break;
+        }
+        keyboardMove(d);
+        return;
+    }
+    switch (key) {
+        case ' ':
+            presenter->pauseToggle();
+            break;
+        case 'q':
+            presenter->exitGame();
+            break;
+        default:
+            break;
+    }
 }

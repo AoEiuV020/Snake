@@ -37,6 +37,8 @@ private:
     void keyboardCallable();
 
     void keyboardMove(Direction direction);
+
+    void onKeyboardHit(char key);
 };
 
 
