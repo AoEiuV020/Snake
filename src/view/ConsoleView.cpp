@@ -19,7 +19,10 @@ void ConsoleView::printMsg(const std::string &msg) {
 void ConsoleView::drawCallable() {
     try {
         while (gameRunning) {
-            drawMapContent();
+            if (!drown) {
+                drawMapContent();
+                drown = true;
+            }
             sleepFPS();
         }
     } catch (const std::exception &e) {
@@ -115,7 +118,7 @@ void ConsoleView::onKeyboardHit(char key) {
     }
     // 方向键第二个字符，65 - 68,
     if (cachedKey[0] == 27 && cachedKey[1] == 91
-            && key>=65 && key <= 68) {
+        && key >= 65 && key <= 68) {
         Direction d;
         switch (key) {
             case 65:

@@ -27,6 +27,10 @@ protected:
     Map *map = nullptr;
     SnakePresenter *presenter = nullptr;
 
+    /**
+     * 标记当前的map是否已经绘制，避免重复绘制，
+     */
+    bool drown;
 };
 
 

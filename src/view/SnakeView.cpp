@@ -7,6 +7,7 @@
 
 void SnakeView::draw(Map *map_) {
     map = map_;
+    drown = false;
 }
 
 void SnakeView::setPresenter(SnakePresenter *presenter_) {
