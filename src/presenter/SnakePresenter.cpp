@@ -58,6 +58,9 @@ void SnakePresenter::setEnableAI(bool enableAI_) {
 
 void SnakePresenter::run() {
     runMoveThread = true;
+
+    map->createRandFood();
+
     moveThread = std::thread(&SnakePresenter::autoMoveCallable, this);
     moveThread.detach();
 
@@ -118,13 +121,24 @@ void SnakePresenter::moveSnake() {
         exitGame(MSG_LOSE);
     } else {
         try {
-            snake.move();
-            if (!map->hasFood()) {
-                map->createRandFood();
+            Direction d = snake.getDirection();
+            if (!snake.isDead() && d != NONE) {
+                Pos nextPos = snake.getHead().getAdj(d);
+                Point nextPoint = map->getPoint(nextPos);
+                if (!map->isSafe(nextPos)) {
+                    snake.setDead(true);
+                } else {
+                    if (nextPoint.getType() == Point::FOOD) {
+                        snake.move(true);
+                        map->createRandFood();
+                    } else {
+                        snake.move(false);
+                    }
+                }
+                view->draw(map);
             }
-            view->draw(map);
             mutexMove.unlock();
-        } catch (const std::exception) {
+        } catch (const std::exception &e) {
             mutexMove.unlock();
             throw;
         }
