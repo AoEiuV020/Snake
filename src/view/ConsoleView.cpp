@@ -171,6 +171,18 @@ void ConsoleView::onKeyboardHit(int key) {
             }
             keyboardMove(d);
             break;
+        case 'w':
+            keyboardMove(Direction::UP);
+            break;
+        case 's':
+            keyboardMove(Direction::DOWN);
+            break;
+        case 'a':
+            keyboardMove(Direction::LEFT);
+            break;
+        case 'd':
+            keyboardMove(Direction::RIGHT);
+            break;
         case ' ':
             presenter->pauseToggle();
             break;
