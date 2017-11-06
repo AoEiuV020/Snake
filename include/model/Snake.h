@@ -28,9 +28,10 @@ public:
     */
     void addBody(const Pos &p);
 
-    /*
-    Move the snake along a given path.
-    */
+    /**
+     * 蛇移动一格，
+     * @param eatenFood 是否吃到食物，如果吃到则不删除尾巴，造成蛇变长一格的效果，
+     */
     void move(bool eatenFood);
 
 /*
