@@ -67,7 +67,7 @@ public:
     A cross-platform getch() method.
     Reference: http://stackoverflow.com/questions/3276546/how-to-implement-getch-function-of-c-in-linux
     */
-    static char getch();
+    static int getch();
 
     /*
     A cross-platform kbhit() method.

@@ -168,7 +168,7 @@ void Console::writeWithColor(const std::string &str, const ConsoleColor &console
 #endif
 }
 
-char Console::getch() {
+int Console::getch() {
 #ifdef LINUX_OR_APPLE
     struct termios oldattr, newattr;
     int ch;
