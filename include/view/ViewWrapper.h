@@ -12,6 +12,7 @@ class SnakePresenter;
 
 /**
  * 给view包装一层，以便同时启动多个view,
+ * 不心要，
  */
 class ViewWrapper : public SnakeView {
 public:

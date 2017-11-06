@@ -6,6 +6,8 @@
 #include "presenter/SnakePresenter.h"
 
 void SnakeView::draw(Map *map_) {
+    // 简单保存地图指针，
+    // 考虑到线程安全，之后要改成深度复制，
     map = map_;
     drown = false;
 }

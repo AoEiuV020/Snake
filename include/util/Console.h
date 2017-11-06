@@ -2,14 +2,20 @@
 #define SNAKE_CONSOLE_H_
 
 #include <string>
+
 #if defined(WIN32) || defined(_WIN32)
+
 #include <Windows.h>
+
 #endif
 
 #if defined(__linux__) || defined(__APPLE__)
 #define LINUX_OR_APPLE
 #endif
 
+/**
+ * 枚举控制台颜色，
+ */
 enum ConsoleColorType {
     BLACK,
     RED,
@@ -21,75 +27,86 @@ enum ConsoleColorType {
     WHITE,
 };
 
+/**
+ * 封装控制台颜色，
+ */
 struct ConsoleColor {
     ConsoleColor(const ConsoleColorType foreColor_,
-                 const ConsoleColorType backColor_, 
+                 const ConsoleColorType backColor_,
                  const bool foreIntensified_ = false,
                  const bool backIntensified_ = false);
+
+    /**
+     * 前景色，也就是文字的颜色，
+     */
     ConsoleColorType foreColor;
+    /**
+     * 背景色，
+     */
     ConsoleColorType backColor;
+    /**
+     * 是否前景高亮，
+     */
     bool foreIntensified;
+    /**
+     * 是否背景高亮，
+     */
     bool backIntensified;
 };
 
-/*
-A cross-platform class to control the output attributes of the console.
-*/
+/**
+ * 封装控制台相关方法,
+ * 比如打印字符, 读取键盘输入,
+ */
 class Console {
 public:
-    /*
-    Set console cursor position. The origin is at the left-top corner.
-    Axis x extends to the right and axis y extends to the bottom.
-
-    @param x The x coordinate
-    @param y The y coordinate
-    */
+    /**
+     * 光标跳转到指写行列，
+     * @param x 列号，
+     * @param y 行号，
+     */
     static void setCursor(const int x = 0, const int y = 0);
 
-    /*
-    Clear the console.
-    */
+    /**
+     * 控制台清屏，
+     */
     static void clear();
 
-    /*
-    Write a string object to console.
-    */
+    /**
+     * 控制台打印字符串，
+     * @param str 字符串，
+     */
     static void write(const std::string &str);
 
-    /*
-    Write a string to console with a given color. The intensified
-    console color attribute is not supported at the linux platform.
-    Reference: http://stackoverflow.com/questions/2616906/how-do-i-output-coloured-text-to-a-linux-terminal
-    */
+    /**
+     * 控制台打印带颜色的字符串，
+     * @param str 字符串，
+     * @param consoleColor 颜色，
+     */
     static void writeWithColor(const std::string &str, const ConsoleColor &consoleColor);
 
-    /*
-    A cross-platform getch() method.
-    Reference: http://stackoverflow.com/questions/3276546/how-to-implement-getch-function-of-c-in-linux
-    */
+    /**
+     * 获取控制台输入，
+     * @return
+     */
     static int getch();
 
-    /*
-    A cross-platform kbhit() method.
-    Reference: http://cboard.cprogramming.com/c-programming/63166-kbhit-linux.html
-    */
+    /**
+     * 判断控制台是否有输入，
+     * @return 有则返回非0 也就是真，没有则返回0 也就是假，
+     */
     static int kbhit();
 
 private:
 #ifdef WIN32
-    /*
-    Set console output color. Only available in windows platform.
-
-    @param color The output color
-    @return      The origin console attribute
-    */
+    /**
+     * windows设置控制台颜色,
+     */
     static WORD setColor(const ConsoleColor &consoleColor);
 
-    /*
-    Reset console output color to default. Only available in windows platform.
-
-    @param attr The console attribute to restore
-    */
+    /**
+     * windows重置控制台颜色,
+     */
     static void resetColor(const WORD attr);
 #endif
 };

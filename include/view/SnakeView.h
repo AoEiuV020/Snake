@@ -13,16 +13,40 @@ class SnakeView {
 public:
     typedef Map::SizeType SizeType;
 
+    /**
+     * 关联presenter,
+     */
     virtual void setPresenter(SnakePresenter *presenter_);
 
+    /**
+     * 绘图，
+     * 未必是马上绘图，先保存这个map,并标记有map需要绘制，
+     * @param map
+     */
     virtual void draw(Map *map);
 
+    /**
+     * 开始绘图，
+     * 空实现，要在子类中重写，
+     */
     virtual void start();
 
+    /**
+     * 结束绘图，
+     * 空实现，要在子类中重写，
+     */
     virtual void stop();
 
+    /**
+     * 打印文字，
+     * 空实现，要在子类中重写，
+     */
     virtual void printMsg(const std::string &msg);
 
+    /**
+     * 改得分，
+     * 得分改变时presenter调用这个方法通知分数修改，
+     */
     virtual void onScoreChanged(int score_);
 
 protected:

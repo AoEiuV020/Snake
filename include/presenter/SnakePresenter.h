@@ -23,29 +23,53 @@ public:
 
     ~SnakePresenter();
 
-    /*
-    Return the only instance.
-    */
+    /**
+     * @return 返回单例对象，并没有必要，可以考虑不用单例模式，
+     */
     static SnakePresenter *getInstance();
 
+    /**
+     * 关联view,
+     * 保存这个view, 需要绘图时通知这个view, 本类不管绘图相关细节，
+     */
     void attach(SnakeView *view_);
 
     void setEnableHamilton(const bool enableHamilton_);
 
+    /**
+     * 设置地图行数，
+     * 在游戏初始化前修改才有效，
+     * @param n 行数，
+     */
     void setMapRow(const SizeType n);
 
+    /**
+     * 设置地图列数，
+     * 在游戏初始化前修改才有效，
+     * @param n 列数，
+     */
     void setMapCol(const SizeType n);
 
-    /*
-    Run the game.
+    void setMoveInterval(long moveInterval_);
 
-    @return The exit status of the program.
-    */
+    void setEnableAI(bool enableAI_);
+
+    /**
+     * 游戏初始化，
+     * 初始化地图，蛇身，AI，
+     */
+    void init();
+
+    /**
+     * 启动游戏，并进入游戏循环，
+     */
     void run();
 
-    /*
-    Print an error message and exit the game.
-    */
+    /**
+     * 异常退出游戏，
+     * 退出并打印消息，
+     * @param err 错误消息，
+     */
     void exitGameErr(const std::string &err);
 
     /**
@@ -53,19 +77,20 @@ public:
      */
     void exitGame();
 
-    /*
-    Initialize.
-    */
-    void init();
-
+    /**
+     * @return 返回游戏退出状态码，目前只有成功0 和初始化失败-1 两种状态，
+     */
     int getExitCode();
 
+    /**
+     * 往指定方向移动一格，
+     * @param direction 移动方向，
+     */
     void move(Direction direction);
 
-    void setMoveInterval(long moveInterval_);
-
-    void setEnableAI(bool enableAI_);
-
+    /**
+     * 切换暂停与否，
+     */
     void pauseToggle();
 
 private:
@@ -90,40 +115,81 @@ private:
 
     SnakePresenter();
 
-    /*
-    Print a message and exit the game.
-    */
+    /**
+     * 带着消息退出游戏，
+     * @param msg 消息，可能是成功，失败，或主动退出，
+     */
     void exitGame(const std::string &msg);
 
-    /*
-    Print a message to the terminal.
-    */
+    /**
+     * 打印消息，
+     * 直接通知view去打印，
+     * @param msg 消息，
+     */
     void printMsg(const std::string &msg);
 
+    /**
+     * 初始化地图，
+     * 判断地图不能太小，
+     */
     void initMap();
 
+    /**
+     * 初始化蛇，
+     */
     void initSnake();
 
     int exitCode;
     SnakeAI *snakeAI;
 
+    /**
+     * 初始化AI,
+     */
     void initAI();
 
     void decideNext();
 
-    /*
-    Move the snake and check if the game is over.
-    */
+    /**
+     * 蛇移动方法，
+     * 在这里判断是否已经胜利,
+     */
     void moveSnake();
 
+    /**
+     * 自动移动线程，
+     */
+    std::thread moveThread;
+
+    /**
+     * 供自动移动线程调用的方法，
+     */
     void autoMoveCallable();
 
-    std::thread moveThread;      // Thread to move the snake
-    volatile bool runMoveThread = false;   // Switch of sub-threads
+    /**
+     * 自动移动线程是否要继续运行，
+     * 游戏启动时改成true，游戏结束时改回false通知线程结束，
+     */
+    volatile bool runMoveThread = false;
+
+    /**
+     * 蛇自动移动间隔，单位毫秒ms,
+     * 影响蛇的速度，每这么多毫秒移动一格，
+     */
     long moveInterval = 30;
-    bool pause;
+    /**
+     * 游戏是否处于暂时状态，
+     */
+    bool pause = false;
+    /**
+     * 是否启用AI,
+     * 在游戏初始化前修改才有效，
+     */
     bool enableAI;
 
+    /**
+     * 当蛇吃到食物时调用，
+     * 加分并产生新的食物，
+     */
     void onEatenFood();
 
     /**

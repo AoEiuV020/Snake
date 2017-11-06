@@ -10,34 +10,89 @@
 
 class SnakePresenter;
 
+/**
+ * 控制台游戏视图，
+ * 在控制台打印游戏地图，
+ */
 class ConsoleView : public SnakeView {
 
 public:
+    /**
+     * 开始绘图，
+     * 游戏开始时调用，
+     * 控制台清屏，并启动绘图线程和监听键盘的线程，
+     */
     void start() override;
 
+    /**
+     * 结束绘图，
+     * 游戏结束时调用，
+     * 通知子线程结束，
+     */
     void stop() override;
 
     void printMsg(const std::string &msg) override;
 
+    /**
+     * 设置游戏显示帧数，
+     * 即每秒绘图多少次，
+     * @param fps_ 帧数，
+     */
     void setFPS(double fps_);
 
 private:
-    void drawCallable();
-
-    volatile bool gameRunning = false;   // Switch of sub-threads
-
+    /**
+     * 实际的绘图方法，
+     */
     void drawMapContent();
 
+    /**
+     * 为了满足指定帧数刷新率而让线程休息，
+     * 在方法内计算需要休息的时间，
+     */
     void sleepFPS();
 
+    /**
+    * 游戏显示帧数，
+    * 即每秒绘图多少次，
+    */
     double fps = 60.0;
 
+    /**
+     * 绘图线程，
+     */
     std::thread drawThread;
+    /**
+     * 供绘图线程调用的方法，
+     */
+    void drawCallable();
+    /**
+     * 监听键盘输入线程，
+     */
     std::thread keyboardThread;  // Thread to receive keyboard instructions
+    /**
+     * 供监听键盘线程调用的方法，
+     */
     void keyboardCallable();
 
+    /**
+     * 游戏是否正在运行，
+     * 两个子线程都根据这个判断是否要结束线程，
+     */
+    volatile bool gameRunning = false;   // Switch of sub-threads
+
+    /**
+     * 当键盘输入方向键时调用，
+     * 通知presenter控制蛇移动，
+     * @param direction 方向，
+     */
     void keyboardMove(Direction direction);
 
+    /**
+     * 当键盘有输入时调用，
+     * 根据键值判断是游戏蛇移动还是暂停或者结束，
+     * @param key 键值，
+     */
     void onKeyboardHit(int key);
 };
 
