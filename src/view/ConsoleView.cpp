@@ -68,10 +68,7 @@ void ConsoleView::drawMapContent() {
 void ConsoleView::keyboardCallable() {
     try {
         while (gameRunning) {
-            if (Console::kbhit()) {
-                onKeyboardHit(Console::getch());
-            }
-            sleepFPS();
+            onKeyboardHit(Console::getch());
         }
     } catch (const std::exception &e) {
         presenter->exitGameErr(e.what());
