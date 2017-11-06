@@ -100,9 +100,10 @@ void ConsoleView::keyboardMove(Direction direction) {
     presenter->move(direction);
 }
 
-void ConsoleView::onKeyboardHit(char key) {
-    static char cachedKey[3];
+void ConsoleView::onKeyboardHit(int key) {
+    static int cachedKey[3];
 
+    // Linux下的的方向键键键值是27, 91开头的三个字符，
     // 方向键第一个字符，Esc,
     if (key == 27) {
         cachedKey[0] = key;
@@ -116,7 +117,7 @@ void ConsoleView::onKeyboardHit(char key) {
         cachedKey[2] = 0;
         return;
     }
-    // 方向键第二个字符，65 - 68,
+    // 方向键第三个字符，65 - 68,
     if (cachedKey[0] == 27 && cachedKey[1] == 91
         && key >= 65 && key <= 68) {
         Direction d;
@@ -138,6 +139,28 @@ void ConsoleView::onKeyboardHit(char key) {
         return;
     }
     switch (key) {
+        // Windows下的的方向键键键值是224开头的两个字符，
+        case 224:
+            Direction d;
+            d = Direction::NONE;
+            switch (Console::getch()) {
+                case 72:
+                    d = Direction::UP;
+                    break;
+                case 80:
+                    d = Direction::DOWN;
+                    break;
+                case 75:
+                    d = Direction::LEFT;
+                    break;
+                case 77:
+                    d = Direction::RIGHT;
+                    break;
+                default:
+                    break;
+            }
+            keyboardMove(d);
+            break;
         case ' ':
             presenter->pauseToggle();
             break;
