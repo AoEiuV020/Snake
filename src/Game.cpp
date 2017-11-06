@@ -15,45 +15,40 @@ Game *Game::getInstance() {
 
 int Game::launch() {
     SnakeView *view;
-    auto *viewWrapper = new ViewWrapper();
-    view = viewWrapper;
 
     auto *consoleView = new ConsoleView();
-
-    // Set FPS. Default is 60.0
-    consoleView->setFPS(60.0);
-
-    viewWrapper->addView(consoleView);
-
-
-//    auto *fileView = new FileView();
-//    viewWrapper->addView(fileView);
+    view = consoleView;
 
 
     SnakePresenter *presenter = SnakePresenter::getInstance();
 
-    // Set map's size(including boundaries). Default is 10*10. Minimum is 5*5.
+    // 设置默认地图大小，默认就是10 * 10,
     presenter->setMapRow(10);
     presenter->setMapCol(10);
 
-    // Set the interval time between each snake's movement. Default is 30 ms.
-    // To play classic snake presenter, set to 150 ms is perfect.
+    // 设置自动移动间隔，单位是毫秒ms, 默认30ms，
+    // 也就是说蛇每30毫秒移动一格，
     presenter->setMoveInterval(30);
 
-    // Set whether to enable the snake AI. Default is true.
+    // 设置是否启用AI自动移动，默认是，
     presenter->setEnableAI(true);
 
-    // Set whether to use a hamiltonian cycle to guide the AI. Default is true.
-    presenter->setEnableHamilton(true);
+    // mvp模式，关联view和presenter,
+    // view负责绘图和用户交互，
+    // presenter负责游戏本身的逻辑，并通知view绘图，
+    view->setPresenter(presenter);
+    presenter->attach(view);
 
-    viewWrapper->setPresenter(presenter);
-    presenter->attach(viewWrapper);
-
+    // 游戏初始化，
     presenter->init();
 
     // 开始绘图，
     view->start();
-    // 进入游戏循环，
+    // 启动游戏，
+    // 并进入游戏循环，其实就是个死循环，
     presenter->run();
+
+    // 返回游戏退出状态码，
+    // 目前只有成功0 和初始化失败-1 两种状态，
     return presenter->getExitCode();
 }
