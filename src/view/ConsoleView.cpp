@@ -12,6 +12,8 @@ void ConsoleView::printMsg(const std::string &msg) {
     if (map != nullptr) {
         mapRowCnt = (int) map->getRowCount();
     }
+    // 光标跳到地图下两行打印消息，
+    // 控制台光标行列是0开始的，所以是+1，
     Console::setCursor(0, mapRowCnt + 1);
     Console::writeWithColor(msg + "\n", ConsoleColor(WHITE, BLACK, true, false));
 }
@@ -20,9 +22,11 @@ void ConsoleView::drawCallable() {
     try {
         while (gameRunning) {
             if (!drown) {
-                drawMapContent();
+                // 改标识避免重复绘图，
                 drown = true;
+                drawMapContent();
             }
+            // 每次画完都让线程休息一下，为了满足刷新率，
             sleepFPS();
         }
     } catch (const std::exception &e) {
@@ -31,7 +35,10 @@ void ConsoleView::drawCallable() {
 }
 
 void ConsoleView::drawMapContent() {
-    Console::setCursor();
+    // 光标跳转到(0,0)即左上角，
+    Console::setCursor(0, 0);
+    // 简单的两层循环遍历地图每个点，
+    // 一个一个点绘制,
     SizeType row = map->getRowCount(), col = map->getColCount();
     for (SizeType i = 0; i < row; ++i) {
         for (SizeType j = 0; j < col; ++j) {
@@ -59,8 +66,10 @@ void ConsoleView::drawMapContent() {
                     break;
             }
         }
+        // 换行,
         Console::write("\n");
     }
+    // 画完地图再展示得分，
     Console::write("Score: " + util::toString(score));
     Console::write("\n");
 }
@@ -68,6 +77,7 @@ void ConsoleView::drawMapContent() {
 void ConsoleView::keyboardCallable() {
     try {
         while (gameRunning) {
+            // getch方法阻塞，有输入时传给onKeyboardHit处理，
             onKeyboardHit(Console::getch());
         }
     } catch (const std::exception &e) {

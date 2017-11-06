@@ -11,7 +11,8 @@
 class SnakePresenter;
 
 /**
- * 以文件保存游戏过程，
+ * 以文件形式保存游戏过程，
+ * 不心要，
  */
 class FileView : public SnakeView {
 public:
