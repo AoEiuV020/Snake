@@ -71,6 +71,7 @@ void ConsoleView::keyboardCallable() {
             if (Console::kbhit()) {
                 onKeyboardHit(Console::getch());
             }
+            sleepFPS();
         }
     } catch (const std::exception &e) {
         presenter->exitGameErr(e.what());
