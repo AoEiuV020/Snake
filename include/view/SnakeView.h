@@ -26,14 +26,18 @@ public:
     virtual void draw(Map *map);
 
     /**
-     * 开始绘图，
-     * 空实现，要在子类中重写，
+     * 开始游戏，
      */
     virtual void start();
 
     /**
+     * 初始化视图，
+     * 空实现，
+     */
+    virtual void init();
+
+    /**
      * 结束绘图，
-     * 空实现，要在子类中重写，
      */
     virtual void stop();
 
@@ -49,6 +53,8 @@ public:
      */
     virtual void onScoreChanged(int score_);
 
+    virtual void loop();
+
 protected:
     Map *map = nullptr;
     SnakePresenter *presenter = nullptr;
@@ -56,12 +62,17 @@ protected:
     /**
      * 标记当前的map是否已经绘制，避免重复绘制，
      */
-    bool drown;
+    bool drown = true;
 
     /**
      * 缓存得分，
      */
     int score;
+
+    /**
+     * 游戏是否正在运行，
+     */
+    static bool gameRunning;
 };
 
 

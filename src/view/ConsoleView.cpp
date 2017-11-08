@@ -90,7 +90,7 @@ void ConsoleView::sleepFPS() {
 }
 
 void ConsoleView::start() {
-    gameRunning = true;
+    SnakeView::start();
     Console::clear();
     drawThread = std::thread(&ConsoleView::drawCallable, this);
     drawThread.detach();
@@ -100,10 +100,6 @@ void ConsoleView::start() {
 
 void ConsoleView::setFPS(double fps_) {
     fps = fps_;
-}
-
-void ConsoleView::stop() {
-    gameRunning = false;
 }
 
 void ConsoleView::keyboardMove(Direction direction) {

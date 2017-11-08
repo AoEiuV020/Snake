@@ -7,8 +7,8 @@
 #include <util/util.h>
 
 void SDLView::start() {
+    SnakeView::start();
     SDL_Log("onStart");
-    gameRunning = true;
     drawThread = std::thread(&SDLView::drawCallable, this);
     // 线程休息一下，确保sdl初始化完毕，否则可能出异常，
     SDL_Delay(100);
@@ -32,8 +32,8 @@ void SDLView::initSDL() {
 }
 
 void SDLView::stop() {
+    SnakeView::stop();
     SDL_Log("onStop");
-    gameRunning = false;
     SDL_Quit();
 }
 

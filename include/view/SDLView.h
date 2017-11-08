@@ -69,12 +69,6 @@ private:
     void eventCallable();
 
     /**
-     * 游戏是否正在运行，
-     * 两个子线程都根据这个判断是否要结束线程，
-     */
-    volatile bool gameRunning = false;   // Switch of sub-threads
-
-    /**
      * 当键盘输入方向键时调用，
      * 通知presenter控制蛇移动，
      * @param direction 方向，

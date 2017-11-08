@@ -22,6 +22,8 @@ public:
 
     void draw(Map *map) override;
 
+    void init() override;
+
     void start() override;
 
     void stop() override;

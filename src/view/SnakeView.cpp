@@ -5,6 +5,8 @@
 #include "view/SnakeView.h"
 #include "presenter/SnakePresenter.h"
 
+bool SnakeView::gameRunning;
+
 void SnakeView::draw(Map *map_) {
     // 简单保存地图指针，
     // 考虑到线程安全，之后要改成深度复制，
@@ -16,12 +18,17 @@ void SnakeView::setPresenter(SnakePresenter *presenter_) {
     presenter = presenter_;
 }
 
-void SnakeView::start() {
+void SnakeView::init() {
 
 }
 
-void SnakeView::stop() {
+void SnakeView::start() {
+    gameRunning = true;
+    presenter->run();
+}
 
+void SnakeView::stop() {
+    gameRunning = false;
 }
 
 void SnakeView::printMsg(const std::string &msg) {
@@ -31,4 +38,11 @@ void SnakeView::printMsg(const std::string &msg) {
 
 void SnakeView::onScoreChanged(int score_) {
     score = score_;
+}
+
+void SnakeView::loop() {
+    // 先启动游戏，再进入死循环，
+    start();
+    while(gameRunning) {
+    }
 }

@@ -57,19 +57,20 @@ void SnakePresenter::setEnableAI(bool enableAI_) {
 }
 
 void SnakePresenter::run() {
-    runMoveThread = true;
+    if (gameRunning) {
+        return;
+    }
+    gameRunning = true;
 
     map->createRandFood();
 
     moveThread = std::thread(&SnakePresenter::autoMoveCallable, this);
     moveThread.detach();
-
-    while (runMainThread) {}
 }
 
 void SnakePresenter::autoMoveCallable() {
     try {
-        while (runMoveThread) {
+        while (gameRunning) {
             util::sleep(moveInterval);
             if (!pause) {
                 if (enableAI) {
@@ -90,14 +91,11 @@ void SnakePresenter::exitGame() {
 void SnakePresenter::exitGame(const std::string &msg) {
     mutexExit.lock();
     if (runMainThread) {
-        // 游戏结果，
-        util::sleep(100);
         // 自动移动线程停止，
-        runMoveThread = false;
+        gameRunning = false;
+        printMsg(msg);
         // 停止绘图，
         view->stop();
-        util::sleep(100);
-        printMsg(msg);
     }
     runMainThread = false;
     mutexExit.unlock();

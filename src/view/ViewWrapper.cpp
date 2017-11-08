@@ -21,6 +21,12 @@ void ViewWrapper::draw(Map *map) {
     }
 }
 
+void ViewWrapper::init() {
+    for (auto &view : viewList) {
+        view->init();
+    }
+}
+
 void ViewWrapper::start() {
     for (auto &view : viewList) {
         view->start();

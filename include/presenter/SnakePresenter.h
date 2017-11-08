@@ -169,7 +169,7 @@ private:
      * 自动移动线程是否要继续运行，
      * 游戏启动时改成true，游戏结束时改回false通知线程结束，
      */
-    volatile bool runMoveThread = false;
+    volatile bool gameRunning = false;
 
     /**
      * 蛇自动移动间隔，单位毫秒ms,

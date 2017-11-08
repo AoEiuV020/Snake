@@ -24,13 +24,6 @@ public:
      */
     void start() override;
 
-    /**
-     * 结束绘图，
-     * 游戏结束时调用，
-     * 通知子线程结束，
-     */
-    void stop() override;
-
     void printMsg(const std::string &msg) override;
 
     /**
@@ -74,12 +67,6 @@ private:
      * 供监听键盘线程调用的方法，
      */
     void keyboardCallable();
-
-    /**
-     * 游戏是否正在运行，
-     * 两个子线程都根据这个判断是否要结束线程，
-     */
-    volatile bool gameRunning = false;   // Switch of sub-threads
 
     /**
      * 当键盘输入方向键时调用，
