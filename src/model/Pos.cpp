@@ -79,7 +79,7 @@ Pos Pos::getAdj(const Direction d) const {
 std::vector<Pos> Pos::getAllAdj() const {
     std::vector<Pos> adj;
     for (int i = 1; i <= 4; ++i) {
-        Pos p = getAdj((Direction)i);
+        Pos p = getAdj((Direction) i);
         if (p != *this) {
             adj.push_back(p);
         }

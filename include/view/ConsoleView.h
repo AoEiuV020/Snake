@@ -48,14 +48,17 @@ private:
      * 绘图线程，
      */
     std::thread drawThread;
+
     /**
      * 供绘图线程调用的方法，
      */
     void drawCallable();
+
     /**
      * 监听键盘输入线程，
      */
     std::thread keyboardThread;
+
     /**
      * 供监听键盘线程调用的方法，
      */

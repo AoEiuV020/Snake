@@ -117,7 +117,7 @@ void SnakeAI::findMinPath(const Pos &from, const Pos &to, std::list<Direction> &
         util::Random<>::getInstance()->shuffle(adjPositions.begin(), adjPositions.end());
         // Arrange the order of traversing to make the result path as straight as possible
         Direction bestDirec = (curPos == from ? snake->direc : curPoint.getParent().getDirectionTo(curPos));
-        for (int i = 0; i < (int)adjPositions.size(); ++i) {
+        for (int i = 0; i < (int) adjPositions.size(); ++i) {
             if (bestDirec == curPos.getDirectionTo(adjPositions[i])) {
                 util::swap(adjPositions[0], adjPositions[i]);
                 break;

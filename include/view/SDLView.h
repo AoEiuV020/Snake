@@ -60,6 +60,7 @@ private:
      * 监听SDL事件线程，
      */
     std::thread eventThread;
+
     /**
      * 供SDL事件线程调用的方法，
      */
@@ -76,7 +77,7 @@ private:
      * SDL窗口，
      */
     SDL_Window *window;
-    
+
     /**
      * SDL表面，
      */

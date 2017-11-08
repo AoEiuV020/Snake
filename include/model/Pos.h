@@ -12,15 +12,21 @@ Integer coordinate in 2D plane.
 class Pos {
 public:
     Pos(const int x_ = 0, const int y_ = 0);
+
     ~Pos();
 
     int getX() const;
+
     int getY() const;
+
     void setX(const int x_);
+
     void setY(const int y_);
 
     friend Pos operator+(const Pos &a, const Pos &b);
+
     friend bool operator==(const Pos &a, const Pos &b);
+
     friend bool operator!=(const Pos &a, const Pos &b);
 
     std::string toString() const;

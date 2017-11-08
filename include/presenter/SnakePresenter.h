@@ -18,6 +18,7 @@ Game controller.
 class SnakePresenter {
 public:
     SnakePresenter();
+
     ~SnakePresenter();
 
     /**

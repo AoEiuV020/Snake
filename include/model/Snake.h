@@ -4,6 +4,7 @@
 #include "model/Map.h"
 
 class SnakeAI;
+
 /*
 Game snake.
 */
@@ -12,11 +13,15 @@ public:
     friend class SnakeAI;
 
     Snake();
+
     ~Snake();
 
     void setDirection(const Direction &d);
+
     void setMap(Map *const m);
+
     Direction getDirection() const;
+
     bool isDead() const;
 
     /*
@@ -36,7 +41,7 @@ public:
 /*
 Get the head position.
 */
-const Pos& getHead() const;
+    const Pos &getHead() const;
 
     void setDead(bool isDead);
 
@@ -56,7 +61,7 @@ private:
     /*
     Get the tail position.
     */
-    const Pos& getTail() const;
+    const Pos &getTail() const;
 
 };
 

@@ -23,17 +23,27 @@ public:
     };
 
     Point();
+
     ~Point();
 
     void setType(Type type_);
+
     void setParent(const Pos &p_);
+
     void setVisit(const bool v);
+
     void setDist(const ValueType dist_);
+
     void setIndex(const ValueType index_);
+
     Type getType() const;
+
     Pos getParent() const;
+
     bool isVisit() const;
+
     ValueType getDist() const;
+
     ValueType getIndex() const;
 
 private:
