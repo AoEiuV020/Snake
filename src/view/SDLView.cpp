@@ -6,9 +6,8 @@
 #include "presenter/SnakePresenter.h"
 #include <util/util.h>
 
-void SDLView::start() {
+void SDLView::onStart() {
     SDL_Log("onStart");
-    gameRunning = true;
     drawThread = std::thread(&SDLView::drawCallable, this);
     // 线程休息一下，确保sdl初始化完毕，否则可能出异常，
     SDL_Delay(100);
@@ -31,14 +30,10 @@ void SDLView::initSDL() {
     screenSurface = SDL_GetWindowSurface(window);
 }
 
-void SDLView::stop() {
+void SDLView::onStop() {
+    SnakeView::stop();
     SDL_Log("onStop");
-    gameRunning = false;
     SDL_Quit();
-}
-
-void SDLView::printMsg(const std::string &msg) {
-    SDL_Log("%s", msg.c_str());
 }
 
 void SDLView::eventCallable() {
@@ -46,12 +41,9 @@ void SDLView::eventCallable() {
     SDL_Event event;
     while (gameRunning) {
         while (SDL_PollEvent(&event) != 0) {
-            if (event.type == SDL_QUIT) {
-                presenter->exitGame();
-            }
             switch (event.type) {
                 case SDL_QUIT:
-                    presenter->exitGame();
+                    exit();
                     break;
                 case SDL_KEYDOWN:
                     switch (event.key.keysym.sym) {
@@ -75,7 +67,7 @@ void SDLView::eventCallable() {
                             keyboardMove(RIGHT);
                             break;
                         case SDLK_q:
-                            presenter->exitGame();
+                            exit();
                             break;
                         case SDLK_SPACE:
                             presenter->pauseToggle();

@@ -20,7 +20,7 @@ public:
 
     void draw(Map *map) override;
 
-    void start() override;
+    void init() override;
 
 private:
     static const std::string MAP_INFO_FILENAME;

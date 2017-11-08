@@ -18,17 +18,15 @@ class ViewWrapper : public SnakeView {
 public:
     void addView(SnakeView *view);
 
-    void setPresenter(SnakePresenter *presenter_) override;
-
     void draw(Map *map) override;
 
-    void start() override;
+    void init() override;
 
-    void stop() override;
+    void message(std::string message) override;
 
-    void printMsg(const std::string &msg) override;
+    void onStart() override;
 
-    void onScoreChanged(int score) override;
+    void onStop() override;
 
 private:
     std::vector<SnakeView *> viewList;

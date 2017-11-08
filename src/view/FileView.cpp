@@ -54,7 +54,7 @@ void FileView::writeMapToFile() {
     fwrite("\n", sizeof(char), 1, movementFile);
 }
 
-void FileView::start() {
+void FileView::init() {
     initFiles();
 }
 

@@ -8,39 +8,32 @@ void ViewWrapper::addView(SnakeView *view) {
     viewList.push_back(view);
 }
 
-void ViewWrapper::setPresenter(SnakePresenter *presenter_) {
-    SnakeView::setPresenter(presenter_);
-    for (auto &view : viewList) {
-        view->setPresenter(presenter_);
-    }
-}
-
 void ViewWrapper::draw(Map *map) {
     for (auto &view : viewList) {
         view->draw(map);
     }
 }
 
-void ViewWrapper::start() {
+void ViewWrapper::init() {
     for (auto &view : viewList) {
-        view->start();
+        view->init();
     }
 }
 
-void ViewWrapper::stop() {
+void ViewWrapper::onStart() {
     for (auto &view : viewList) {
-        view->stop();
+        view->onStart();
     }
 }
 
-void ViewWrapper::printMsg(const std::string &msg) {
+void ViewWrapper::onStop() {
     for (auto &view : viewList) {
-        view->printMsg(msg);
+        view->onStop();
     }
 }
 
-void ViewWrapper::onScoreChanged(int score) {
+void ViewWrapper::message(std::string message) {
     for (auto &view : viewList) {
-        view->onScoreChanged(score);
+        view->message(message);
     }
 }

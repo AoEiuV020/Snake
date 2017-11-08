@@ -16,7 +16,7 @@ public:
     /**
      * 关联presenter,
      */
-    virtual void setPresenter(SnakePresenter *presenter_);
+    void setPresenter(SnakePresenter *presenter_);
 
     /**
      * 绘图，
@@ -26,42 +26,69 @@ public:
     virtual void draw(Map *map);
 
     /**
-     * 开始绘图，
-     * 空实现，要在子类中重写，
+     * 开始游戏，
      */
-    virtual void start();
+    void start();
+
+    /**
+     * 初始化视图，
+     * 空实现，
+     */
+    virtual void init();
 
     /**
      * 结束绘图，
-     * 空实现，要在子类中重写，
      */
-    virtual void stop();
-
-    /**
-     * 打印文字，
-     * 空实现，要在子类中重写，
-     */
-    virtual void printMsg(const std::string &msg);
+    void stop();
 
     /**
      * 改得分，
      * 得分改变时presenter调用这个方法通知分数修改，
      */
-    virtual void onScoreChanged(int score_);
+    void setScore(int score_);
+
+    /**
+     * 显示消息，
+     * @param message 消息，
+     */
+    virtual void message(std::string message);
+
+    virtual void loop();
+
+    void win();
+
+    void lose();
+
+    virtual void onStart();
+
+    virtual void onStop();
 
 protected:
     Map *map = nullptr;
-    SnakePresenter *presenter = nullptr;
+    static SnakePresenter *presenter;
 
     /**
      * 标记当前的map是否已经绘制，避免重复绘制，
      */
-    bool drown;
+    bool drown = true;
 
     /**
      * 缓存得分，
      */
     int score;
+
+    /**
+     * 游戏是否正在运行，
+     */
+    static bool gameRunning;
+
+    void exit();
+
+private:
+    static const std::string MSG_BAD_ALLOC;
+    static const std::string MSG_LOSE;
+    static const std::string MSG_WIN;
+    static const std::string MSG_EXIT;
 };
 
 
