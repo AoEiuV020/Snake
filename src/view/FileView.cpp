@@ -23,9 +23,9 @@ void FileView::writeMapToFile() {
     if (!movementFile) {
         return;
     }
-    SizeType rows = map->getRowCount(), cols = map->getColCount();
-    for (SizeType i = 0; i < rows; ++i) {
-        for (SizeType j = 0; j < cols; ++j) {
+    int rows = map->getRowCount(), cols = map->getColCount();
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < cols; ++j) {
             switch (map->getPoint(Pos(i, j)).getType()) {
                 case Point::Type::EMPTY:
                     fwrite("  ", sizeof(char), 2, movementFile);

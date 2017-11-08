@@ -1,10 +1,11 @@
 #include "util/Console.h"
-#include <cstdio>
-#include <cstdlib>
+
 #ifdef LINUX_OR_APPLE
+
 #include <termios.h>
 #include <unistd.h>
 #include <fcntl.h>
+
 #elif _WIN32
 #include <conio.h>
 #endif
@@ -13,8 +14,8 @@ ConsoleColor::ConsoleColor(const ConsoleColorType foreColor_,
                            const ConsoleColorType backColor_,
                            const bool foreIntensified_,
                            const bool backIntensified_)
-    : foreColor(foreColor_), backColor(backColor_),
-    foreIntensified(foreIntensified_), backIntensified(backIntensified_) {}
+        : foreColor(foreColor_), backColor(backColor_),
+          foreIntensified(foreIntensified_), backIntensified(backIntensified_) {}
 
 #ifdef WIN32
 
@@ -118,41 +119,57 @@ void Console::writeWithColor(const std::string &str, const ConsoleColor &console
     int fore = -1, back = -1;
     switch (consoleColor.backColor) {
         case WHITE:
-            back = 47; break;
+            back = 47;
+            break;
         case RED:
-            back = 41; break;
+            back = 41;
+            break;
         case GREEN:
-            back = 42; break;
+            back = 42;
+            break;
         case BLUE:
-            back = 44; break;
+            back = 44;
+            break;
         case YELLOW:
-            back = 43; break;
+            back = 43;
+            break;
         case MAGENTA:
-            back = 45; break;
+            back = 45;
+            break;
         case CYAN:
-            back = 46; break;
+            back = 46;
+            break;
         case BLACK:
-            back = 40; break;
+            back = 40;
+            break;
         default:
             break;
     }
     switch (consoleColor.foreColor) {
         case WHITE:
-            fore = 37; break;
+            fore = 37;
+            break;
         case RED:
-            fore = 31; break;
+            fore = 31;
+            break;
         case GREEN:
-            fore = 32; break;
+            fore = 32;
+            break;
         case BLUE:
-            fore = 34; break;
+            fore = 34;
+            break;
         case YELLOW:
-            fore = 33; break;
+            fore = 33;
+            break;
         case MAGENTA:
-            fore = 35; break;
+            fore = 35;
+            break;
         case CYAN:
-            fore = 36; break;
+            fore = 36;
+            break;
         case BLACK:
-            fore = 30; break;
+            fore = 30;
+            break;
         default:
             break;
     }

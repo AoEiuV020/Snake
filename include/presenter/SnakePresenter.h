@@ -17,16 +17,9 @@ Game controller.
 */
 class SnakePresenter {
 public:
-    typedef Map::SizeType SizeType;
-
-    static const Point::ValueType EMPTY_VALUE = 99999;
+    SnakePresenter();
 
     ~SnakePresenter();
-
-    /**
-     * @return 返回单例对象，并没有必要，可以考虑不用单例模式，
-     */
-    static SnakePresenter *getInstance();
 
     /**
      * 关联view,
@@ -34,21 +27,19 @@ public:
      */
     void attach(SnakeView *view_);
 
-    void setEnableHamilton(const bool enableHamilton_);
-
     /**
      * 设置地图行数，
      * 在游戏初始化前修改才有效，
      * @param n 行数，
      */
-    void setMapRow(const SizeType n);
+    void setMapRow(int n);
 
     /**
      * 设置地图列数，
      * 在游戏初始化前修改才有效，
      * @param n 列数，
      */
-    void setMapCol(const SizeType n);
+    void setMapCol(int n);
 
     void setMoveInterval(long moveInterval_);
 
@@ -71,11 +62,6 @@ public:
     void exitGame();
 
     /**
-     * @return 返回游戏退出状态码，目前只有成功0 和初始化失败-1 两种状态，
-     */
-    int getExitCode();
-
-    /**
      * 往指定方向移动一格，
      * @param direction 移动方向，
      */
@@ -90,8 +76,8 @@ private:
     SnakeView *view;
 
     bool enableHamilton = true;
-    SizeType mapRowCnt = 10;
-    SizeType mapColCnt = 10;
+    int mapRowCnt = 10;
+    int mapColCnt = 10;
 
     Map *map = nullptr;
     Snake snake;
@@ -100,8 +86,6 @@ private:
 
     std::mutex mutexMove;  // Mutex of moveSnake()
     std::mutex mutexExit;  // Mutex of exitGame()
-
-    SnakePresenter();
 
     /**
      * 初始化地图，
@@ -114,7 +98,6 @@ private:
      */
     void initSnake();
 
-    int exitCode;
     SnakeAI *snakeAI;
 
     /**

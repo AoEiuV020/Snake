@@ -11,18 +11,22 @@ Integer coordinate in 2D plane.
 */
 class Pos {
 public:
-    typedef std::size_t SizeType;
+    Pos(const int x_ = 0, const int y_ = 0);
 
-    Pos(const SizeType x_ = 0, const SizeType y_ = 0);
     ~Pos();
 
-    SizeType getX() const;
-    SizeType getY() const;
-    void setX(const SizeType x_);
-    void setY(const SizeType y_);
+    int getX() const;
+
+    int getY() const;
+
+    void setX(const int x_);
+
+    void setY(const int y_);
 
     friend Pos operator+(const Pos &a, const Pos &b);
+
     friend bool operator==(const Pos &a, const Pos &b);
+
     friend bool operator!=(const Pos &a, const Pos &b);
 
     std::string toString() const;
@@ -50,8 +54,8 @@ public:
     std::vector<Pos> getAllAdj() const;
 
 private:
-    SizeType x;
-    SizeType y;
+    int x;
+    int y;
 };
 
 #endif

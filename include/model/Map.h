@@ -9,39 +9,48 @@ Game map.
 */
 class Map {
 public:
-    typedef Pos::SizeType SizeType;
+    Map(const int rowCnt_, const int colCnt_);
 
-    Map(const SizeType rowCnt_, const SizeType colCnt_);
     ~Map();
 
-    Point& getPoint(const Pos &p);
-    const Point& getPoint(const Pos &p) const;
+    Point &getPoint(const Pos &p);
 
-    SizeType getRowCount() const;
-    SizeType getColCount() const;
+    const Point &getPoint(const Pos &p) const;
+
+    int getRowCount() const;
+
+    int getColCount() const;
 
     /*
     Return the number of points excluding the boundaries.
     */
-    SizeType getSize() const;
+    int getSize() const;
 
     /*
     Check the state of the map.
     */
     bool isInside(const Pos &p) const;
+
     bool isEmpty(const Pos &p) const;
+
     bool isEmptyNotVisit(const Pos &p) const;
+
     bool isSafe(const Pos &p) const;
+
     bool isAllBody() const;
 
     /*
     Food API.
     */
     void createRandFood();
+
     void createFood(const Pos &pos);
+
     void removeFood();
+
     bool hasFood() const;
-    const Pos& getFood() const;
+
+    const Pos &getFood() const;
 
     /*
     Return the manhatten distance between two positions.
@@ -50,11 +59,11 @@ public:
     @param to   The ending position
     @return     The manhatten distance
     */
-    static SizeType distance(const Pos &from, const Pos &to);
+    static int distance(const Pos &from, const Pos &to);
 
 private:
     std::vector<std::vector<Point>> content;
-    SizeType size;
+    int size;
     Pos food;
 
     /*

@@ -5,41 +5,27 @@
 #include "ai/SnakeAI.h"
 #include "presenter/SnakePresenter.h"
 #include "view/ConsoleView.h"
-
 #include "util/util.h"
-
-#ifdef _WIN32
-#include <Windows.h>
-#endif
 
 using std::string;
 using std::list;
 
-SnakePresenter::SnakePresenter() {}
+SnakePresenter::SnakePresenter() = default;
 
 SnakePresenter::~SnakePresenter() {
     delete map;
     map = nullptr;
 }
 
-SnakePresenter *SnakePresenter::getInstance() {
-    static SnakePresenter instance;
-    return &instance;
-}
-
 void SnakePresenter::attach(SnakeView *view_) {
     view = view_;
 }
 
-void SnakePresenter::setEnableHamilton(const bool enableHamilton_) {
-    enableHamilton = enableHamilton_;
-}
-
-void SnakePresenter::setMapRow(const SizeType n) {
+void SnakePresenter::setMapRow(const int n) {
     mapRowCnt = n;
 }
 
-void SnakePresenter::setMapCol(const SizeType n) {
+void SnakePresenter::setMapCol(const int n) {
     mapColCnt = n;
 }
 
@@ -164,7 +150,7 @@ void SnakePresenter::initAI() {
     snakeAI->setMap(map);
     snakeAI->setSnake(&snake);
     if (enableHamilton) {
-        snakeAI->enableHamilton();
+        snakeAI->init();
     }
 }
 
@@ -203,10 +189,6 @@ void SnakePresenter::move(Direction direction) {
             snake.setDirection(direction);
         }
     }
-}
-
-int SnakePresenter::getExitCode() {
-    return exitCode;
 }
 
 void SnakePresenter::decideNext() {

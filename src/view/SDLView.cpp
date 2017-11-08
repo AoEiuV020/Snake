@@ -108,15 +108,15 @@ void SDLView::sleepFPS() {
 }
 
 void SDLView::drawMapContent() {
-    SizeType row = map->getRowCount(), col = map->getColCount();
+    int row = map->getRowCount(), col = map->getColCount();
     int width = 400 / col, height = 400 / row;
     int x = 0, y = 0;
     SDL_Rect r = {};
     r.w = width;
     r.h = height;
-    for (SizeType i = 0; i < row; ++i, y += height) {
+    for (int i = 0; i < row; ++i, y += height) {
         x = 0;
-        for (SizeType j = 0; j < col; ++j, x += width) {
+        for (int j = 0; j < col; ++j, x += width) {
             r.x = x;
             r.y = y;
             const Point &point = map->getPoint(Pos(i, j));

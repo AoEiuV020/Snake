@@ -11,8 +11,6 @@ class SnakePresenter;
 
 class SnakeView {
 public:
-    typedef Map::SizeType SizeType;
-
     /**
      * 关联presenter,
      */
@@ -75,7 +73,7 @@ protected:
     /**
      * 缓存得分，
      */
-    int score;
+    int score = 0;
 
     /**
      * 游戏是否正在运行，
@@ -85,7 +83,6 @@ protected:
     void exit();
 
 private:
-    static const std::string MSG_BAD_ALLOC;
     static const std::string MSG_LOSE;
     static const std::string MSG_WIN;
     static const std::string MSG_EXIT;

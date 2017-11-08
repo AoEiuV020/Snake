@@ -25,7 +25,7 @@ public:
 private:
     static const std::string MAP_INFO_FILENAME;
 
-    FILE *movementFile = nullptr;  // File to save snake movements
+    FILE *movementFile = nullptr;
 
     void writeMapToFile();
 

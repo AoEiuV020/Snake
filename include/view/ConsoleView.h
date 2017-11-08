@@ -26,13 +26,6 @@ public:
 
     void message(std::string message) override;
 
-    /**
-     * 设置游戏显示帧数，
-     * 即每秒绘图多少次，
-     * @param fps_ 帧数，
-     */
-    void setFPS(double fps_);
-
 private:
     /**
      * 实际的绘图方法，
@@ -55,14 +48,17 @@ private:
      * 绘图线程，
      */
     std::thread drawThread;
+
     /**
      * 供绘图线程调用的方法，
      */
     void drawCallable();
+
     /**
      * 监听键盘输入线程，
      */
-    std::thread keyboardThread;  // Thread to receive keyboard instructions
+    std::thread keyboardThread;
+
     /**
      * 供监听键盘线程调用的方法，
      */

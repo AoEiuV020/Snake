@@ -11,8 +11,7 @@
 
 class SnakeAI {
 public:
-    typedef Map::SizeType SizeType;
-    void enableHamilton();
+    void init();
 
     void setMap(Map *map_);
 
@@ -33,6 +32,7 @@ private:
     @param path The result path will be stored in this field.
     */
     void findMinPathToFood(std::list<Direction> &path);
+
     void findMaxPathToTail(std::list<Direction> &path);
 
     /*

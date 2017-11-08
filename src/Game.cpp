@@ -9,11 +9,6 @@
 #include "view/ConsoleView.h"
 #include "view/ViewWrapper.h"
 
-Game *Game::getInstance() {
-    static Game instance;
-    return &instance;
-}
-
 int Game::launch() {
     SnakeView *view;
 
@@ -31,7 +26,7 @@ int Game::launch() {
     view = viewWrapper;
 
 
-    SnakePresenter *presenter = SnakePresenter::getInstance();
+    auto *presenter = new SnakePresenter();
 
     // 设置默认地图大小，默认就是10 * 10,
     presenter->setMapRow(10);
@@ -62,7 +57,5 @@ int Game::launch() {
     // 进入游戏循环，其实就是个死循环，
     view->loop();
 
-    // 返回游戏退出状态码，
-    // 目前只有成功0 和初始化失败-1 两种状态，
-    return presenter->getExitCode();
+    return 0;
 }

@@ -8,8 +8,6 @@
 
 class Game {
 public:
-    static Game *getInstance();
-
     int launch();
 };
 

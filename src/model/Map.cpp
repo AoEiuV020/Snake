@@ -5,14 +5,14 @@ using std::vector;
 using std::string;
 using std::list;
 
-Map::Map(const SizeType rowCnt_, const SizeType colCnt_)
+Map::Map(const int rowCnt_, const int colCnt_)
         : content(rowCnt_, vector<Point>(colCnt_)) {
     size = (rowCnt_ - 2) * (colCnt_ - 2);
     // Add boundary walls
-    SizeType row = getRowCount(), col = getColCount();
-    for (SizeType i = 0; i < row; ++i) {
+    int row = getRowCount(), col = getColCount();
+    for (int i = 0; i < row; ++i) {
         if (i == 0 || i == row - 1) {  // The first and last row
-            for (SizeType j = 0; j < col; ++j) {
+            for (int j = 0; j < col; ++j) {
                 content[i][j].setType(Point::Type::WALL);
             }
         } else {  // Rows in the middle
@@ -32,15 +32,15 @@ const Point &Map::getPoint(const Pos &p) const {
     return content[p.getX()][p.getY()];
 }
 
-Map::SizeType Map::getRowCount() const {
+int Map::getRowCount() const {
     return content.size();
 }
 
-Map::SizeType Map::getColCount() const {
+int Map::getColCount() const {
     return content[0].size();
 }
 
-Map::SizeType Map::getSize() const {
+int Map::getSize() const {
     return size;
 }
 
@@ -66,9 +66,9 @@ bool Map::isSafe(const Pos &p) const {
 }
 
 bool Map::isAllBody() const {
-    SizeType row = getRowCount(), col = getColCount();
-    for (SizeType i = 1; i < row - 1; ++i) {
-        for (SizeType j = 1; j < col - 1; ++j) {
+    int row = getRowCount(), col = getColCount();
+    for (int i = 1; i < row - 1; ++i) {
+        for (int j = 1; j < col - 1; ++j) {
             Point::Type type = content[i][j].getType();
             if (!(type == Point::Type::SNAKE_HEAD
                   || type == Point::Type::SNAKE_BODY
@@ -84,7 +84,7 @@ void Map::createRandFood() {
     auto random = util::Random<>::getInstance();
     vector<Pos> emptyPoints = getEmptyPoints();
     if (!emptyPoints.empty()) {
-        SizeType i = random->nextInt((SizeType) 0, emptyPoints.size() - 1);
+        int i = random->nextInt((int) 0, (int) emptyPoints.size() - 1);
         createFood(emptyPoints[i]);
     }
 }
@@ -108,19 +108,19 @@ const Pos &Map::getFood() const {
     return food;
 }
 
-Map::SizeType Map::distance(const Pos &from, const Pos &to) {
-    SizeType fromX = from.getX(), toX = to.getX();
-    SizeType fromY = from.getY(), toY = to.getY();
-    SizeType dx = fromX > toX ? fromX - toX : toX - fromX;
-    SizeType dy = fromY > toY ? fromY - toY : toY - fromY;
+int Map::distance(const Pos &from, const Pos &to) {
+    int fromX = from.getX(), toX = to.getX();
+    int fromY = from.getY(), toY = to.getY();
+    int dx = fromX > toX ? fromX - toX : toX - fromX;
+    int dy = fromY > toY ? fromY - toY : toY - fromY;
     return dx + dy;
 }
 
 vector<Pos> Map::getEmptyPoints() const {
     vector<Pos> points;
-    SizeType row = getRowCount(), col = getColCount();
-    for (SizeType i = 1; i < row - 1; ++i) {
-        for (SizeType j = 1; j < col - 1; ++j) {
+    int row = getRowCount(), col = getColCount();
+    for (int i = 1; i < row - 1; ++i) {
+        for (int j = 1; j < col - 1; ++j) {
             if (content[i][j].getType() == Point::Type::EMPTY) {
                 points.push_back(Pos(i, j));
             }
