@@ -6,6 +6,7 @@
 #define SNAKE_SDL2VIEW_H
 
 #include <thread>
+#include <SDL2/SDL.h>
 #include "view/SnakeView.h"
 
 class SnakePresenter;
@@ -28,7 +29,7 @@ public:
 
     void printMsg(const std::string &msg) override;
 
-    void initSDL() const;
+    void initSDL();
 
 private:
     /**
@@ -79,6 +80,21 @@ private:
      * @param direction 方向，
      */
     void keyboardMove(Direction direction);
+
+    /**
+     * SDL窗口，
+     */
+    SDL_Window *window;
+    
+    /**
+     * SDL表面，
+     */
+    SDL_Surface *screenSurface;
+
+    /**
+     * SDL渲染器,
+     */
+    SDL_Renderer *renderer;
 };
 
 
