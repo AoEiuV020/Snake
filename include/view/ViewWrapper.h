@@ -18,8 +18,6 @@ class ViewWrapper : public SnakeView {
 public:
     void addView(SnakeView *view);
 
-    void setPresenter(SnakePresenter *presenter_) override;
-
     void draw(Map *map) override;
 
     void init() override;

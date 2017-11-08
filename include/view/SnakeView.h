@@ -16,7 +16,7 @@ public:
     /**
      * 关联presenter,
      */
-    virtual void setPresenter(SnakePresenter *presenter_);
+    void setPresenter(SnakePresenter *presenter_);
 
     /**
      * 绘图，
@@ -65,7 +65,7 @@ public:
 
 protected:
     Map *map = nullptr;
-    SnakePresenter *presenter = nullptr;
+    static SnakePresenter *presenter;
 
     /**
      * 标记当前的map是否已经绘制，避免重复绘制，

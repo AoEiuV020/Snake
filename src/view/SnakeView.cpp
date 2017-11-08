@@ -4,12 +4,12 @@
 
 #include "view/SnakeView.h"
 #include "presenter/SnakePresenter.h"
-#include <string>
 
 const std::string SnakeView::MSG_BAD_ALLOC = "Not enough memory to run the game.";
 const std::string SnakeView::MSG_LOSE = "Oops! You lose!";
 const std::string SnakeView::MSG_WIN = "Congratulations! You Win!";
 const std::string SnakeView::MSG_EXIT = "Game ended.";
+SnakePresenter *SnakeView::presenter = nullptr;
 
 bool SnakeView::gameRunning;
 
@@ -53,7 +53,7 @@ void SnakeView::setScore(int score_) {
 }
 
 void SnakeView::loop() {
-     while(gameRunning) {
+    while (gameRunning) {
     }
 }
 
