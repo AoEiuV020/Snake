@@ -150,7 +150,7 @@ void SnakePresenter::initAI() {
     snakeAI->setMap(map);
     snakeAI->setSnake(&snake);
     if (enableHamilton) {
-        snakeAI->enableHamilton();
+        snakeAI->init();
     }
 }
 

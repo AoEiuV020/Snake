@@ -11,7 +11,7 @@
 
 class SnakeAI {
 public:
-    void enableHamilton();
+    void init();
 
     void setMap(Map *map_);
 

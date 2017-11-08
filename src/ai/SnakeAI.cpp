@@ -18,9 +18,9 @@ void SnakeAI::setSnake(Snake *snake_) {
     snake = snake_;
 }
 
-void SnakeAI::enableHamilton() {
+void SnakeAI::init() {
     if (map->getRowCount() % 2 == 1 && map->getColCount() % 2 == 1) {
-        throw std::range_error("SnakeAI.enableHamilton(): require even amount of rows or columns.");
+        throw std::range_error("SnakeAI.init(): require even amount of rows or columns.");
     }
     hamiltonEnabled = true;
     buildHamilton();
