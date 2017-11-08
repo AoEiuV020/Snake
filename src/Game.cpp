@@ -9,11 +9,6 @@
 #include "view/ConsoleView.h"
 #include "view/ViewWrapper.h"
 
-Game *Game::getInstance() {
-    static Game instance;
-    return &instance;
-}
-
 int Game::launch() {
     SnakeView *view;
 
