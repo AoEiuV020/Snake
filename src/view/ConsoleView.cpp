@@ -89,10 +89,6 @@ void ConsoleView::onStart() {
     keyboardThread.detach();
 }
 
-void ConsoleView::setFPS(double fps_) {
-    fps = fps_;
-}
-
 void ConsoleView::keyboardMove(Direction direction) {
     presenter->move(direction);
 }

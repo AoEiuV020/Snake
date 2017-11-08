@@ -59,7 +59,7 @@ private:
     /**
      * 监听SDL事件线程，
      */
-    std::thread eventThread;  // Thread to receive keyboard instructions
+    std::thread eventThread;
     /**
      * 供SDL事件线程调用的方法，
      */
@@ -82,10 +82,6 @@ private:
      */
     SDL_Surface *screenSurface;
 
-    /**
-     * SDL渲染器,
-     */
-    SDL_Renderer *renderer;
 };
 
 
