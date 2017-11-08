@@ -11,8 +11,6 @@ class SnakePresenter;
 
 class SnakeView {
 public:
-    typedef Map::SizeType SizeType;
-
     /**
      * 关联presenter,
      */

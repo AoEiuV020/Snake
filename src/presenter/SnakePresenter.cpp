@@ -21,11 +21,11 @@ void SnakePresenter::attach(SnakeView *view_) {
     view = view_;
 }
 
-void SnakePresenter::setMapRow(const SizeType n) {
+void SnakePresenter::setMapRow(const int n) {
     mapRowCnt = n;
 }
 
-void SnakePresenter::setMapCol(const SizeType n) {
+void SnakePresenter::setMapCol(const int n) {
     mapColCnt = n;
 }
 

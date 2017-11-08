@@ -1,23 +1,23 @@
 #include "model/Pos.h"
 #include "util/util.h"
 
-Pos::Pos(const SizeType x_, const SizeType y_) : x(x_), y(y_) {}
+Pos::Pos(const int x_, const int y_) : x(x_), y(y_) {}
 
 Pos::~Pos() {}
 
-Pos::SizeType Pos::getX() const {
+int Pos::getX() const {
     return x;
 }
 
-Pos::SizeType Pos::getY() const {
+int Pos::getY() const {
     return y;
 }
 
-void Pos::setX(const SizeType x_) {
+void Pos::setX(const int x_) {
     x = x_;
 }
 
-void Pos::setY(const SizeType y_) {
+void Pos::setY(const int y_) {
     y = y_;
 }
 

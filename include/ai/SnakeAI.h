@@ -11,7 +11,6 @@
 
 class SnakeAI {
 public:
-    typedef Map::SizeType SizeType;
     void enableHamilton();
 
     void setMap(Map *map_);

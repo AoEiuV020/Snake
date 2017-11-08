@@ -9,7 +9,6 @@ Game snake.
 */
 class Snake {
 public:
-    typedef Map::SizeType SizeType;
     friend class SnakeAI;
 
     Snake();

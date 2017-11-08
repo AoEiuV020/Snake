@@ -35,9 +35,9 @@ void ConsoleView::drawMapContent() {
     Console::setCursor(0, 0);
     // 简单的两层循环遍历地图每个点，
     // 一个一个点绘制,
-    SizeType row = map->getRowCount(), col = map->getColCount();
-    for (SizeType i = 0; i < row; ++i) {
-        for (SizeType j = 0; j < col; ++j) {
+    int row = map->getRowCount(), col = map->getColCount();
+    for (int i = 0; i < row; ++i) {
+        for (int j = 0; j < col; ++j) {
             const Point &point = map->getPoint(Pos(i, j));
             switch (point.getType()) {
                 case Point::Type::EMPTY:

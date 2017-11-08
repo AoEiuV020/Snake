@@ -41,7 +41,7 @@ void SnakeAI::buildHamilton() {
         map->getPoint(*it).setIndex(index++);
     }
     // Build remaining cycle
-    SizeType size = map->getSize();
+    int size = map->getSize();
     Pos cur = snake->getHead();
     for (const Direction d : maxPath) {
         Pos next = cur.getAdj(d);
@@ -58,7 +58,7 @@ void SnakeAI::decideNext() {
         return;
     }
 
-    SizeType size = map->getSize();
+    int size = map->getSize();
     Pos head = snake->getHead(), tail = snake->getTail();
     Point::ValueType headIndex = map->getPoint(head).getIndex();
     // Move along the hamitonian cycle
@@ -94,9 +94,9 @@ void SnakeAI::findPathTo(const int pathType, const Pos &goal, std::list<Directio
 
 void SnakeAI::findMinPath(const Pos &from, const Pos &to, std::list<Direction> &path) {
     // Init
-    SizeType row = map->getRowCount(), col = map->getColCount();
-    for (SizeType i = 1; i < row - 1; ++i) {
-        for (SizeType j = 1; j < col - 1; ++j) {
+    int row = map->getRowCount(), col = map->getColCount();
+    for (int i = 1; i < row - 1; ++i) {
+        for (int j = 1; j < col - 1; ++j) {
             map->getPoint(Pos(i, j)).setDist(Point::MAX_VALUE);
         }
     }
@@ -117,7 +117,7 @@ void SnakeAI::findMinPath(const Pos &from, const Pos &to, std::list<Direction> &
         util::Random<>::getInstance()->shuffle(adjPositions.begin(), adjPositions.end());
         // Arrange the order of traversing to make the result path as straight as possible
         Direction bestDirec = (curPos == from ? snake->direc : curPoint.getParent().getDirectionTo(curPos));
-        for (SizeType i = 0; i < adjPositions.size(); ++i) {
+        for (int i = 0; i < (int)adjPositions.size(); ++i) {
             if (bestDirec == curPos.getDirectionTo(adjPositions[i])) {
                 util::swap(adjPositions[0], adjPositions[i]);
                 break;
@@ -139,9 +139,9 @@ void SnakeAI::findMaxPath(const Pos &from, const Pos &to, std::list<Direction> &
     // Get the shortest path
     findMinPath(from, to, path);
     // Init
-    SizeType row = map->getRowCount(), col = map->getColCount();
-    for (SizeType i = 1; i < row - 1; ++i) {
-        for (SizeType j = 1; j < col - 1; ++j) {
+    int row = map->getRowCount(), col = map->getColCount();
+    for (int i = 1; i < row - 1; ++i) {
+        for (int j = 1; j < col - 1; ++j) {
             map->getPoint(Pos(i, j)).setVisit(false);
         }
     }

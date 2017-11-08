@@ -17,8 +17,6 @@ Game controller.
 */
 class SnakePresenter {
 public:
-    typedef Map::SizeType SizeType;
-
     SnakePresenter();
     ~SnakePresenter();
 
@@ -33,14 +31,14 @@ public:
      * 在游戏初始化前修改才有效，
      * @param n 行数，
      */
-    void setMapRow(SizeType n);
+    void setMapRow(int n);
 
     /**
      * 设置地图列数，
      * 在游戏初始化前修改才有效，
      * @param n 列数，
      */
-    void setMapCol(SizeType n);
+    void setMapCol(int n);
 
     void setMoveInterval(long moveInterval_);
 
@@ -77,8 +75,8 @@ private:
     SnakeView *view;
 
     bool enableHamilton = true;
-    SizeType mapRowCnt = 10;
-    SizeType mapColCnt = 10;
+    int mapRowCnt = 10;
+    int mapColCnt = 10;
 
     Map *map = nullptr;
     Snake snake;
