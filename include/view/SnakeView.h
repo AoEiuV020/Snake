@@ -55,9 +55,9 @@ public:
 
     virtual void loop();
 
-    virtual void win();
+    void win();
 
-    virtual void lose();
+    void lose();
 
     virtual void onStart();
 
