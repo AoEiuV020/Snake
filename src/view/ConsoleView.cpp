@@ -82,7 +82,6 @@ void ConsoleView::sleepFPS() {
 }
 
 void ConsoleView::onStart() {
-    SnakeView::start();
     Console::clear();
     drawThread = std::thread(&ConsoleView::drawCallable, this);
     drawThread.detach();
