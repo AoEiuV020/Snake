@@ -24,8 +24,6 @@ public:
 
     void init() override;
 
-    void onScoreChanged(int score) override;
-
     void message(std::string message) override;
 
     void onStart() override;

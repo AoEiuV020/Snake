@@ -45,7 +45,7 @@ public:
      * 改得分，
      * 得分改变时presenter调用这个方法通知分数修改，
      */
-    virtual void onScoreChanged(int score_);
+    void setScore(int score_);
 
     /**
      * 显示消息，
@@ -89,7 +89,6 @@ private:
     static const std::string MSG_LOSE;
     static const std::string MSG_WIN;
     static const std::string MSG_EXIT;
-
 };
 
 

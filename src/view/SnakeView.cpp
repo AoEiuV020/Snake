@@ -48,7 +48,7 @@ void SnakeView::onStop() {
 
 }
 
-void SnakeView::onScoreChanged(int score_) {
+void SnakeView::setScore(int score_) {
     score = score_;
 }
 

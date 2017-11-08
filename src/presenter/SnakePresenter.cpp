@@ -128,7 +128,7 @@ void SnakePresenter::moveSnake() {
 
 void SnakePresenter::onEatenFood() {
     score += 1;
-    view->onScoreChanged(score);
+    view->setScore(score);
     map->createRandFood();
 }
 
