@@ -31,7 +31,7 @@ int Game::launch() {
     view = viewWrapper;
 
 
-    SnakePresenter *presenter = SnakePresenter::getInstance();
+    auto *presenter = new SnakePresenter();
 
     // 设置默认地图大小，默认就是10 * 10,
     presenter->setMapRow(10);

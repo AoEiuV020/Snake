@@ -19,12 +19,8 @@ class SnakePresenter {
 public:
     typedef Map::SizeType SizeType;
 
+    SnakePresenter();
     ~SnakePresenter();
-
-    /**
-     * @return 返回单例对象，并没有必要，可以考虑不用单例模式，
-     */
-    static SnakePresenter *getInstance();
 
     /**
      * 关联view,
@@ -91,8 +87,6 @@ private:
 
     std::mutex mutexMove;  // Mutex of moveSnake()
     std::mutex mutexExit;  // Mutex of exitGame()
-
-    SnakePresenter();
 
     /**
      * 初始化地图，

@@ -17,11 +17,6 @@ SnakePresenter::~SnakePresenter() {
     map = nullptr;
 }
 
-SnakePresenter *SnakePresenter::getInstance() {
-    static SnakePresenter instance;
-    return &instance;
-}
-
 void SnakePresenter::attach(SnakeView *view_) {
     view = view_;
 }
