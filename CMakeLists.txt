@@ -49,5 +49,5 @@ file(GLOB_RECURSE SRCS "${PROJECT_SOURCE_DIR}/src/*.cpp")
 add_executable(${PROJ_EXEC_NAME} ${SRCS} ${HEADERS})
 
 if(NOT WIN32)
-    target_link_libraries(${PROJ_EXEC_NAME} pthread)
+    target_link_libraries(${PROJ_EXEC_NAME} pthread SDL2)
 endif(NOT WIN32)

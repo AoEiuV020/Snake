@@ -2,6 +2,7 @@
 // Created by AoEiuV020 on 2017.10.31-16:05:12.
 //
 
+#include <view/SDLView.h>
 #include "view/FileView.h"
 #include "Game.h"
 #include "presenter/SnakePresenter.h"
@@ -16,8 +17,18 @@ Game *Game::getInstance() {
 int Game::launch() {
     SnakeView *view;
 
+    auto *viewWrapper = new ViewWrapper();
+
+#ifndef _WIN32
+    // 非Windows才启用SDL, 因为没有在Windows上测试，
+    auto *sdlView = new SDLView();
+    viewWrapper->addView(sdlView);
+#else
     auto *consoleView = new ConsoleView();
-    view = consoleView;
+    viewWrapper->addView(consoleView);
+#endif
+
+    view = viewWrapper;
 
 
     SnakePresenter *presenter = SnakePresenter::getInstance();
@@ -47,10 +58,6 @@ int Game::launch() {
     // 启动游戏，
     // 并进入游戏循环，其实就是个死循环，
     presenter->run();
-
-    // 游戏结果后暂停一下，免得窗口直接消失，
-    // 敲任意键继续，
-    Console::getch();
 
     // 返回游戏退出状态码，
     // 目前只有成功0 和初始化失败-1 两种状态，
