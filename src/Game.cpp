@@ -62,7 +62,5 @@ int Game::launch() {
     // 进入游戏循环，其实就是个死循环，
     view->loop();
 
-    // 返回游戏退出状态码，
-    // 目前只有成功0 和初始化失败-1 两种状态，
-    return presenter->getExitCode();
+    return 0;
 }

@@ -19,8 +19,6 @@ class SnakePresenter {
 public:
     typedef Map::SizeType SizeType;
 
-    static const Point::ValueType EMPTY_VALUE = 99999;
-
     ~SnakePresenter();
 
     /**
@@ -34,21 +32,19 @@ public:
      */
     void attach(SnakeView *view_);
 
-    void setEnableHamilton(const bool enableHamilton_);
-
     /**
      * 设置地图行数，
      * 在游戏初始化前修改才有效，
      * @param n 行数，
      */
-    void setMapRow(const SizeType n);
+    void setMapRow(SizeType n);
 
     /**
      * 设置地图列数，
      * 在游戏初始化前修改才有效，
      * @param n 列数，
      */
-    void setMapCol(const SizeType n);
+    void setMapCol(SizeType n);
 
     void setMoveInterval(long moveInterval_);
 
@@ -69,11 +65,6 @@ public:
      * 正常退出游戏，
      */
     void exitGame();
-
-    /**
-     * @return 返回游戏退出状态码，目前只有成功0 和初始化失败-1 两种状态，
-     */
-    int getExitCode();
 
     /**
      * 往指定方向移动一格，
@@ -114,7 +105,6 @@ private:
      */
     void initSnake();
 
-    int exitCode;
     SnakeAI *snakeAI;
 
     /**

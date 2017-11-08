@@ -5,17 +5,12 @@
 #include "ai/SnakeAI.h"
 #include "presenter/SnakePresenter.h"
 #include "view/ConsoleView.h"
-
 #include "util/util.h"
-
-#ifdef _WIN32
-#include <Windows.h>
-#endif
 
 using std::string;
 using std::list;
 
-SnakePresenter::SnakePresenter() {}
+SnakePresenter::SnakePresenter() = default;
 
 SnakePresenter::~SnakePresenter() {
     delete map;
@@ -29,10 +24,6 @@ SnakePresenter *SnakePresenter::getInstance() {
 
 void SnakePresenter::attach(SnakeView *view_) {
     view = view_;
-}
-
-void SnakePresenter::setEnableHamilton(const bool enableHamilton_) {
-    enableHamilton = enableHamilton_;
 }
 
 void SnakePresenter::setMapRow(const SizeType n) {
@@ -203,10 +194,6 @@ void SnakePresenter::move(Direction direction) {
             snake.setDirection(direction);
         }
     }
-}
-
-int SnakePresenter::getExitCode() {
-    return exitCode;
 }
 
 void SnakePresenter::decideNext() {
