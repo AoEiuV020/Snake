@@ -4,6 +4,12 @@
 
 #include "view/SnakeView.h"
 #include "presenter/SnakePresenter.h"
+#include <string>
+
+const std::string SnakeView::MSG_BAD_ALLOC = "Not enough memory to run the game.";
+const std::string SnakeView::MSG_LOSE = "Oops! You lose!";
+const std::string SnakeView::MSG_WIN = "Congratulations! You Win!";
+const std::string SnakeView::MSG_EXIT = "Game ended.";
 
 bool SnakeView::gameRunning;
 
@@ -29,11 +35,7 @@ void SnakeView::start() {
 
 void SnakeView::stop() {
     gameRunning = false;
-}
-
-void SnakeView::printMsg(const std::string &msg) {
-    // 无意义语句，只为避免一个警告，
-    (void)msg;
+    presenter->exitGame();
 }
 
 void SnakeView::onScoreChanged(int score_) {
@@ -43,6 +45,24 @@ void SnakeView::onScoreChanged(int score_) {
 void SnakeView::loop() {
     // 先启动游戏，再进入死循环，
     start();
-    while(gameRunning) {
+     while(gameRunning) {
     }
+}
+
+void SnakeView::win() {
+    message(MSG_WIN);
+    stop();
+}
+
+void SnakeView::lose() {
+    message(MSG_LOSE);
+    stop();
+}
+
+void SnakeView::exit() {
+    message(MSG_EXIT);
+    stop();
+}
+
+void SnakeView::message(const std::string) {
 }

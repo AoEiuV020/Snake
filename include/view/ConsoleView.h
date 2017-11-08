@@ -24,7 +24,7 @@ public:
      */
     void start() override;
 
-    void printMsg(const std::string &msg) override;
+    void message(std::string message) override;
 
     /**
      * 设置游戏显示帧数，

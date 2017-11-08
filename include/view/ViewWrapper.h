@@ -28,9 +28,9 @@ public:
 
     void stop() override;
 
-    void printMsg(const std::string &msg) override;
-
     void onScoreChanged(int score) override;
+
+    void message(std::string message) override;
 
 private:
     std::vector<SnakeView *> viewList;

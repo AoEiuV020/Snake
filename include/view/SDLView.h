@@ -27,8 +27,6 @@ public:
      */
     void stop() override;
 
-    void printMsg(const std::string &msg) override;
-
     void initSDL();
 
 private:

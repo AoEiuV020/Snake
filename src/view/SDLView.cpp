@@ -37,21 +37,14 @@ void SDLView::stop() {
     SDL_Quit();
 }
 
-void SDLView::printMsg(const std::string &msg) {
-    SDL_Log("%s", msg.c_str());
-}
-
 void SDLView::eventCallable() {
     SDL_Log("event thread start");
     SDL_Event event;
     while (gameRunning) {
         while (SDL_PollEvent(&event) != 0) {
-            if (event.type == SDL_QUIT) {
-                presenter->exitGame();
-            }
             switch (event.type) {
                 case SDL_QUIT:
-                    presenter->exitGame();
+                    exit();
                     break;
                 case SDL_KEYDOWN:
                     switch (event.key.keysym.sym) {
@@ -75,7 +68,7 @@ void SDLView::eventCallable() {
                             keyboardMove(RIGHT);
                             break;
                         case SDLK_q:
-                            presenter->exitGame();
+                            exit();
                             break;
                         case SDLK_SPACE:
                             presenter->pauseToggle();

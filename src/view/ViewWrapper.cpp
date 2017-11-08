@@ -39,14 +39,14 @@ void ViewWrapper::stop() {
     }
 }
 
-void ViewWrapper::printMsg(const std::string &msg) {
-    for (auto &view : viewList) {
-        view->printMsg(msg);
-    }
-}
-
 void ViewWrapper::onScoreChanged(int score) {
     for (auto &view : viewList) {
         view->onScoreChanged(score);
+    }
+}
+
+void ViewWrapper::message(std::string message) {
+    for (auto &view : viewList) {
+        view->message(message);
     }
 }

@@ -66,13 +66,6 @@ public:
     void run();
 
     /**
-     * 异常退出游戏，
-     * 退出并打印消息，
-     * @param err 错误消息，
-     */
-    void exitGameErr(const std::string &err);
-
-    /**
      * 正常退出游戏，
      */
     void exitGame();
@@ -94,11 +87,6 @@ public:
     void pauseToggle();
 
 private:
-    static const std::string MSG_BAD_ALLOC;
-    static const std::string MSG_LOSE;
-    static const std::string MSG_WIN;
-    static const std::string MSG_ESC;
-
     SnakeView *view;
 
     bool enableHamilton = true;
@@ -114,19 +102,6 @@ private:
     std::mutex mutexExit;  // Mutex of exitGame()
 
     SnakePresenter();
-
-    /**
-     * 带着消息退出游戏，
-     * @param msg 消息，可能是成功，失败，或主动退出，
-     */
-    void exitGame(const std::string &msg);
-
-    /**
-     * 打印消息，
-     * 直接通知view去打印，
-     * @param msg 消息，
-     */
-    void printMsg(const std::string &msg);
 
     /**
      * 初始化地图，

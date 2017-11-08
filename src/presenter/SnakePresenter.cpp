@@ -15,11 +15,6 @@
 using std::string;
 using std::list;
 
-const string SnakePresenter::MSG_BAD_ALLOC = "Not enough memory to run the game.";
-const string SnakePresenter::MSG_LOSE = "Oops! You lose!";
-const string SnakePresenter::MSG_WIN = "Congratulations! You Win!";
-const string SnakePresenter::MSG_ESC = "Game ended.";
-
 SnakePresenter::SnakePresenter() {}
 
 SnakePresenter::~SnakePresenter() {
@@ -69,44 +64,25 @@ void SnakePresenter::run() {
 }
 
 void SnakePresenter::autoMoveCallable() {
-    try {
-        while (gameRunning) {
-            util::sleep(moveInterval);
-            if (!pause) {
-                if (enableAI) {
-                    decideNext();
-                }
-                moveSnake();
+    while (gameRunning) {
+        util::sleep(moveInterval);
+        if (!pause) {
+            if (enableAI) {
+                decideNext();
             }
+            moveSnake();
         }
-    } catch (const std::exception &e) {
-        exitGameErr(e.what());
     }
 }
 
 void SnakePresenter::exitGame() {
-    exitGame(MSG_ESC);
-}
-
-void SnakePresenter::exitGame(const std::string &msg) {
     mutexExit.lock();
     if (runMainThread) {
         // 自动移动线程停止，
         gameRunning = false;
-        printMsg(msg);
-        // 停止绘图，
-        view->stop();
     }
     runMainThread = false;
     mutexExit.unlock();
-}
-
-void SnakePresenter::exitGameErr(const std::string &err) {
-    exitGame("ERROR: " + err);
-}
-
-void SnakePresenter::printMsg(const std::string &msg) {
-    view->printMsg(msg);
 }
 
 void SnakePresenter::moveSnake() {
@@ -116,7 +92,7 @@ void SnakePresenter::moveSnake() {
     // 如果全地图都是蛇身则胜利，不继续移动蛇身，
     if (map->isAllBody()) {
         mutexMove.unlock();
-        exitGame(MSG_WIN);
+        view->win();
         return;
     }
     try {
@@ -130,7 +106,7 @@ void SnakePresenter::moveSnake() {
             // 判断下一格是否安全，不安全就死，游戏结束，
             if (!map->isSafe(nextPos)) {
                 snake.setDead(true);
-                exitGame(MSG_LOSE);
+                view->lose();
             } else {
                 // 判断下一格是否是食物，并控制蛇移动，
                 if (nextPoint.getType() == Point::FOOD) {
@@ -157,16 +133,10 @@ void SnakePresenter::onEatenFood() {
 }
 
 void SnakePresenter::init() {
-    try {
-        initMap();
-        initSnake();
-        initAI();
-        view->draw(map);
-    } catch (const std::exception &e) {
-        exitGameErr(e.what());
-        // 任何原因初始化失败都简单设置状态码-1，
-        exitCode = -1;
-    }
+    initMap();
+    initSnake();
+    initAI();
+    view->draw(map);
 }
 
 void SnakePresenter::initMap() {
@@ -178,12 +148,8 @@ void SnakePresenter::initMap() {
     }
     map = new Map(mapRowCnt, mapColCnt);
     // 创建对象失败可能是地图太大，申请空间失败，
-    if (!map) {
-        exitGameErr(MSG_BAD_ALLOC);
-    } else {
-        // 如果要在地图添加额外的墙可以在这里添加，
-        // 现在没有，
-    }
+    // 如果要在地图添加额外的墙可以在这里添加，
+    // 现在没有，
 }
 
 void SnakePresenter::initSnake() {
@@ -204,7 +170,7 @@ void SnakePresenter::initAI() {
 
 void SnakePresenter::move(Direction direction) {
     // 蛇头只能前进左右拐，不能后退，反正后退必死，
-    if(direction != snake.getDirection()) {
+    if (direction != snake.getDirection()) {
         switch (snake.getDirection()) {
             case UP:
             case DOWN:

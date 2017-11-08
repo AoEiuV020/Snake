@@ -7,7 +7,7 @@
 #include "view/ConsoleView.h"
 #include "presenter/SnakePresenter.h"
 
-void ConsoleView::printMsg(const std::string &msg) {
+void ConsoleView::message(std::string message) {
     int mapRowCnt = 0;
     if (map != nullptr) {
         mapRowCnt = (int) map->getRowCount();
@@ -15,22 +15,18 @@ void ConsoleView::printMsg(const std::string &msg) {
     // 光标跳到地图下两行打印消息，
     // 控制台光标行列是0开始的，所以是+1，
     Console::setCursor(0, mapRowCnt + 1);
-    Console::writeWithColor(msg + "\n", ConsoleColor(WHITE, BLACK, true, false));
+    Console::writeWithColor(message + "\n", ConsoleColor(WHITE, BLACK, true, false));
 }
 
 void ConsoleView::drawCallable() {
-    try {
-        while (gameRunning) {
-            if (!drown) {
-                // 改标识避免重复绘图，
-                drown = true;
-                drawMapContent();
-            }
-            // 每次画完都让线程休息一下，为了满足刷新率，
-            sleepFPS();
+    while (gameRunning) {
+        if (!drown) {
+            // 改标识避免重复绘图，
+            drown = true;
+            drawMapContent();
         }
-    } catch (const std::exception &e) {
-        presenter->exitGameErr(e.what());
+        // 每次画完都让线程休息一下，为了满足刷新率，
+        sleepFPS();
     }
 }
 
@@ -75,13 +71,9 @@ void ConsoleView::drawMapContent() {
 }
 
 void ConsoleView::keyboardCallable() {
-    try {
-        while (gameRunning) {
-            // getch方法阻塞，有输入时传给onKeyboardHit处理，
-            onKeyboardHit(Console::getch());
-        }
-    } catch (const std::exception &e) {
-        presenter->exitGameErr(e.what());
+    while (gameRunning) {
+        // getch方法阻塞，有输入时传给onKeyboardHit处理，
+        onKeyboardHit(Console::getch());
     }
 }
 
@@ -183,7 +175,7 @@ void ConsoleView::onKeyboardHit(int key) {
             presenter->pauseToggle();
             break;
         case 'q':
-            presenter->exitGame();
+            exit();
             break;
         default:
             break;

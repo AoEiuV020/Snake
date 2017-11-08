@@ -42,20 +42,29 @@ public:
     virtual void stop();
 
     /**
-     * 打印文字，
-     * 空实现，要在子类中重写，
-     */
-    virtual void printMsg(const std::string &msg);
-
-    /**
      * 改得分，
      * 得分改变时presenter调用这个方法通知分数修改，
      */
     virtual void onScoreChanged(int score_);
 
+    /**
+     * 显示消息，
+     * @param message 消息，
+     */
+    virtual void message(std::string message);
+
     virtual void loop();
 
+    virtual void win();
+
+    virtual void lose();
+
 protected:
+    static const std::string MSG_BAD_ALLOC;
+    static const std::string MSG_LOSE;
+    static const std::string MSG_WIN;
+    static const std::string MSG_EXIT;
+
     Map *map = nullptr;
     SnakePresenter *presenter = nullptr;
 
@@ -73,6 +82,8 @@ protected:
      * 游戏是否正在运行，
      */
     static bool gameRunning;
+
+    void exit();
 };
 
 
