@@ -10,6 +10,8 @@ void SDLView::start() {
     SDL_Log("onStart");
     gameRunning = true;
     drawThread = std::thread(&SDLView::drawCallable, this);
+    // 线程休息一下，确保sdl初始化完毕，否则可能出异常，
+    SDL_Delay(100);
     drawThread.detach();
     eventThread = std::thread(&SDLView::eventCallable, this);
     eventThread.detach();
@@ -27,12 +29,6 @@ void SDLView::initSDL() {
                               SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
     //Get window surface
     screenSurface = SDL_GetWindowSurface(window);
-
-    //Fill the surface white
-    SDL_FillRect(screenSurface, nullptr, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
-
-    //Update the surface
-    SDL_UpdateWindowSurface(window);
 }
 
 void SDLView::stop() {
