@@ -56,6 +56,9 @@ int Game::launch() {
     // 视图绘图，
     view->init();
 
+    // 启动游戏，
+    view->start();
+
     // 进入游戏循环，其实就是个死循环，
     view->loop();
 

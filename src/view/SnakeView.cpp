@@ -43,8 +43,6 @@ void SnakeView::onScoreChanged(int score_) {
 }
 
 void SnakeView::loop() {
-    // 先启动游戏，再进入死循环，
-    start();
      while(gameRunning) {
     }
 }
