@@ -6,8 +6,7 @@
 #include "presenter/SnakePresenter.h"
 #include <util/util.h>
 
-void SDLView::start() {
-    SnakeView::start();
+void SDLView::onStart() {
     SDL_Log("onStart");
     drawThread = std::thread(&SDLView::drawCallable, this);
     // 线程休息一下，确保sdl初始化完毕，否则可能出异常，
@@ -31,7 +30,7 @@ void SDLView::initSDL() {
     screenSurface = SDL_GetWindowSurface(window);
 }
 
-void SDLView::stop() {
+void SDLView::onStop() {
     SnakeView::stop();
     SDL_Log("onStop");
     SDL_Quit();

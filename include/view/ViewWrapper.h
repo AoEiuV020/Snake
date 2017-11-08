@@ -24,13 +24,13 @@ public:
 
     void init() override;
 
-    void start() override;
-
-    void stop() override;
-
     void onScoreChanged(int score) override;
 
     void message(std::string message) override;
+
+    void onStart() override;
+
+    void onStop() override;
 
 private:
     std::vector<SnakeView *> viewList;

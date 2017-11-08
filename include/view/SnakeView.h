@@ -28,7 +28,7 @@ public:
     /**
      * 开始游戏，
      */
-    virtual void start();
+    void start();
 
     /**
      * 初始化视图，
@@ -39,7 +39,7 @@ public:
     /**
      * 结束绘图，
      */
-    virtual void stop();
+    void stop();
 
     /**
      * 改得分，
@@ -58,6 +58,10 @@ public:
     virtual void win();
 
     virtual void lose();
+
+    virtual void onStart();
+
+    virtual void onStop();
 
 protected:
     static const std::string MSG_BAD_ALLOC;

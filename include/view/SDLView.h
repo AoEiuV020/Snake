@@ -16,16 +16,15 @@ public:
     /**
      * 开始绘图，
      * 游戏开始时调用，
-     * 控制台清屏，并启动绘图线程和监听键盘的线程，
+     * 并启动绘图线程和监听键盘的线程，
      */
-    void start() override;
+    void onStart() override;
 
     /**
      * 结束绘图，
      * 游戏结束时调用，
-     * 通知子线程结束，
      */
-    void stop() override;
+    void onStop() override;
 
     void initSDL();
 

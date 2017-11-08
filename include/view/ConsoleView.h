@@ -22,7 +22,7 @@ public:
      * 游戏开始时调用，
      * 控制台清屏，并启动绘图线程和监听键盘的线程，
      */
-    void start() override;
+    void onStart() override;
 
     void message(std::string message) override;
 

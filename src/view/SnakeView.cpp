@@ -31,11 +31,21 @@ void SnakeView::init() {
 void SnakeView::start() {
     gameRunning = true;
     presenter->run();
+    onStart();
+}
+
+void SnakeView::onStart() {
+
 }
 
 void SnakeView::stop() {
     gameRunning = false;
     presenter->exitGame();
+    onStop();
+}
+
+void SnakeView::onStop() {
+
 }
 
 void SnakeView::onScoreChanged(int score_) {

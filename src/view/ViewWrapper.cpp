@@ -27,15 +27,15 @@ void ViewWrapper::init() {
     }
 }
 
-void ViewWrapper::start() {
+void ViewWrapper::onStart() {
     for (auto &view : viewList) {
-        view->start();
+        view->onStart();
     }
 }
 
-void ViewWrapper::stop() {
+void ViewWrapper::onStop() {
     for (auto &view : viewList) {
-        view->stop();
+        view->onStop();
     }
 }
 
