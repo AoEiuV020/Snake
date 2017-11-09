@@ -23,17 +23,6 @@ void SnakeAI::init() {
         throw std::range_error("SnakeAI.init(): require even amount of rows or columns.");
     }
     buildHamilton();
-
-    // 打印哈密顿回路走的顺序，
-    int row = map->getRowCount(), col = map->getColCount();
-    for (int i = 0; i < row; ++i) {
-        for (int j = 0; j < col; ++j) {
-            const Point &point = map->getPoint(Pos(i, j));
-            printf("%3d", point.getIndex());
-        }
-        printf("\n");
-    }
-
 }
 
 void SnakeAI::buildHamilton() {

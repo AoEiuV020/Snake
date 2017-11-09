@@ -38,8 +38,6 @@ public:
 
     void setDist(const ValueType dist_);
 
-    void setIndex(const ValueType index_);
-
     Type getType() const;
 
     Pos getParent() const;
@@ -47,8 +45,6 @@ public:
     bool isVisit() const;
 
     ValueType getDist() const;
-
-    ValueType getIndex() const;
 
 private:
     /**

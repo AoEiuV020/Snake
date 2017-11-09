@@ -24,10 +24,6 @@ void Point::setDist(const ValueType dist_) {
     dist = dist_;
 }
 
-void Point::setIndex(const ValueType index_) {
-    index = index_;
-}
-
 Pos Point::getParent() const {
     return parent;
 }
@@ -40,6 +36,3 @@ Point::ValueType Point::getDist() const {
     return dist;
 }
 
-Point::ValueType Point::getIndex() const {
-    return index;
-}
