@@ -37,7 +37,6 @@ void SDLView::initSDL() {
 }
 
 void SDLView::onStop() {
-    SnakeView::stop();
     SDL_Log("onStop");
 
     SDL_DestroyTexture(background);
