@@ -118,21 +118,27 @@ void SDLView::drawMapContent() {
             Uint32 color = 0xff11ff;
             switch (point.getType()) {
                 case Point::Type::EMPTY:
+                    // 白色，
                     color = 0xffffff;
                     break;
                 case Point::Type::WALL:
+                    // 黑色，
                     color = 0x000000;
                     break;
                 case Point::Type::FOOD:
+                    // 红色，
                     color = 0xff0000;
                     break;
                 case Point::Type::SNAKE_HEAD:
+                    // 绿色，
                     color = 0x00ff00;
                     break;
                 case Point::Type::SNAKE_BODY:
+                    // 黄色，
                     color = 0xffff00;
                     break;
                 case Point::Type::SNAKE_TAIL:
+                    // 蓝色，
                     color = 0x0000ff;
                     break;
                 default:
