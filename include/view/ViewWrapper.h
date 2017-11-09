@@ -18,9 +18,9 @@ class ViewWrapper : public SnakeView {
 public:
     void addView(SnakeView *view);
 
-    void draw(Map *map) override;
+    void draw(Map *map, Snake *) override;
 
-    void init() override;
+    void init(int, char **) override;
 
     void message(std::string message) override;
 

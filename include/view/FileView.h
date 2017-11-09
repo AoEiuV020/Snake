@@ -18,9 +18,9 @@ class FileView : public SnakeView {
 public:
     ~FileView();
 
-    void draw(Map *map) override;
+    void draw(Map *map, Snake *) override;
 
-    void init() override;
+    void init(int, char **) override;
 
 private:
     static const std::string MAP_INFO_FILENAME;

@@ -8,15 +8,15 @@ void ViewWrapper::addView(SnakeView *view) {
     viewList.push_back(view);
 }
 
-void ViewWrapper::draw(Map *map) {
+void ViewWrapper::draw(Map *map, Snake *) {
     for (auto &view : viewList) {
-        view->draw(map);
+        view->draw(map, nullptr);
     }
 }
 
-void ViewWrapper::init() {
+void ViewWrapper::init(int argc, char **argv) {
     for (auto &view : viewList) {
-        view->init();
+        view->init(argc, argv);
     }
 }
 

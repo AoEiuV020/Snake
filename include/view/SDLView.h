@@ -7,6 +7,7 @@
 
 #include <thread>
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 #include "view/SnakeView.h"
 
 class SnakePresenter;
@@ -20,13 +21,19 @@ public:
      */
     void onStart() override;
 
+    void init(int, char **) override;
+
+    void loop() override;
+
     /**
      * 结束绘图，
      * 游戏结束时调用，
      */
-    void onStop() override;
+    void destroy();
 
     void initSDL();
+
+    void message(std::string message) override;
 
 private:
     /**
@@ -74,15 +81,36 @@ private:
     void keyboardMove(Direction direction);
 
     /**
+     * 是否退出SDL界面，
+     */
+    bool quit = false;
+
+    /**
      * SDL窗口，
      */
     SDL_Window *window;
 
     /**
-     * SDL表面，
+     * SDL渲染器，
      */
-    SDL_Surface *screenSurface;
+    SDL_Renderer *renderer;
 
+    /**
+     * 资源目录，
+     */
+    std::string resourceDir;
+
+    SDL_Texture *background;
+    SDL_Texture *food;
+    SDL_Texture *wall;
+    SDL_Texture *body;
+    SDL_Texture *headUp;
+    SDL_Texture *headDown;
+    SDL_Texture *headLeft;
+    SDL_Texture *headRight;
+    TTF_Font *font;
+    SDL_Color textColor = {0x2b, 0x2b, 0x2b, 0xff};
+    std::string msg;
 };
 
 

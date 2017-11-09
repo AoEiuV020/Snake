@@ -5,6 +5,7 @@
 #ifndef SNAKE_SNAKEVIEW_H
 #define SNAKE_SNAKEVIEW_H
 
+#include <model/Snake.h>
 #include "model/Map.h"
 
 class SnakePresenter;
@@ -21,7 +22,7 @@ public:
      * 未必是马上绘图，先保存这个map,并标记有map需要绘制，
      * @param map
      */
-    virtual void draw(Map *map);
+    virtual void draw(Map *map, Snake *snake_);
 
     /**
      * 开始游戏，
@@ -32,7 +33,7 @@ public:
      * 初始化视图，
      * 空实现，
      */
-    virtual void init();
+    virtual void init(int, char **);
 
     /**
      * 结束绘图，
@@ -63,6 +64,7 @@ public:
 
 protected:
     Map *map = nullptr;
+    Snake *snake = nullptr;
     static SnakePresenter *presenter;
 
     /**

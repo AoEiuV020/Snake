@@ -5,13 +5,11 @@
 #include "view/SDLView.h"
 #include "presenter/SnakePresenter.h"
 #include <util/util.h>
+#include <util/FileUtil.h>
+#include <SDL2/SDL_image.h>
 
 void SDLView::onStart() {
     SDL_Log("onStart");
-    drawThread = std::thread(&SDLView::drawCallable, this);
-    // 线程休息一下，确保sdl初始化完毕，否则可能出异常，
-    SDL_Delay(100);
-    drawThread.detach();
     eventThread = std::thread(&SDLView::eventCallable, this);
     eventThread.detach();
 }
@@ -26,26 +24,63 @@ void SDLView::initSDL() {
     //Create window
     window = SDL_CreateWindow("Snake", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH,
                               SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
-    //Get window surface
-    screenSurface = SDL_GetWindowSurface(window);
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+
+    // 白底，
+    SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+    SDL_RenderClear(renderer);
+
+    background = IMG_LoadTexture(renderer, FileUtil::subFile(resourceDir, "background.png").c_str());
+    food = IMG_LoadTexture(renderer, FileUtil::subFile(resourceDir, "food.png").c_str());
+    wall = IMG_LoadTexture(renderer, FileUtil::subFile(resourceDir, "block.jpg").c_str());
+    headUp = IMG_LoadTexture(renderer, FileUtil::subFile(resourceDir, "head_up.png").c_str());
+    headDown = IMG_LoadTexture(renderer, FileUtil::subFile(resourceDir, "head_down.png").c_str());
+    headLeft = IMG_LoadTexture(renderer, FileUtil::subFile(resourceDir, "head_left.png").c_str());
+    headRight = IMG_LoadTexture(renderer, FileUtil::subFile(resourceDir, "head_right.png").c_str());
+    body = IMG_LoadTexture(renderer, FileUtil::subFile(resourceDir, "body.png").c_str());
+
+    TTF_Init();
+    font = TTF_OpenFont(FileUtil::subFile(resourceDir, "font.ttf").c_str(), 28);
 }
 
-void SDLView::onStop() {
-    SnakeView::stop();
-    SDL_Log("onStop");
+void SDLView::destroy() {
+    SDL_Log("destroy");
+
+    TTF_CloseFont(font);
+
+    SDL_DestroyTexture(background);
+    SDL_DestroyTexture(food);
+    SDL_DestroyTexture(wall);
+    SDL_DestroyTexture(headUp);
+    SDL_DestroyTexture(headDown);
+    SDL_DestroyTexture(headLeft);
+    SDL_DestroyTexture(headRight);
+    SDL_DestroyTexture(body);
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+
+    IMG_Quit();
+    TTF_Quit();
     SDL_Quit();
 }
 
 void SDLView::eventCallable() {
     SDL_Log("event thread start");
     SDL_Event event;
-    while (gameRunning) {
+    while (!quit) {
         while (SDL_PollEvent(&event) != 0) {
             switch (event.type) {
                 case SDL_QUIT:
                     exit();
+                    // 关闭界面，
+                    quit = true;
                     break;
                 case SDL_KEYDOWN:
+                    if (!gameRunning) {
+                        // 游戏结束时再点击任意键关闭界面，
+                        quit = true;
+                        break;
+                    }
                     switch (event.key.keysym.sym) {
                         case SDLK_UP:
                         case SDLK_w:
@@ -87,8 +122,7 @@ void SDLView::eventCallable() {
 
 void SDLView::drawCallable() {
     SDL_Log("draw thread start");
-    initSDL();
-    while (gameRunning) {
+    while (!quit) {
         if (!drown) {
             // 改标识避免重复绘图，
             drown = true;
@@ -104,10 +138,12 @@ void SDLView::keyboardMove(Direction direction) {
 }
 
 void SDLView::sleepFPS() {
-    util::sleep((long) ((1.0 / fps) * 1000));
+    SDL_Delay((Uint32) ((1.0 / fps) * 1000));
 }
 
 void SDLView::drawMapContent() {
+    SDL_RenderClear(renderer);
+
     int row = map->getRowCount(), col = map->getColCount();
     int width = 400 / col, height = 400 / row;
     int x = 0, y = 0;
@@ -120,32 +156,85 @@ void SDLView::drawMapContent() {
             r.x = x;
             r.y = y;
             const Point &point = map->getPoint(Pos(i, j));
-            Uint32 color = 0xff11ff;
+            // 刷上背景，
+            SDL_RenderCopy(renderer, background, nullptr, &r);
+            SDL_Texture *texture = nullptr;
             switch (point.getType()) {
                 case Point::Type::EMPTY:
-                    color = 0xffffff;
+                    texture = background;
                     break;
                 case Point::Type::WALL:
-                    color = 0x000000;
+                    texture = wall;
                     break;
                 case Point::Type::FOOD:
-                    color = 0xff0000;
+                    texture = food;
                     break;
                 case Point::Type::SNAKE_HEAD:
-                    color = 0x00ff00;
+                    switch (snake->getDirection()) {
+                        case UP:
+                            texture = headUp;
+                            break;
+                        default:
+                        case DOWN:
+                            texture = headDown;
+                            break;
+                        case LEFT:
+                            texture = headLeft;
+                            break;
+                        case RIGHT:
+                            texture = headRight;
+                            break;
+                    }
                     break;
                 case Point::Type::SNAKE_BODY:
-                    color = 0xffff00;
-                    break;
                 case Point::Type::SNAKE_TAIL:
-                    color = 0x0000ff;
+                    texture = body;
                     break;
                 default:
                     break;
             }
-            SDL_FillRect(screenSurface, &r, color);
+            if (texture != nullptr) {
+                // 刷上方块，
+                SDL_RenderCopy(renderer, texture, nullptr, &r);
+            }
         }
     }
-    //Update the surface
-    SDL_UpdateWindowSurface(window);
+
+    // 显示分数，
+    SDL_Surface *scoreSurface = TTF_RenderText_Solid(font, ("Score: " + util::toString(score)).c_str(), textColor);
+    // 分数显示在右上角，
+    SDL_Rect scoreRect = {400 - scoreSurface->w, 0, scoreSurface->w, scoreSurface->h};
+    SDL_Texture *textTexture = SDL_CreateTextureFromSurface(renderer, scoreSurface);
+    SDL_FreeSurface(scoreSurface);
+    SDL_RenderCopy(renderer, textTexture, nullptr, &scoreRect);
+
+    if (!msg.empty()) {
+        // 显示消息，胜利失败之类的，
+        SDL_Surface *messageSurface = TTF_RenderText_Solid(font, msg.c_str(), textColor);
+        // 消息显示在正中，
+        SDL_Rect messageRect = {400 / 2 - messageSurface->w / 2, 400 / 2 - messageSurface->h / 2, messageSurface->w,
+                                messageSurface->h};
+        SDL_Texture *messageTexture = SDL_CreateTextureFromSurface(renderer, messageSurface);
+        SDL_FreeSurface(messageSurface);
+        SDL_RenderCopy(renderer, messageTexture, nullptr, &messageRect);
+    }
+
+    SDL_RenderPresent(renderer);
+}
+
+void SDLView::init(int, char **argv) {
+    std::string bin = argv[0];
+    resourceDir = FileUtil::subFile(FileUtil::parent(bin), "res");
+    initSDL();
+}
+
+void SDLView::loop() {
+    drawCallable();
+    destroy();
+}
+
+void SDLView::message(std::string message) {
+    SDL_Log("%s", message.c_str());
+    msg = message;
+    drown = false;
 }

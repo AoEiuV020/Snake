@@ -9,21 +9,17 @@
 #include "view/ConsoleView.h"
 #include "view/ViewWrapper.h"
 
-int Game::launch() {
+int Game::launch(int argc, char **argv) {
     SnakeView *view;
-
-    auto *viewWrapper = new ViewWrapper();
 
 #ifndef _WIN32
     // 非Windows才启用SDL, 因为没有在Windows上测试，
     auto *sdlView = new SDLView();
-    viewWrapper->addView(sdlView);
+    view = sdlView;
 #else
     auto *consoleView = new ConsoleView();
-    viewWrapper->addView(consoleView);
+    view = consoleView;
 #endif
-
-    view = viewWrapper;
 
 
     auto *presenter = new SnakePresenter();
@@ -49,7 +45,7 @@ int Game::launch() {
     presenter->init();
 
     // 视图绘图，
-    view->init();
+    view->init(argc, argv);
 
     // 启动游戏，
     view->start();
