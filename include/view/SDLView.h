@@ -82,9 +82,14 @@ private:
     SDL_Window *window;
 
     /**
-     * SDL表面，
+     * SDL渲染器，
      */
-    SDL_Surface *screenSurface;
+    SDL_Renderer *renderer;
+
+    /**
+     * 代表一个方块的SDL纹理，
+     */
+    SDL_Texture *block;
 
     /**
      * 资源目录，

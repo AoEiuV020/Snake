@@ -23,8 +23,9 @@ void SDLView::initSDL() {
     //Create window
     window = SDL_CreateWindow("Snake", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH,
                               SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
-    //Get window surface
-    screenSurface = SDL_GetWindowSurface(window);
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    block = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STATIC, 40, 40);
+    SDL_SetRenderTarget(renderer, block);
 }
 
 void SDLView::onStop() {
@@ -116,46 +117,44 @@ void SDLView::drawMapContent() {
             r.x = x;
             r.y = y;
             const Point &point = map->getPoint(Pos(i, j));
-            Uint32 color = 0xff11ff;
+            SDL_SetRenderDrawColor(renderer, 0xff, 0xff, 0xff, 0xff);
             switch (point.getType()) {
                 case Point::Type::EMPTY:
                     // 白色，
-                    color = 0xffffff;
+                    SDL_SetRenderDrawColor(renderer, 0xff, 0xff, 0xff, 0xff);
                     break;
                 case Point::Type::WALL:
                     // 黑色，
-                    color = 0x000000;
+                    SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0xff);
                     break;
                 case Point::Type::FOOD:
                     // 红色，
-                    color = 0xff0000;
+                    SDL_SetRenderDrawColor(renderer, 0xff, 0x00, 0x00, 0xff);
                     break;
                 case Point::Type::SNAKE_HEAD:
                     // 绿色，
-                    color = 0x00ff00;
+                    SDL_SetRenderDrawColor(renderer, 0x00, 0xff, 0x00, 0xff);
                     break;
                 case Point::Type::SNAKE_BODY:
                     // 黄色，
-                    color = 0xffff00;
+                    SDL_SetRenderDrawColor(renderer, 0xff, 0xff, 0x00, 0xff);
                     break;
                 case Point::Type::SNAKE_TAIL:
                     // 蓝色，
-                    color = 0x0000ff;
+                    SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0xff, 0xff);
                     break;
                 default:
                     break;
             }
-            SDL_FillRect(screenSurface, &r, color);
+            SDL_RenderFillRect(renderer, &r);
         }
     }
-    //Update the surface
-    SDL_UpdateWindowSurface(window);
+    SDL_RenderPresent(renderer);
 }
 
 void SDLView::init(int, char **argv) {
     std::string bin = argv[0];
     resourceDir = FileUtil::subFile(FileUtil::parent(bin), "res");
-    SDL_Log("%s", resourceDir.c_str());
     initSDL();
 }
 
