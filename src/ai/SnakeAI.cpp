@@ -23,23 +23,30 @@ void SnakeAI::init() {
         throw std::range_error("SnakeAI.init(): require even amount of rows or columns.");
     }
     buildHamilton();
+
+    // 打印哈密顿回路走的顺序，
+    int row = map->getRowCount(), col = map->getColCount();
+    for (int i = 0; i < row; ++i) {
+        for (int j = 0; j < col; ++j) {
+            const Point &point = map->getPoint(Pos(i, j));
+            printf("%3d", point.getIndex());
+        }
+        printf("\n");
+    }
+
 }
 
 void SnakeAI::buildHamilton() {
-    // Change the initial body to a wall temporarily
-    Pos bodyPos = *(++snake->bodies.begin());
-    Point &bodyPoint = map->getPoint(bodyPos);
-    map->getPoint(*(++snake->bodies.begin())).setType(Point::Type::WALL);
-    // Get the longest path
+    // 得到从蛇头到蛇尾的最长路径，
     std::list<Direction> maxPath;
     findMaxPathToTail(maxPath);
-    bodyPoint.setType(Point::Type::SNAKE_BODY);
-    // Initialize the first three incides of the cycle
+
+    // 从蛇尾到蛇头标记顺序，
     Point::ValueType index = 0;
     for (auto it = snake->bodies.crbegin(); it != snake->bodies.crend(); ++it) {
         map->getPoint(*it).setIndex(index++);
     }
-    // Build remaining cycle
+    // 沿途按顺序记录下来，
     int size = map->getSize();
     Pos cur = snake->getHead();
     for (const Direction d : maxPath) {
@@ -50,13 +57,6 @@ void SnakeAI::buildHamilton() {
 }
 
 void SnakeAI::decideNext() {
-    if (snake->isDead()) {
-        return;
-    } else if (!map->hasFood()) {
-        snake->direc = NONE;
-        return;
-    }
-
     int size = map->getSize();
     Pos head = snake->getHead(), tail = snake->getTail();
     Point::ValueType headIndex = map->getPoint(head).getIndex();
