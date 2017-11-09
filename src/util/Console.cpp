@@ -7,6 +7,7 @@
 #include <fcntl.h>
 
 #elif _WIN32
+#include <cstdio>
 #include <conio.h>
 #endif
 

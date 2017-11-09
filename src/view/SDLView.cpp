@@ -2,6 +2,7 @@
 // Created by AoEiuV020 on 2017.11.08-14:28:33.
 //
 
+#ifndef __WIN32
 #include "view/SDLView.h"
 #include "presenter/SnakePresenter.h"
 #include <util/util.h>
@@ -179,7 +180,7 @@ void SDLView::drawMapContent() {
     int row = map->getRowCount(), col = map->getColCount();
     int width = 400 / col, height = 400 / row;
     int x = 0, y = 0;
-    SDL_Rect r = {};
+    SDL_Rect r;
     r.w = width;
     r.h = height;
     // 一个方块，从左到右，从上到下移动，一个个块贴上图片，
@@ -320,3 +321,4 @@ void SDLView::message(std::string message) {
     msg = message;
     drown = false;
 }
+#endif // __WIN32
