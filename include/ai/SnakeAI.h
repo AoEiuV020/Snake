@@ -20,29 +20,16 @@ public:
     void setSnake(Snake *snake_);
 
 private:
-    bool hamiltonEnabled = false;
 
     Map *map;
 
     Snake *snake;
 
-    /*
-    Find path between two points.
-
-    @param path The result path will be stored in this field.
-    */
-    void findMinPathToFood(std::list<Direction> &path);
-
+    /**
+     * 查找距离蛇尾最远的路径，
+     * @param path 路径保存在这个列表中，
+     */
     void findMaxPathToTail(std::list<Direction> &path);
-
-    /*
-    Find path from the snake's head to a given position.
-
-    @param type 0->shortest path, 1->longest path
-    @param to   The given position
-    @param path The result path will be stored in this field.
-    */
-    void findPathTo(const int type, const Pos &to, std::list<Direction> &path);
 
     /*
     Find the shortest path as straight as possible between two positions.
@@ -76,6 +63,11 @@ private:
     The path index will be stored in the 'value' field of each Point.
     */
     void buildHamilton();
+
+    std::vector<std::vector<Direction>> directionMap;
+    std::vector<std::vector<bool>> visitMap;
+    std::vector<std::vector<uint32_t>> distanceMap;
+    std::vector<std::vector<Pos>> parentMap;
 };
 
 
