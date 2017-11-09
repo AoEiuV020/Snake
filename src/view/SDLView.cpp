@@ -29,7 +29,10 @@ void SDLView::initSDL() {
     background = IMG_LoadTexture(renderer, FileUtil::subFile(resourceDir, "background.png").c_str());
     food = IMG_LoadTexture(renderer, FileUtil::subFile(resourceDir, "food.png").c_str());
     wall = IMG_LoadTexture(renderer, FileUtil::subFile(resourceDir, "block.jpg").c_str());
-    head = IMG_LoadTexture(renderer, FileUtil::subFile(resourceDir, "head_2.png").c_str());
+    headUp = IMG_LoadTexture(renderer, FileUtil::subFile(resourceDir, "head_up.png").c_str());
+    headDown = IMG_LoadTexture(renderer, FileUtil::subFile(resourceDir, "head_down.png").c_str());
+    headLeft = IMG_LoadTexture(renderer, FileUtil::subFile(resourceDir, "head_left.png").c_str());
+    headRight = IMG_LoadTexture(renderer, FileUtil::subFile(resourceDir, "head_right.png").c_str());
     body = IMG_LoadTexture(renderer, FileUtil::subFile(resourceDir, "body.png").c_str());
 }
 
@@ -136,7 +139,21 @@ void SDLView::drawMapContent() {
                     texture = food;
                     break;
                 case Point::Type::SNAKE_HEAD:
-                    texture = head;
+                    switch (snake->getDirection()) {
+                        case UP:
+                            texture = headUp;
+                            break;
+                        default:
+                        case DOWN:
+                            texture = headDown;
+                            break;
+                        case LEFT:
+                            texture = headLeft;
+                            break;
+                        case RIGHT:
+                            texture = headRight;
+                            break;
+                    }
                     break;
                 case Point::Type::SNAKE_BODY:
                 case Point::Type::SNAKE_TAIL:

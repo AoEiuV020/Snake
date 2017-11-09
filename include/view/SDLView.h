@@ -94,8 +94,11 @@ private:
     SDL_Texture *background;
     SDL_Texture *food;
     SDL_Texture *wall;
-    SDL_Texture *head;
     SDL_Texture *body;
+    SDL_Texture *headUp;
+    SDL_Texture *headDown;
+    SDL_Texture *headLeft;
+    SDL_Texture *headRight;
 };
 
 

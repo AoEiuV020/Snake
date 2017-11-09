@@ -103,7 +103,7 @@ void SnakePresenter::moveSnake() {
                 }
             }
             // 通知view绘图，
-            view->draw(map);
+            view->draw(map, &snake);
         }
         mutexMove.unlock();
     } catch (const std::exception &e) {
@@ -122,7 +122,7 @@ void SnakePresenter::init() {
     initMap();
     initSnake();
     initAI();
-    view->draw(map);
+    view->draw(map, &snake);
 }
 
 void SnakePresenter::initMap() {

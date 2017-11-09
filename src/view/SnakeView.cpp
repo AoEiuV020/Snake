@@ -12,10 +12,11 @@ SnakePresenter *SnakeView::presenter = nullptr;
 
 bool SnakeView::gameRunning;
 
-void SnakeView::draw(Map *map_) {
+void SnakeView::draw(Map *map_, Snake *snake_) {
     // 简单保存地图指针，
     // 考虑到线程安全，之后要改成深度复制，
     map = map_;
+    snake = snake_;
     drown = false;
 }
 

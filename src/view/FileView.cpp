@@ -14,8 +14,8 @@ FileView::~FileView() {
     }
 }
 
-void FileView::draw(Map *map) {
-    SnakeView::draw(map);
+void FileView::draw(Map *map, Snake *) {
+    SnakeView::draw(map, nullptr);
     writeMapToFile();
 }
 
