@@ -54,10 +54,6 @@ bool Map::isEmpty(const Pos &p) const {
     return isInside(p) && getPoint(p).getType() == Point::Type::EMPTY;
 }
 
-bool Map::isEmptyNotVisit(const Pos &p) const {
-    return isEmpty(p) && !getPoint(p).isVisit();
-}
-
 bool Map::isSafe(const Pos &p) const {
     const Point &point = getPoint(p);
     return isInside(p) && (point.getType() == Point::Type::EMPTY

@@ -33,8 +33,6 @@ public:
 
     bool isEmpty(const Pos &p) const;
 
-    bool isEmptyNotVisit(const Pos &p) const;
-
     bool isSafe(const Pos &p) const;
 
     bool isAllBody() const;

@@ -34,15 +34,11 @@ public:
 
     void setParent(const Pos &p_);
 
-    void setVisit(const bool v);
-
     void setDist(const ValueType dist_);
 
     Type getType() const;
 
     Pos getParent() const;
-
-    bool isVisit() const;
 
     ValueType getDist() const;
 
