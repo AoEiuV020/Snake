@@ -57,13 +57,20 @@ void SDLView::destroy() {
 void SDLView::eventCallable() {
     SDL_Log("event thread start");
     SDL_Event event;
-    while (gameRunning) {
+    while (!quit) {
         while (SDL_PollEvent(&event) != 0) {
             switch (event.type) {
                 case SDL_QUIT:
                     exit();
+                    // 关闭界面，
+                    quit = true;
                     break;
                 case SDL_KEYDOWN:
+                    if (!gameRunning) {
+                        // 游戏结束时再点击任意键关闭界面，
+                        quit = true;
+                        break;
+                    }
                     switch (event.key.keysym.sym) {
                         case SDLK_UP:
                         case SDLK_w:
@@ -105,7 +112,7 @@ void SDLView::eventCallable() {
 
 void SDLView::drawCallable() {
     SDL_Log("draw thread start");
-    while (gameRunning) {
+    while (!quit) {
         if (!drown) {
             // 改标识避免重复绘图，
             drown = true;

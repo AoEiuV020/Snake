@@ -101,6 +101,8 @@ private:
     SDL_Texture *headDown;
     SDL_Texture *headLeft;
     SDL_Texture *headRight;
+
+    bool quit = false;
 };
 
 
