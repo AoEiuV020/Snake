@@ -16,15 +16,7 @@ void Point::setParent(const Pos &p_) {
     parent = p_;
 }
 
-void Point::setDist(const ValueType dist_) {
-    dist = dist_;
-}
-
 Pos Point::getParent() const {
     return parent;
-}
-
-Point::ValueType Point::getDist() const {
-    return dist;
 }
 

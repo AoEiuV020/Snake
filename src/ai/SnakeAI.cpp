@@ -28,6 +28,7 @@ void SnakeAI::init() {
 void SnakeAI::buildHamilton() {
     directionMap = std::vector<std::vector<Direction>>(map->getRowCount(), std::vector<Direction>(map->getColCount()));
     visitMap = std::vector<std::vector<bool>>(map->getRowCount(), std::vector<bool>(map->getColCount()));
+    distanceMap = std::vector<std::vector<uint32_t >>(map->getRowCount(), std::vector<uint32_t>(map->getColCount()));
     // 得到从蛇头到蛇尾的最长路径，
     std::list<Direction> maxPath;
     findMaxPathToTail(maxPath);
@@ -59,11 +60,11 @@ void SnakeAI::findMinPath(const Pos &from, const Pos &to, std::list<Direction> &
     int row = map->getRowCount(), col = map->getColCount();
     for (int i = 1; i < row - 1; ++i) {
         for (int j = 1; j < col - 1; ++j) {
-            map->getPoint(Pos(i, j)).setDist(Point::MAX_VALUE);
+            distanceMap[i][j] = UINT32_MAX;
         }
     }
     path.clear();
-    map->getPoint(from).setDist(0);
+    distanceMap[from.getX()][from.getY()] = 0;
     std::queue<Pos> openList;
     openList.push(from);
     // BFS
@@ -88,9 +89,9 @@ void SnakeAI::findMinPath(const Pos &from, const Pos &to, std::list<Direction> &
         // Traverse the adjacent positions
         for (const Pos &adjPos : adjPositions) {
             Point &adjPoint = map->getPoint(adjPos);
-            if (map->isSafe(adjPos) && adjPoint.getDist() == Point::MAX_VALUE) {
+            if (map->isSafe(adjPos) && distanceMap[adjPos.getX()][adjPos.getY()] == UINT32_MAX) {
                 adjPoint.setParent(curPos);
-                adjPoint.setDist(curPoint.getDist() + 1);
+                distanceMap[adjPos.getX()][adjPos.getY()] = distanceMap[curPos.getX()][curPos.getY()] + 1;
                 openList.push(adjPos);
             }
         }

@@ -9,10 +9,6 @@
  */
 class Point {
 public:
-    typedef uint32_t ValueType;
-
-    static const ValueType MAX_VALUE = UINT32_MAX;
-
     /**
      * 枚举地图上的点的类型，
      * 包括空白，墙，食物，蛇头，蛇身，蛇尾，
@@ -34,13 +30,9 @@ public:
 
     void setParent(const Pos &p_);
 
-    void setDist(const ValueType dist_);
-
     Type getType() const;
 
     Pos getParent() const;
-
-    ValueType getDist() const;
 
 private:
     /**
@@ -48,9 +40,6 @@ private:
      */
     Type type = EMPTY;
     Pos parent;
-    bool visit;
-    ValueType dist;
-    ValueType index;
 };
 
 #endif
