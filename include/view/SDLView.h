@@ -87,14 +87,15 @@ private:
     SDL_Renderer *renderer;
 
     /**
-     * 代表一个方块的SDL纹理，
-     */
-    SDL_Texture *block;
-
-    /**
      * 资源目录，
      */
     std::string resourceDir;
+
+    SDL_Texture *background;
+    SDL_Texture *food;
+    SDL_Texture *wall;
+    SDL_Texture *head;
+    SDL_Texture *body;
 };
 
 

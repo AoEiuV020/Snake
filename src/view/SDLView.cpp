@@ -6,6 +6,7 @@
 #include "presenter/SnakePresenter.h"
 #include <util/util.h>
 #include <util/FileUtil.h>
+#include <SDL2/SDL_image.h>
 
 void SDLView::onStart() {
     SDL_Log("onStart");
@@ -24,8 +25,12 @@ void SDLView::initSDL() {
     window = SDL_CreateWindow("Snake", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH,
                               SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-    block = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STATIC, 40, 40);
-    SDL_SetRenderTarget(renderer, block);
+
+    background = IMG_LoadTexture(renderer, FileUtil::subFile(resourceDir, "background.png").c_str());
+    food = IMG_LoadTexture(renderer, FileUtil::subFile(resourceDir, "food.png").c_str());
+    wall = IMG_LoadTexture(renderer, FileUtil::subFile(resourceDir, "block.jpg").c_str());
+    head = IMG_LoadTexture(renderer, FileUtil::subFile(resourceDir, "head_2.png").c_str());
+    body = IMG_LoadTexture(renderer, FileUtil::subFile(resourceDir, "body.png").c_str());
 }
 
 void SDLView::onStop() {
@@ -117,36 +122,33 @@ void SDLView::drawMapContent() {
             r.x = x;
             r.y = y;
             const Point &point = map->getPoint(Pos(i, j));
-            SDL_SetRenderDrawColor(renderer, 0xff, 0xff, 0xff, 0xff);
+            // 刷上背景，
+            SDL_RenderCopy(renderer, background, nullptr, &r);
+            SDL_Texture *texture = nullptr;
             switch (point.getType()) {
                 case Point::Type::EMPTY:
-                    // 白色，
-                    SDL_SetRenderDrawColor(renderer, 0xff, 0xff, 0xff, 0xff);
+                    texture = background;
                     break;
                 case Point::Type::WALL:
-                    // 黑色，
-                    SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0xff);
+                    texture = wall;
                     break;
                 case Point::Type::FOOD:
-                    // 红色，
-                    SDL_SetRenderDrawColor(renderer, 0xff, 0x00, 0x00, 0xff);
+                    texture = food;
                     break;
                 case Point::Type::SNAKE_HEAD:
-                    // 绿色，
-                    SDL_SetRenderDrawColor(renderer, 0x00, 0xff, 0x00, 0xff);
+                    texture = head;
                     break;
                 case Point::Type::SNAKE_BODY:
-                    // 黄色，
-                    SDL_SetRenderDrawColor(renderer, 0xff, 0xff, 0x00, 0xff);
-                    break;
                 case Point::Type::SNAKE_TAIL:
-                    // 蓝色，
-                    SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0xff, 0xff);
+                    texture = body;
                     break;
                 default:
                     break;
             }
-            SDL_RenderFillRect(renderer, &r);
+            if (texture != nullptr) {
+                // 刷上方块，
+                SDL_RenderCopy(renderer, texture, nullptr, &r);
+            }
         }
     }
     SDL_RenderPresent(renderer);

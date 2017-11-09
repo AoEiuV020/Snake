@@ -56,5 +56,5 @@ add_custom_command(TARGET ${PROJ_EXEC_NAME} PRE_BUILD
         $<TARGET_FILE_DIR:${PROJ_EXEC_NAME}>/res
         )
 if (NOT WIN32)
-    target_link_libraries(${PROJ_EXEC_NAME} pthread SDL2)
+    target_link_libraries(${PROJ_EXEC_NAME} pthread SDL2 SDL2_image)
 endif (NOT WIN32)
