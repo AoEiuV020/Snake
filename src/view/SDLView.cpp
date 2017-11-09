@@ -180,3 +180,7 @@ void SDLView::init(int, char **argv) {
 void SDLView::loop() {
     drawCallable();
 }
+
+void SDLView::message(std::string message) {
+    SDL_Log("%s", message.c_str());
+}

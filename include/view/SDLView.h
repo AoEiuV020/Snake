@@ -31,6 +31,8 @@ public:
 
     void initSDL();
 
+    void message(std::string message) override;
+
 private:
     /**
      * 实际的绘图方法，
