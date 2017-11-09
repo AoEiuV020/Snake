@@ -31,8 +31,6 @@ public:
     */
     bool isInside(const Pos &p) const;
 
-    bool isEmpty(const Pos &p) const;
-
     bool isSafe(const Pos &p) const;
 
     bool isAllBody() const;

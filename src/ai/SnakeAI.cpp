@@ -91,7 +91,7 @@ void SnakeAI::findMinPath(const Pos &from, const Pos &to, std::list<Direction> &
         // Traverse the adjacent positions
         for (const Pos &adjPos : adjPositions) {
             Point &adjPoint = map->getPoint(adjPos);
-            if (map->isEmpty(adjPos) && adjPoint.getDist() == Point::MAX_VALUE) {
+            if (map->isSafe(adjPos) && adjPoint.getDist() == Point::MAX_VALUE) {
                 adjPoint.setParent(curPos);
                 adjPoint.setDist(curPoint.getDist() + 1);
                 openList.push(adjPos);

@@ -50,10 +50,6 @@ bool Map::isInside(const Pos &p) const {
            && p.getY() < getColCount() - 1;
 }
 
-bool Map::isEmpty(const Pos &p) const {
-    return isInside(p) && getPoint(p).getType() == Point::Type::EMPTY;
-}
-
 bool Map::isSafe(const Pos &p) const {
     const Point &point = getPoint(p);
     return isInside(p) && (point.getType() == Point::Type::EMPTY
