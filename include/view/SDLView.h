@@ -5,6 +5,8 @@
 #ifndef SNAKE_SDL2VIEW_H
 #define SNAKE_SDL2VIEW_H
 
+#ifndef __WIN32
+
 #include <thread>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
@@ -135,5 +137,6 @@ private:
     void setting() const;
 };
 
+#endif // __WIN32
 
 #endif //SNAKE_SDL2VIEW_H

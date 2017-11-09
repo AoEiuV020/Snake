@@ -2,11 +2,14 @@
 // Created by AoEiuV020 on 2017.10.31-16:05:12.
 //
 
+#ifndef _WIN32
 #include <view/SDLView.h>
+#else
+#include "view/ConsoleView.h"
+#endif
 #include "view/FileView.h"
 #include "Game.h"
 #include "presenter/SnakePresenter.h"
-#include "view/ConsoleView.h"
 #include "view/ViewWrapper.h"
 
 /**
