@@ -20,18 +20,10 @@ public:
     void setSnake(Snake *snake_);
 
 private:
-    bool hamiltonEnabled = false;
 
     Map *map;
 
     Snake *snake;
-
-    /*
-    Find path between two points.
-
-    @param path The result path will be stored in this field.
-    */
-    void findMinPathToFood(std::list<Direction> &path);
 
     void findMaxPathToTail(std::list<Direction> &path);
 

@@ -22,7 +22,6 @@ void SnakeAI::init() {
     if (map->getRowCount() % 2 == 1 && map->getColCount() % 2 == 1) {
         throw std::range_error("SnakeAI.init(): require even amount of rows or columns.");
     }
-    hamiltonEnabled = true;
     buildHamilton();
 }
 
@@ -71,10 +70,6 @@ void SnakeAI::decideNext() {
             snake->direc = head.getDirectionTo(adjPos);
         }
     }
-}
-
-void SnakeAI::findMinPathToFood(std::list<Direction> &path) {
-    findPathTo(0, map->getFood(), path);
 }
 
 void SnakeAI::findMaxPathToTail(std::list<Direction> &path) {
