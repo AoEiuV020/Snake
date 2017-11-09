@@ -12,17 +12,24 @@
 
 class SnakePresenter;
 
+/**
+ * 使用SDL绘制游戏界面，
+ */
 class SDLView : public SnakeView {
 public:
     /**
      * 开始绘图，
      * 游戏开始时调用，
-     * 并启动绘图线程和监听键盘的线程，
+     * 启动监听事件的线程，
      */
     void onStart() override;
 
     void init(int, char **) override;
 
+    /**
+     * 游戏循环，
+     * 游戏结束前循环绘图，
+     */
     void loop() override;
 
     /**
@@ -31,8 +38,14 @@ public:
      */
     void destroy();
 
+    /**
+     * 初始化配置SDL,
+     */
     void initSDL();
 
+    /**
+     * 打印消息，比如游戏胜利失败，
+     */
     void message(std::string message) override;
 
 private:
@@ -52,11 +65,6 @@ private:
     * 即每秒绘图多少次，
     */
     double fps = 60.0;
-
-    /**
-     * 绘图线程，
-     */
-    std::thread drawThread;
 
     /**
      * 供绘图线程调用的方法，
@@ -100,6 +108,7 @@ private:
      */
     std::string resourceDir;
 
+    // 各种贴图，背景，食物，墙，身体，四个方向的蛇头，
     SDL_Texture *background;
     SDL_Texture *food;
     SDL_Texture *wall;
@@ -108,9 +117,22 @@ private:
     SDL_Texture *headDown;
     SDL_Texture *headLeft;
     SDL_Texture *headRight;
+
+    /**
+     * 字体，
+     */
     TTF_Font *font;
+    /**
+     * 文字颜色，
+     */
     SDL_Color textColor = {0x2b, 0x2b, 0x2b, 0xff};
+
+    /**
+     * 缓存消息，绘图时画出来，
+     */
     std::string msg;
+
+    void setting() const;
 };
 
 

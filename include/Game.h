@@ -6,8 +6,14 @@
 #define SNAKE_GAME_H
 
 
+/**
+ * 启动游戏相关封装，
+ */
 class Game {
 public:
+    /**
+     * 启动游戏，
+     */
     int launch(int argc, char **argv);
 };
 

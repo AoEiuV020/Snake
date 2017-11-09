@@ -12,6 +12,10 @@ SnakePresenter *SnakeView::presenter = nullptr;
 
 bool SnakeView::gameRunning;
 
+/**
+ * 绘图，
+ * 不是马上绘图，先保存这个地图和蛇,并标记有地图需要绘制，
+ */
 void SnakeView::draw(Map *map_, Snake *snake_) {
     // 简单保存地图指针，
     // 考虑到线程安全，之后要改成深度复制，

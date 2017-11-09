@@ -80,11 +80,17 @@ bool Map::isAllBody() const {
     return true;
 }
 
+/**
+ * 创建新的食物，
+ */
 void Map::createRandFood() {
     auto random = util::Random<>::getInstance();
+    // 得到地图上所有空白的点的集合，
     vector<Pos> emptyPoints = getEmptyPoints();
     if (!emptyPoints.empty()) {
+        // 随机取一个点，
         int i = random->nextInt((int) 0, (int) emptyPoints.size() - 1);
+        // 将这个点设为食物，
         createFood(emptyPoints[i]);
     }
 }
