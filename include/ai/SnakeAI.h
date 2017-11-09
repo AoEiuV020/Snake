@@ -65,6 +65,7 @@ private:
     void buildHamilton();
 
     std::vector<std::vector<Direction>> directionMap;
+    std::vector<std::vector<bool>> visitMap;
 };
 
 

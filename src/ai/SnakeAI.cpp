@@ -27,6 +27,7 @@ void SnakeAI::init() {
 
 void SnakeAI::buildHamilton() {
     directionMap = std::vector<std::vector<Direction>>(map->getRowCount(), std::vector<Direction>(map->getColCount()));
+    visitMap = std::vector<std::vector<bool>>(map->getRowCount(), std::vector<bool>(map->getColCount()));
     // 得到从蛇头到蛇尾的最长路径，
     std::list<Direction> maxPath;
     findMaxPathToTail(maxPath);
@@ -106,16 +107,16 @@ void SnakeAI::findMaxPath(const Pos &from, const Pos &to, std::list<Direction> &
     int row = map->getRowCount(), col = map->getColCount();
     for (int i = 1; i < row - 1; ++i) {
         for (int j = 1; j < col - 1; ++j) {
-            map->getPoint(Pos(i, j)).setVisit(false);
+            visitMap[i][j] = false;
         }
     }
     // Make all points on the path visited
     Pos cur = from;
     for (const Direction d : path) {
-        map->getPoint(cur).setVisit(true);
+        visitMap[cur.getX()][cur.getY()] = true;
         cur = cur.getAdj(d);
     }
-    map->getPoint(cur).setVisit(true);
+    visitMap[cur.getX()][cur.getY()] = true;
     // Extend the path between each pair of the points
     for (auto it = path.begin(); it != path.end();) {
         if (it == path.begin()) {
@@ -130,9 +131,10 @@ void SnakeAI::findMaxPath(const Pos &from, const Pos &to, std::list<Direction> &
                 Pos curUp = cur.getAdj(UP);
                 Pos nextUp = next.getAdj(UP);
                 // Check two points above
-                if (map->isEmptyNotVisit(curUp) && map->isEmptyNotVisit(nextUp)) {
-                    map->getPoint(curUp).setVisit(true);
-                    map->getPoint(nextUp).setVisit(true);
+                if (map->isSafe(curUp) && !visitMap[curUp.getX()][curUp.getY()]
+                    && map->isSafe(nextUp) && !visitMap[nextUp.getX()][nextUp.getY()]) {
+                    visitMap[curUp.getX()][curUp.getY()] = true;
+                    visitMap[nextUp.getX()][nextUp.getY()] = true;
                     it = path.erase(it);
                     it = path.insert(it, DOWN);
                     it = path.insert(it, curDirec);
@@ -143,9 +145,10 @@ void SnakeAI::findMaxPath(const Pos &from, const Pos &to, std::list<Direction> &
                     Pos curDown = cur.getAdj(DOWN);
                     Pos nextDown = next.getAdj(DOWN);
                     // Check two points below
-                    if (map->isEmptyNotVisit(curDown) && map->isEmptyNotVisit(nextDown)) {
-                        map->getPoint(curDown).setVisit(true);
-                        map->getPoint(nextDown).setVisit(true);
+                    if (map->isSafe(curDown) && !visitMap[curDown.getX()][curDown.getY()]
+                        && map->isSafe(nextDown) && !visitMap[nextDown.getX()][nextDown.getY()]) {
+                        visitMap[curDown.getX()][curDown.getY()] = true;
+                        visitMap[nextDown.getX()][nextDown.getY()] = true;
                         it = path.erase(it);
                         it = path.insert(it, UP);
                         it = path.insert(it, curDirec);
@@ -161,9 +164,10 @@ void SnakeAI::findMaxPath(const Pos &from, const Pos &to, std::list<Direction> &
                 Pos curLeft = cur.getAdj(LEFT);
                 Pos nextLeft = next.getAdj(LEFT);
                 // Check two points on the left
-                if (map->isEmptyNotVisit(curLeft) && map->isEmptyNotVisit(nextLeft)) {
-                    map->getPoint(curLeft).setVisit(true);
-                    map->getPoint(nextLeft).setVisit(true);
+                if (map->isSafe(curLeft) && !visitMap[curLeft.getX()][curLeft.getY()]
+                    && map->isSafe(nextLeft) && !visitMap[nextLeft.getX()][nextLeft.getY()]) {
+                    visitMap[curLeft.getX()][curLeft.getY()] = true;
+                    visitMap[nextLeft.getX()][nextLeft.getY()] = true;
                     it = path.erase(it);
                     it = path.insert(it, RIGHT);
                     it = path.insert(it, curDirec);
@@ -174,9 +178,10 @@ void SnakeAI::findMaxPath(const Pos &from, const Pos &to, std::list<Direction> &
                     Pos curRight = cur.getAdj(RIGHT);
                     Pos nextRight = next.getAdj(RIGHT);
                     // Check two points on the right
-                    if (map->isEmptyNotVisit(curRight) && map->isEmptyNotVisit(nextRight)) {
-                        map->getPoint(curRight).setVisit(true);
-                        map->getPoint(nextRight).setVisit(true);
+                    if (map->isSafe(curRight) && !visitMap[curRight.getX()][curRight.getY()]
+                        && map->isSafe(nextRight) && !visitMap[nextRight.getX()][nextRight.getY()]) {
+                        visitMap[curRight.getX()][curRight.getY()] = true;
+                        visitMap[nextRight.getX()][nextRight.getY()] = true;
                         it = path.erase(it);
                         it = path.insert(it, LEFT);
                         it = path.insert(it, curDirec);
