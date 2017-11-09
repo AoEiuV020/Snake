@@ -36,8 +36,8 @@ void SDLView::initSDL() {
     body = IMG_LoadTexture(renderer, FileUtil::subFile(resourceDir, "body.png").c_str());
 }
 
-void SDLView::onStop() {
-    SDL_Log("onStop");
+void SDLView::destroy() {
+    SDL_Log("destroy");
 
     SDL_DestroyTexture(background);
     SDL_DestroyTexture(food);
@@ -191,6 +191,7 @@ void SDLView::init(int, char **argv) {
 
 void SDLView::loop() {
     drawCallable();
+    destroy();
 }
 
 void SDLView::message(std::string message) {

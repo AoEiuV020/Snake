@@ -27,7 +27,7 @@ public:
      * 结束绘图，
      * 游戏结束时调用，
      */
-    void onStop() override;
+    void destroy();
 
     void initSDL();
 
