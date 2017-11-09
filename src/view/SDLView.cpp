@@ -99,7 +99,7 @@ void SDLView::keyboardMove(Direction direction) {
 }
 
 void SDLView::sleepFPS() {
-    util::sleep((long) ((1.0 / fps) * 1000));
+    SDL_Delay((Uint32) ((1.0 / fps) * 1000));
 }
 
 void SDLView::drawMapContent() {
