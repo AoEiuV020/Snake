@@ -131,6 +131,8 @@ private:
      * 缓存消息，绘图时画出来，
      */
     std::string msg;
+
+    void setting() const;
 };
 
 

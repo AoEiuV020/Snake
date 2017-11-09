@@ -260,6 +260,54 @@ void SDLView::init(int, char **argv) {
     std::string bin = argv[0];
     resourceDir = FileUtil::subFile(FileUtil::parent(bin), "res");
     initSDL();
+    setting();
+}
+
+/**
+ * 设置是否启用AI,
+ */
+void SDLView::setting() const {
+    SDL_Surface *messageSurface = TTF_RenderText_Solid(this->font, "Enable AI? y/n", this->textColor);
+    // 消息显示在正中，
+    SDL_Rect messageRect = {400 / 2 - messageSurface->w / 2, 400 / 2 - messageSurface->h / 2, messageSurface->w,
+                            messageSurface->h};
+    SDL_Texture *messageTexture = SDL_CreateTextureFromSurface(this->renderer, messageSurface);
+    SDL_FreeSurface(messageSurface);
+    SDL_RenderCopy(this->renderer, messageTexture, nullptr, &messageRect);
+    // 更新，
+    SDL_RenderPresent(this->renderer);
+
+    SDL_Event event;
+    bool flag = false;
+    while (!flag) {
+        while (SDL_PollEvent(&event) != 0) {
+            // 判断事件，键盘按键y或n输入才有效，
+            switch (event.type) {
+                case SDL_KEYDOWN:
+                    switch (event.key.keysym.sym) {
+                        case SDLK_y:
+                            // 启用AI并设置高速，
+                            presenter->setEnableAI(true);
+                            presenter->setMoveInterval(30);
+                            flag = true;
+                            break;
+                        case SDLK_n:
+                            // 禁用AI并设置低速，
+                            presenter->setEnableAI(false);
+                            presenter->setMoveInterval(150);
+                            flag = true;
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+        // 休息一下，避免死循环占用太多cpu资源，
+        SDL_Delay(10);
+    }
 }
 
 void SDLView::loop() {
