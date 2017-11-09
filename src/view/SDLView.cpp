@@ -151,7 +151,7 @@ void SDLView::drawMapContent() {
     SDL_UpdateWindowSurface(window);
 }
 
-void SDLView::init() {
+void SDLView::init(int, char **) {
     initSDL();
 }
 

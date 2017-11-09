@@ -9,7 +9,7 @@
 #include "view/ConsoleView.h"
 #include "view/ViewWrapper.h"
 
-int Game::launch() {
+int Game::launch(int argc, char **argv) {
     SnakeView *view;
 
 #ifndef _WIN32
@@ -45,7 +45,7 @@ int Game::launch() {
     presenter->init();
 
     // 视图绘图，
-    view->init();
+    view->init(argc, argv);
 
     // 启动游戏，
     view->start();

@@ -20,7 +20,7 @@ public:
      */
     void onStart() override;
 
-    void init() override;
+    void init(int, char **) override;
 
     void loop() override;
     /**

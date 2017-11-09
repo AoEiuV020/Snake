@@ -32,7 +32,7 @@ public:
      * 初始化视图，
      * 空实现，
      */
-    virtual void init();
+    virtual void init(int, char **);
 
     /**
      * 结束绘图，

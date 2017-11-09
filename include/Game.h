@@ -8,7 +8,7 @@
 
 class Game {
 public:
-    int launch();
+    int launch(int argc, char **argv);
 };
 
 

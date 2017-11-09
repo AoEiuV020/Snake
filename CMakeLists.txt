@@ -41,13 +41,20 @@ message(STATUS "CMAKE_CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
 message(STATUS "CMAKE_CXX_FLAGS_DEBUG: ${CMAKE_CXX_FLAGS_DEBUG}")
 message(STATUS "CMAKE_CXX_FLAGS_RELEASE: ${CMAKE_CXX_FLAGS_RELEASE}")
 
-# Include headers
+# 头文件，
 file(GLOB_RECURSE HEADERS "${PROJECT_SOURCE_DIR}/include/*.h")
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
+# 源码，
 file(GLOB_RECURSE SRCS "${PROJECT_SOURCE_DIR}/src/*.cpp")
+
 add_executable(${PROJ_EXEC_NAME} ${SRCS} ${HEADERS})
 
-if(NOT WIN32)
+# 资源，
+add_custom_command(TARGET ${PROJ_EXEC_NAME} PRE_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/res
+        $<TARGET_FILE_DIR:${PROJ_EXEC_NAME}>/res
+        )
+if (NOT WIN32)
     target_link_libraries(${PROJ_EXEC_NAME} pthread SDL2)
-endif(NOT WIN32)
+endif (NOT WIN32)

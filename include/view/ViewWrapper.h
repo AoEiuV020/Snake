@@ -20,7 +20,7 @@ public:
 
     void draw(Map *map) override;
 
-    void init() override;
+    void init(int, char **) override;
 
     void message(std::string message) override;
 

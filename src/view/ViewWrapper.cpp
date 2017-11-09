@@ -14,9 +14,9 @@ void ViewWrapper::draw(Map *map) {
     }
 }
 
-void ViewWrapper::init() {
+void ViewWrapper::init(int argc, char **argv) {
     for (auto &view : viewList) {
-        view->init();
+        view->init(argc, argv);
     }
 }
 
