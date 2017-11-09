@@ -7,7 +7,6 @@ using std::list;
 
 Map::Map(const int rowCnt_, const int colCnt_)
         : content(rowCnt_, vector<Point>(colCnt_)) {
-    size = (rowCnt_ - 2) * (colCnt_ - 2);
     // Add boundary walls
     int row = getRowCount(), col = getColCount();
     for (int i = 0; i < row; ++i) {
@@ -38,10 +37,6 @@ int Map::getRowCount() const {
 
 int Map::getColCount() const {
     return content[0].size();
-}
-
-int Map::getSize() const {
-    return size;
 }
 
 bool Map::isInside(const Pos &p) const {
@@ -90,28 +85,6 @@ void Map::createRandFood() {
 void Map::createFood(const Pos &pos) {
     food = pos;
     content[food.getX()][food.getY()].setType(Point::Type::FOOD);
-}
-
-void Map::removeFood() {
-    if (hasFood()) {
-        content[food.getX()][food.getY()].setType(Point::Type::EMPTY);
-    }
-}
-
-bool Map::hasFood() const {
-    return isInside(food) && getPoint(food).getType() == Point::Type::FOOD;
-}
-
-const Pos &Map::getFood() const {
-    return food;
-}
-
-int Map::distance(const Pos &from, const Pos &to) {
-    int fromX = from.getX(), toX = to.getX();
-    int fromY = from.getY(), toY = to.getY();
-    int dx = fromX > toX ? fromX - toX : toX - fromX;
-    int dy = fromY > toY ? fromY - toY : toY - fromY;
-    return dx + dy;
 }
 
 vector<Pos> Map::getEmptyPoints() const {
