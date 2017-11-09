@@ -73,17 +73,10 @@ void SnakeAI::decideNext() {
 }
 
 void SnakeAI::findMaxPathToTail(std::list<Direction> &path) {
-    findPathTo(1, snake->getTail(), path);
-}
-
-void SnakeAI::findPathTo(const int pathType, const Pos &goal, std::list<Direction> &path) {
+    const Pos &goal = snake->getTail();
     Point::Type oriType = map->getPoint(goal).getType();
     map->getPoint(goal).setType(Point::Type::EMPTY);
-    if (pathType == 0) {
-        findMinPath(snake->getHead(), goal, path);
-    } else if (pathType == 1) {
-        findMaxPath(snake->getHead(), goal, path);
-    }
+    findMaxPath(snake->getHead(), goal, path);
     map->getPoint(goal).setType(oriType);  // Retore point type
 }
 

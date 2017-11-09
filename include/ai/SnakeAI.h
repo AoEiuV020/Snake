@@ -25,16 +25,11 @@ private:
 
     Snake *snake;
 
+    /**
+     * 查找距离蛇尾最远的路径，
+     * @param path 路径保存在这个列表中，
+     */
     void findMaxPathToTail(std::list<Direction> &path);
-
-    /*
-    Find path from the snake's head to a given position.
-
-    @param type 0->shortest path, 1->longest path
-    @param to   The given position
-    @param path The result path will be stored in this field.
-    */
-    void findPathTo(const int type, const Pos &to, std::list<Direction> &path);
 
     /*
     Find the shortest path as straight as possible between two positions.
