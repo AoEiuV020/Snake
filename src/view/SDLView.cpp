@@ -26,6 +26,10 @@ void SDLView::initSDL() {
                               SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
+    // 白底，
+    SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+    SDL_RenderClear(renderer);
+
     background = IMG_LoadTexture(renderer, FileUtil::subFile(resourceDir, "background.png").c_str());
     food = IMG_LoadTexture(renderer, FileUtil::subFile(resourceDir, "food.png").c_str());
     wall = IMG_LoadTexture(renderer, FileUtil::subFile(resourceDir, "block.jpg").c_str());
@@ -34,10 +38,15 @@ void SDLView::initSDL() {
     headLeft = IMG_LoadTexture(renderer, FileUtil::subFile(resourceDir, "head_left.png").c_str());
     headRight = IMG_LoadTexture(renderer, FileUtil::subFile(resourceDir, "head_right.png").c_str());
     body = IMG_LoadTexture(renderer, FileUtil::subFile(resourceDir, "body.png").c_str());
+
+    TTF_Init();
+    font = TTF_OpenFont(FileUtil::subFile(resourceDir, "font.ttf").c_str(), 28);
 }
 
 void SDLView::destroy() {
     SDL_Log("destroy");
+
+    TTF_CloseFont(font);
 
     SDL_DestroyTexture(background);
     SDL_DestroyTexture(food);
@@ -51,6 +60,7 @@ void SDLView::destroy() {
     SDL_DestroyWindow(window);
 
     IMG_Quit();
+    TTF_Quit();
     SDL_Quit();
 }
 
@@ -132,6 +142,8 @@ void SDLView::sleepFPS() {
 }
 
 void SDLView::drawMapContent() {
+    SDL_RenderClear(renderer);
+
     int row = map->getRowCount(), col = map->getColCount();
     int width = 400 / col, height = 400 / row;
     int x = 0, y = 0;
@@ -187,6 +199,26 @@ void SDLView::drawMapContent() {
             }
         }
     }
+
+    // 显示分数，
+    SDL_Surface *scoreSurface = TTF_RenderText_Solid(font, ("Score: " + util::toString(score)).c_str(), textColor);
+    // 分数显示在右上角，
+    SDL_Rect scoreRect = {400 - scoreSurface->w, 0, scoreSurface->w, scoreSurface->h};
+    SDL_Texture *textTexture = SDL_CreateTextureFromSurface(renderer, scoreSurface);
+    SDL_FreeSurface(scoreSurface);
+    SDL_RenderCopy(renderer, textTexture, nullptr, &scoreRect);
+
+    if (!msg.empty()) {
+        // 显示消息，胜利失败之类的，
+        SDL_Surface *messageSurface = TTF_RenderText_Solid(font, msg.c_str(), textColor);
+        // 消息显示在正中，
+        SDL_Rect messageRect = {400 / 2 - messageSurface->w / 2, 400 / 2 - messageSurface->h / 2, messageSurface->w,
+                                messageSurface->h};
+        SDL_Texture *messageTexture = SDL_CreateTextureFromSurface(renderer, messageSurface);
+        SDL_FreeSurface(messageSurface);
+        SDL_RenderCopy(renderer, messageTexture, nullptr, &messageRect);
+    }
+
     SDL_RenderPresent(renderer);
 }
 
@@ -203,4 +235,6 @@ void SDLView::loop() {
 
 void SDLView::message(std::string message) {
     SDL_Log("%s", message.c_str());
+    msg = message;
+    drown = false;
 }

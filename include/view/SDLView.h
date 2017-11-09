@@ -7,6 +7,7 @@
 
 #include <thread>
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 #include "view/SnakeView.h"
 
 class SnakePresenter;
@@ -23,6 +24,7 @@ public:
     void init(int, char **) override;
 
     void loop() override;
+
     /**
      * 结束绘图，
      * 游戏结束时调用，
@@ -79,6 +81,11 @@ private:
     void keyboardMove(Direction direction);
 
     /**
+     * 是否退出SDL界面，
+     */
+    bool quit = false;
+
+    /**
      * SDL窗口，
      */
     SDL_Window *window;
@@ -101,8 +108,9 @@ private:
     SDL_Texture *headDown;
     SDL_Texture *headLeft;
     SDL_Texture *headRight;
-
-    bool quit = false;
+    TTF_Font *font;
+    SDL_Color textColor = {0x2b, 0x2b, 0x2b, 0xff};
+    std::string msg;
 };
 
 
