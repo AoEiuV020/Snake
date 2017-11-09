@@ -9,6 +9,9 @@
 #include "view/ConsoleView.h"
 #include "view/ViewWrapper.h"
 
+/**
+ * 启动游戏，
+ */
 int Game::launch(int argc, char **argv) {
     SnakeView *view;
 

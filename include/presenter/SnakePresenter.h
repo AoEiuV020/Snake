@@ -12,9 +12,9 @@
 
 class SnakeView;
 
-/*
-Game controller.
-*/
+/**
+ * 游戏逻辑，
+ */
 class SnakePresenter {
 public:
     SnakePresenter();
@@ -22,7 +22,7 @@ public:
     ~SnakePresenter();
 
     /**
-     * 关联view,
+     * 关联视图,
      * 保存这个view, 需要绘图时通知这个view, 本类不管绘图相关细节，
      */
     void attach(SnakeView *view_);
@@ -41,8 +41,14 @@ public:
      */
     void setMapCol(int n);
 
+    /**
+     * 设置蛇自动移动时间间隔，单位毫秒，
+     */
     void setMoveInterval(long moveInterval_);
 
+    /**
+     * 设置AI是否启用，
+     */
     void setEnableAI(bool enableAI_);
 
     /**
@@ -52,7 +58,7 @@ public:
     void init();
 
     /**
-     * 启动游戏，并进入游戏循环，
+     * 启动游戏，
      */
     void run();
 
@@ -73,19 +79,16 @@ public:
     void pauseToggle();
 
 private:
+    /**
+     * 视图类对象，蛇移动后通知视图刷新，
+     */
     SnakeView *view;
 
-    bool enableHamilton = true;
     int mapRowCnt = 10;
     int mapColCnt = 10;
 
     Map *map = nullptr;
     Snake snake;
-
-    volatile bool runMainThread = true;  // Switch of the main thread
-
-    std::mutex mutexMove;  // Mutex of moveSnake()
-    std::mutex mutexExit;  // Mutex of exitGame()
 
     /**
      * 初始化地图，
@@ -98,6 +101,9 @@ private:
      */
     void initSnake();
 
+    /**
+     * AI类对象，
+     */
     SnakeAI *snakeAI;
 
     /**
@@ -105,6 +111,9 @@ private:
      */
     void initAI();
 
+    /**
+     * 调用AI方法得到下一个方向，
+     */
     void decideNext();
 
     /**

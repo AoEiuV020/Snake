@@ -4,15 +4,19 @@
 #include "model/Pos.h"
 #include <cstdint>
 
-/*
-Point on the game map.
-*/
+/**
+ * 地图上的点，
+ */
 class Point {
 public:
     typedef uint32_t ValueType;
 
     static const ValueType MAX_VALUE = UINT32_MAX;
 
+    /**
+     * 枚举地图上的点的类型，
+     * 包括空白，墙，食物，蛇头，蛇身，蛇尾，
+     */
     enum Type {
         EMPTY,
         WALL,
@@ -47,6 +51,9 @@ public:
     ValueType getIndex() const;
 
 private:
+    /**
+     * 类型，表示该点上有什么，
+     */
     Type type = EMPTY;
     Pos parent;
     bool visit;

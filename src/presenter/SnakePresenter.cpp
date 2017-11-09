@@ -37,84 +37,89 @@ void SnakePresenter::setEnableAI(bool enableAI_) {
     enableAI = enableAI_;
 }
 
+/**
+ * 启动游戏，
+ */
 void SnakePresenter::run() {
     if (gameRunning) {
         return;
     }
     gameRunning = true;
 
+    // 创建第一个食物，
     map->createRandFood();
 
+    // 创建一个负责控制蛇自动移动的线程，
     moveThread = std::thread(&SnakePresenter::autoMoveCallable, this);
     moveThread.detach();
 }
 
+/**
+ * 供自动移动线程调用的方法，
+ */
 void SnakePresenter::autoMoveCallable() {
     while (gameRunning) {
+        // 每次移动都休息指定时间，
         util::sleep(moveInterval);
+        // 如果游戏暂停了，就不继续，
         if (!pause) {
             if (enableAI) {
+                // 如果启用了AI就让AI判断下一步的方向，
                 decideNext();
             }
+            // 移动蛇，
             moveSnake();
         }
     }
 }
 
 void SnakePresenter::exitGame() {
-    mutexExit.lock();
-    if (runMainThread) {
-        // 自动移动线程停止，
-        gameRunning = false;
-    }
-    runMainThread = false;
-    mutexExit.unlock();
+    gameRunning = false;
 }
 
+/**
+ * 蛇移动方法，
+ */
 void SnakePresenter::moveSnake() {
-    // 简单的互斥锁，确保本方法同时只有一个线程在运行，
-    // 主要是自动移动线程和监听键盘输入手动前进线程可能同时调用本方法，
-    mutexMove.lock();
     // 如果全地图都是蛇身则胜利，不继续移动蛇身，
     if (map->isAllBody()) {
-        mutexMove.unlock();
         view->win();
         return;
     }
-    try {
-        Direction d = snake.getDirection();
-        // 如果蛇已经死了则不继续移动，这个判断似乎是多余的，
-        // 如果蛇没有方向，则不移动，比如手动游戏刚开始时，
-        if (!snake.isDead() && d != NONE) {
-            // 得到蛇头下一格，
-            Pos nextPos = snake.getHead().getAdj(d);
-            Point nextPoint = map->getPoint(nextPos);
-            // 判断下一格是否安全，不安全就死，游戏结束，
-            if (!map->isSafe(nextPos)) {
-                snake.setDead(true);
-                view->lose();
+    Direction d = snake.getDirection();
+    // 如果蛇已经死了则不继续移动，这个判断似乎是多余的，
+    // 如果蛇没有方向，则不移动，比如手动游戏刚开始时，
+    if (!snake.isDead() && d != NONE) {
+        // 得到蛇头下一格，
+        Pos nextPos = snake.getHead().getAdj(d);
+        Point nextPoint = map->getPoint(nextPos);
+        // 判断下一格是否安全，不安全就死，游戏结束，
+        if (!map->isSafe(nextPos)) {
+            snake.setDead(true);
+            view->lose();
+        } else {
+            // 判断下一格是否是食物，并控制蛇移动，
+            if (nextPoint.getType() == Point::FOOD) {
+                snake.move(true);
+                onEatenFood();
             } else {
-                // 判断下一格是否是食物，并控制蛇移动，
-                if (nextPoint.getType() == Point::FOOD) {
-                    snake.move(true);
-                    onEatenFood();
-                } else {
-                    snake.move(false);
-                }
+                snake.move(false);
             }
-            // 通知view绘图，
-            view->draw(map, &snake);
         }
-        mutexMove.unlock();
-    } catch (const std::exception &e) {
-        mutexMove.unlock();
-        throw;
+        // 通知view绘图，
+        view->draw(map, &snake);
     }
 }
 
+/**
+ * 当蛇吃到食物时调用，
+ */
 void SnakePresenter::onEatenFood() {
+    // 加分，
     score += 1;
+    // 修改视图上的
     view->setScore(score);
+    // 产生新的食物，
     map->createRandFood();
 }
 
@@ -149,9 +154,7 @@ void SnakePresenter::initAI() {
     snakeAI = new SnakeAI();
     snakeAI->setMap(map);
     snakeAI->setSnake(&snake);
-    if (enableHamilton) {
-        snakeAI->init();
-    }
+    snakeAI->init();
 }
 
 void SnakePresenter::move(Direction direction) {

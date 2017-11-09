@@ -8,37 +8,48 @@
 #include <util/FileUtil.h>
 #include <SDL2/SDL_image.h>
 
+/**
+ * SDL开始绘图，
+ * 游戏开始时调用，
+ * 启动监听SDL事件的线程，包括键盘操作和关闭窗口，
+ */
 void SDLView::onStart() {
     SDL_Log("onStart");
     eventThread = std::thread(&SDLView::eventCallable, this);
     eventThread.detach();
 }
 
+/**
+ * 初始化配置图形库SDL,
+ */
 void SDLView::initSDL() {
     SDL_Log("initSDL");
     const int SCREEN_WIDTH = 400;
     const int SCREEN_HEIGHT = 400;
 
-    //Initialize SDL
     SDL_Init(SDL_INIT_VIDEO);
-    //Create window
+    // 创建窗口，
     window = SDL_CreateWindow("Snake", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH,
                               SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+    // 创建渲染器，
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
-    // 白底，
+    // 渲染器涂成白底，
     SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
     SDL_RenderClear(renderer);
 
+    // 加载资源，各种贴图，
+    // 背景，食物，墙，身体，四个方向的蛇头，
     background = IMG_LoadTexture(renderer, FileUtil::subFile(resourceDir, "background.png").c_str());
     food = IMG_LoadTexture(renderer, FileUtil::subFile(resourceDir, "food.png").c_str());
     wall = IMG_LoadTexture(renderer, FileUtil::subFile(resourceDir, "block.jpg").c_str());
+    body = IMG_LoadTexture(renderer, FileUtil::subFile(resourceDir, "body.png").c_str());
     headUp = IMG_LoadTexture(renderer, FileUtil::subFile(resourceDir, "head_up.png").c_str());
     headDown = IMG_LoadTexture(renderer, FileUtil::subFile(resourceDir, "head_down.png").c_str());
     headLeft = IMG_LoadTexture(renderer, FileUtil::subFile(resourceDir, "head_left.png").c_str());
     headRight = IMG_LoadTexture(renderer, FileUtil::subFile(resourceDir, "head_right.png").c_str());
-    body = IMG_LoadTexture(renderer, FileUtil::subFile(resourceDir, "body.png").c_str());
 
+    // 初始化字体，
     TTF_Init();
     font = TTF_OpenFont(FileUtil::subFile(resourceDir, "font.ttf").c_str(), 28);
 }
@@ -64,47 +75,61 @@ void SDLView::destroy() {
     SDL_Quit();
 }
 
+/**
+ * 供SDL事件线程调用的方法，
+ */
 void SDLView::eventCallable() {
     SDL_Log("event thread start");
     SDL_Event event;
+    // 在退出前始终循环接收消息，
     while (!quit) {
         while (SDL_PollEvent(&event) != 0) {
+            // 判断事件类型，
             switch (event.type) {
                 case SDL_QUIT:
+                    // 如果是点击窗口关闭按钮，
                     exit();
-                    // 关闭界面，
+                    // 退出循环，关闭界面，
                     quit = true;
                     break;
                 case SDL_KEYDOWN:
+                    // 如果是键盘按键按下，
                     if (!gameRunning) {
                         // 游戏结束时再点击任意键关闭界面，
                         quit = true;
                         break;
                     }
+                    // 判断按下什么键，
                     switch (event.key.keysym.sym) {
                         case SDLK_UP:
                         case SDLK_w:
+                            // 移动，上，
                             keyboardMove(UP);
                             break;
 
                         case SDLK_DOWN:
                         case SDLK_s:
+                            // 移动，下，
                             keyboardMove(DOWN);
                             break;
 
                         case SDLK_LEFT:
                         case SDLK_a:
+                            // 移动，左，
                             keyboardMove(LEFT);
                             break;
 
                         case SDLK_RIGHT:
                         case SDLK_d:
+                            // 移动，右，
                             keyboardMove(RIGHT);
                             break;
                         case SDLK_q:
+                            // 主动结束游戏，
                             exit();
                             break;
                         case SDLK_SPACE:
+                            // 游戏暂停，
                             presenter->pauseToggle();
                             break;
 
@@ -117,6 +142,8 @@ void SDLView::eventCallable() {
                     break;
             }
         }
+        // 休息一下，避免死循环占用太多cpu资源，
+        SDL_Delay(10);
     }
 }
 
@@ -141,22 +168,28 @@ void SDLView::sleepFPS() {
     SDL_Delay((Uint32) ((1.0 / fps) * 1000));
 }
 
+/**
+ * 实际的SDL绘图方法，
+ */
 void SDLView::drawMapContent() {
+    // 先清空，
     SDL_RenderClear(renderer);
 
+    // 得到地图的行列数，
     int row = map->getRowCount(), col = map->getColCount();
     int width = 400 / col, height = 400 / row;
     int x = 0, y = 0;
     SDL_Rect r = {};
     r.w = width;
     r.h = height;
+    // 一个方块，从左到右，从上到下移动，一个个块贴上图片，
     for (int i = 0; i < row; ++i, y += height) {
         x = 0;
+        r.y = y;
         for (int j = 0; j < col; ++j, x += width) {
             r.x = x;
-            r.y = y;
             const Point &point = map->getPoint(Pos(i, j));
-            // 刷上背景，
+            // 先刷背景再刷前景，
             SDL_RenderCopy(renderer, background, nullptr, &r);
             SDL_Texture *texture = nullptr;
             switch (point.getType()) {
@@ -219,6 +252,7 @@ void SDLView::drawMapContent() {
         SDL_RenderCopy(renderer, messageTexture, nullptr, &messageRect);
     }
 
+    // 更新，
     SDL_RenderPresent(renderer);
 }
 

@@ -5,31 +5,41 @@
 
 class SnakeAI;
 
-/*
-Game snake.
-*/
+/**
+ * 游戏主角，蛇，
+ */
 class Snake {
 public:
+    // 设置友元类，方便AI类处理，
     friend class SnakeAI;
 
     Snake();
 
     ~Snake();
 
+    /**
+     * 传入蛇头方向，
+     */
     void setDirection(const Direction &d);
 
-    void setMap(Map *const m);
-
+    /**
+     * @return 得到蛇头方向，
+     */
     Direction getDirection() const;
 
+    /**
+     * 传入地图，
+     */
+    void setMap(Map *const m);
+
+    /**
+     * @return 得到蛇是否死亡，
+     */
     bool isDead() const;
 
-    /*
-    Add a new snake body.
-
-    @param p The position of the new bodies
-    @return  True if adding succeed, false otherwise
-    */
+    /**
+     * 添加蛇身，游戏开始前添加好蛇的长度，
+     */
     void addBody(const Pos &p);
 
     /**
@@ -38,29 +48,45 @@ public:
      */
     void move(bool eatenFood);
 
-/*
-Get the head position.
-*/
+    /**
+     * @return 返回蛇头位置，
+     */
     const Pos &getHead() const;
 
+    /**
+     * 设置蛇是否死亡，
+     */
     void setDead(bool isDead);
 
 private:
+    /**
+     * 游戏地图，用于在蛇身体加长时改变地图上的点，
+     */
     Map *map = nullptr;
+
+    /**
+     * 保存蛇身每个点位置的列表,
+     */
     std::list<Pos> bodies;
 
+    /**
+     * 表示蛇头方向，
+     */
     Direction direc = NONE;
 
+    /**
+     * 表示蛇是否死亡,
+     */
     bool dead = false;
 
-    /*
-    Remove the snake tail.
-    */
+    /**
+     * 删除蛇尾，蛇在前进时调用本函数删除蛇尾，
+     */
     void removeTail();
 
-    /*
-    Get the tail position.
-    */
+    /**
+     * @return 返回蛇尾位置，
+     */
     const Pos &getTail() const;
 
 };
