@@ -5,6 +5,7 @@
 #include "view/SDLView.h"
 #include "presenter/SnakePresenter.h"
 #include <util/util.h>
+#include <util/FileUtil.h>
 
 void SDLView::onStart() {
     SDL_Log("onStart");
@@ -151,7 +152,10 @@ void SDLView::drawMapContent() {
     SDL_UpdateWindowSurface(window);
 }
 
-void SDLView::init(int, char **) {
+void SDLView::init(int, char **argv) {
+    std::string bin = argv[0];
+    resourceDir = FileUtil::subFile(FileUtil::parent(bin), "res");
+    SDL_Log("%s", resourceDir.c_str());
     initSDL();
 }
 

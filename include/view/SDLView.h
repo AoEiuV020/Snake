@@ -86,6 +86,10 @@ private:
      */
     SDL_Surface *screenSurface;
 
+    /**
+     * 资源目录，
+     */
+    std::string resourceDir;
 };
 
 
