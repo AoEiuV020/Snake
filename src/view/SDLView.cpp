@@ -39,6 +39,19 @@ void SDLView::initSDL() {
 void SDLView::onStop() {
     SnakeView::stop();
     SDL_Log("onStop");
+
+    SDL_DestroyTexture(background);
+    SDL_DestroyTexture(food);
+    SDL_DestroyTexture(wall);
+    SDL_DestroyTexture(headUp);
+    SDL_DestroyTexture(headDown);
+    SDL_DestroyTexture(headLeft);
+    SDL_DestroyTexture(headRight);
+    SDL_DestroyTexture(body);
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+
+    IMG_Quit();
     SDL_Quit();
 }
 
