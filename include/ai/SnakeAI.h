@@ -64,7 +64,7 @@ private:
     */
     void buildHamilton();
 
-    std::vector<std::vector<Direction>> content;
+    std::vector<std::vector<Direction>> directionMap;
 };
 
 

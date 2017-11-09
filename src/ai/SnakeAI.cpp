@@ -26,26 +26,26 @@ void SnakeAI::init() {
 }
 
 void SnakeAI::buildHamilton() {
-    content = std::vector<std::vector<Direction>>(map->getRowCount(), std::vector<Direction>(map->getColCount()));
+    directionMap = std::vector<std::vector<Direction>>(map->getRowCount(), std::vector<Direction>(map->getColCount()));
     // 得到从蛇头到蛇尾的最长路径，
     std::list<Direction> maxPath;
     findMaxPathToTail(maxPath);
 
     // 沿途记录每个点的位置，
     for (auto it = snake->bodies.crbegin(); it != snake->bodies.crend(); ++it) {
-        content[it->getX()][it->getY()] = RIGHT;
+        directionMap[it->getX()][it->getY()] = RIGHT;
     }
     Pos cur = snake->getHead();
     for (const Direction d : maxPath) {
         Pos next = cur.getAdj(d);
-        content[cur.getX()][cur.getY()] = d;
+        directionMap[cur.getX()][cur.getY()] = d;
         cur = next;
     }
 }
 
 void SnakeAI::decideNext() {
     Pos head = snake->getHead(), tail = snake->getTail();
-    snake->setDirection(content[head.getX()][head.getY()]);
+    snake->setDirection(directionMap[head.getX()][head.getY()]);
 }
 
 void SnakeAI::findMaxPathToTail(std::list<Direction> &path) {
