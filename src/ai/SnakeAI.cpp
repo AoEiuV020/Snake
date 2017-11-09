@@ -37,39 +37,26 @@ void SnakeAI::init() {
 }
 
 void SnakeAI::buildHamilton() {
+    content = std::vector<std::vector<Direction>>(map->getRowCount(), std::vector<Direction>(map->getColCount()));
     // 得到从蛇头到蛇尾的最长路径，
     std::list<Direction> maxPath;
     findMaxPathToTail(maxPath);
 
-    // 从蛇尾到蛇头标记顺序，
-    Point::ValueType index = 0;
+    // 沿途记录每个点的位置，
     for (auto it = snake->bodies.crbegin(); it != snake->bodies.crend(); ++it) {
-        map->getPoint(*it).setIndex(index++);
+        content[it->getX()][it->getY()] = RIGHT;
     }
-    // 沿途按顺序记录下来，
-    int size = map->getSize();
     Pos cur = snake->getHead();
     for (const Direction d : maxPath) {
         Pos next = cur.getAdj(d);
-        map->getPoint(next).setIndex((map->getPoint(cur).getIndex() + 1) % size);
+        content[cur.getX()][cur.getY()] = d;
         cur = next;
     }
 }
 
 void SnakeAI::decideNext() {
-    int size = map->getSize();
     Pos head = snake->getHead(), tail = snake->getTail();
-    Point::ValueType headIndex = map->getPoint(head).getIndex();
-    // Move along the hamitonian cycle
-    headIndex = map->getPoint(head).getIndex();
-    std::vector<Pos> adjPositions = head.getAllAdj();
-    for (const Pos &adjPos : adjPositions) {
-        const Point &adjPoint = map->getPoint(adjPos);
-        Point::ValueType adjIndex = adjPoint.getIndex();
-        if (adjIndex == (headIndex + 1) % size) {
-            snake->direc = head.getDirectionTo(adjPos);
-        }
-    }
+    snake->setDirection(content[head.getX()][head.getY()]);
 }
 
 void SnakeAI::findMaxPathToTail(std::list<Direction> &path) {

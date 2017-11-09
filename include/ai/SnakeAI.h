@@ -63,6 +63,8 @@ private:
     The path index will be stored in the 'value' field of each Point.
     */
     void buildHamilton();
+
+    std::vector<std::vector<Direction>> content;
 };
 
 
