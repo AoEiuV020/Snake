@@ -67,6 +67,7 @@ private:
     std::vector<std::vector<Direction>> directionMap;
     std::vector<std::vector<bool>> visitMap;
     std::vector<std::vector<uint32_t>> distanceMap;
+    std::vector<std::vector<Pos>> parentMap;
 };
 
 

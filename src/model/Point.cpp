@@ -12,11 +12,3 @@ void Point::setType(Type type_) {
     type = type_;
 }
 
-void Point::setParent(const Pos &p_) {
-    parent = p_;
-}
-
-Pos Point::getParent() const {
-    return parent;
-}
-

@@ -28,18 +28,13 @@ public:
 
     void setType(Type type_);
 
-    void setParent(const Pos &p_);
-
     Type getType() const;
-
-    Pos getParent() const;
 
 private:
     /**
      * 类型，表示该点上有什么，
      */
     Type type = EMPTY;
-    Pos parent;
 };
 
 #endif

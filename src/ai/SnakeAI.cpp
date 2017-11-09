@@ -3,7 +3,6 @@
 //
 
 #include "model/Pos.h"
-#include "model/Point.h"
 #include <stdexcept>
 #include "model/Snake.h"
 #include "util/util.h"
@@ -29,6 +28,7 @@ void SnakeAI::buildHamilton() {
     directionMap = std::vector<std::vector<Direction>>(map->getRowCount(), std::vector<Direction>(map->getColCount()));
     visitMap = std::vector<std::vector<bool>>(map->getRowCount(), std::vector<bool>(map->getColCount()));
     distanceMap = std::vector<std::vector<uint32_t >>(map->getRowCount(), std::vector<uint32_t>(map->getColCount()));
+    parentMap = std::vector<std::vector<Pos>>(map->getRowCount(), std::vector<Pos>(map->getColCount()));
     // 得到从蛇头到蛇尾的最长路径，
     std::list<Direction> maxPath;
     findMaxPathToTail(maxPath);
@@ -70,7 +70,6 @@ void SnakeAI::findMinPath(const Pos &from, const Pos &to, std::list<Direction> &
     // BFS
     while (!openList.empty()) {
         Pos curPos = openList.front();
-        const Point &curPoint = map->getPoint(curPos);
         openList.pop();
         if (curPos == to) {
             buildPath(from, to, path);
@@ -79,7 +78,8 @@ void SnakeAI::findMinPath(const Pos &from, const Pos &to, std::list<Direction> &
         std::vector<Pos> adjPositions = curPos.getAllAdj();
         util::Random<>::getInstance()->shuffle(adjPositions.begin(), adjPositions.end());
         // Arrange the order of traversing to make the result path as straight as possible
-        Direction bestDirec = (curPos == from ? snake->direc : curPoint.getParent().getDirectionTo(curPos));
+        Direction bestDirec = (curPos == from ? snake->direc : parentMap[curPos.getX()][curPos.getY()].getDirectionTo(
+                curPos));
         for (int i = 0; i < (int) adjPositions.size(); ++i) {
             if (bestDirec == curPos.getDirectionTo(adjPositions[i])) {
                 util::swap(adjPositions[0], adjPositions[i]);
@@ -88,9 +88,8 @@ void SnakeAI::findMinPath(const Pos &from, const Pos &to, std::list<Direction> &
         }
         // Traverse the adjacent positions
         for (const Pos &adjPos : adjPositions) {
-            Point &adjPoint = map->getPoint(adjPos);
             if (map->isSafe(adjPos) && distanceMap[adjPos.getX()][adjPos.getY()] == UINT32_MAX) {
-                adjPoint.setParent(curPos);
+                parentMap[adjPos.getX()][adjPos.getY()] = curPos;
                 distanceMap[adjPos.getX()][adjPos.getY()] = distanceMap[curPos.getX()][curPos.getY()] + 1;
                 openList.push(adjPos);
             }
@@ -203,7 +202,7 @@ void SnakeAI::findMaxPath(const Pos &from, const Pos &to, std::list<Direction> &
 void SnakeAI::buildPath(const Pos &from, const Pos &to, std::list<Direction> &path) const {
     Pos tmp = to, parent;
     while (tmp != from) {
-        parent = map->getPoint(tmp).getParent();
+        parent = parentMap[tmp.getX()][tmp.getY()];
         path.push_front(parent.getDirectionTo(tmp));
         tmp = parent;
     }
