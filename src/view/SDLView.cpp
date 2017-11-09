@@ -8,10 +8,6 @@
 
 void SDLView::onStart() {
     SDL_Log("onStart");
-    drawThread = std::thread(&SDLView::drawCallable, this);
-    // 线程休息一下，确保sdl初始化完毕，否则可能出异常，
-    SDL_Delay(100);
-    drawThread.detach();
     eventThread = std::thread(&SDLView::eventCallable, this);
     eventThread.detach();
 }
@@ -87,7 +83,6 @@ void SDLView::eventCallable() {
 
 void SDLView::drawCallable() {
     SDL_Log("draw thread start");
-    initSDL();
     while (gameRunning) {
         if (!drown) {
             // 改标识避免重复绘图，
@@ -148,4 +143,12 @@ void SDLView::drawMapContent() {
     }
     //Update the surface
     SDL_UpdateWindowSurface(window);
+}
+
+void SDLView::init() {
+    initSDL();
+}
+
+void SDLView::loop() {
+    drawCallable();
 }

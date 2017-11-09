@@ -12,18 +12,14 @@
 int Game::launch() {
     SnakeView *view;
 
-    auto *viewWrapper = new ViewWrapper();
-
 #ifndef _WIN32
     // 非Windows才启用SDL, 因为没有在Windows上测试，
     auto *sdlView = new SDLView();
-    viewWrapper->addView(sdlView);
+    view = sdlView;
 #else
     auto *consoleView = new ConsoleView();
-    viewWrapper->addView(consoleView);
+    view = consoleView;
 #endif
-
-    view = viewWrapper;
 
 
     auto *presenter = new SnakePresenter();

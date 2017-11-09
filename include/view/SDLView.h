@@ -20,6 +20,9 @@ public:
      */
     void onStart() override;
 
+    void init() override;
+
+    void loop() override;
     /**
      * 结束绘图，
      * 游戏结束时调用，
