@@ -30,25 +30,12 @@ int Game::launch(int argc, char **argv) {
 
     auto *presenter = new SnakePresenter();
 
-    // 设置默认地图大小，默认就是10 * 10,
-    presenter->setMapRow(10);
-    presenter->setMapCol(10);
-
-    // 设置自动移动间隔，单位是毫秒ms, 默认30ms，
-    // 也就是说蛇每30毫秒移动一格，
-    presenter->setMoveInterval(30);
-
-    // 设置是否启用AI自动移动，默认是，
-    presenter->setEnableAI(true);
-
     // mvp模式，关联view和presenter,
     // view负责绘图和用户交互，
     // presenter负责游戏本身的逻辑，并通知view绘图，
     view->setPresenter(presenter);
     presenter->attach(view);
 
-    // 游戏初始化，
-    presenter->init();
 
     // 视图绘图，
     view->init(argc, argv);

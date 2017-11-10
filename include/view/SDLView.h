@@ -135,6 +135,8 @@ private:
     std::string msg;
 
     void setting() const;
+
+    void showMessage(const char *message) const;
 };
 
 #endif // __WIN32

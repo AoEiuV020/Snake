@@ -3,6 +3,7 @@
 //
 
 #ifndef __WIN32
+
 #include "view/SDLView.h"
 #include "presenter/SnakePresenter.h"
 #include <util/util.h>
@@ -268,15 +269,7 @@ void SDLView::init(int, char **argv) {
  * 设置是否启用AI,
  */
 void SDLView::setting() const {
-    SDL_Surface *messageSurface = TTF_RenderText_Solid(this->font, "Enable AI? y/n", this->textColor);
-    // 消息显示在正中，
-    SDL_Rect messageRect = {400 / 2 - messageSurface->w / 2, 400 / 2 - messageSurface->h / 2, messageSurface->w,
-                            messageSurface->h};
-    SDL_Texture *messageTexture = SDL_CreateTextureFromSurface(this->renderer, messageSurface);
-    SDL_FreeSurface(messageSurface);
-    SDL_RenderCopy(this->renderer, messageTexture, nullptr, &messageRect);
-    // 更新，
-    SDL_RenderPresent(this->renderer);
+    showMessage("Enable AI? y/n");
 
     SDL_Event event;
     bool flag = false;
@@ -309,6 +302,57 @@ void SDLView::setting() const {
         // 休息一下，避免死循环占用太多cpu资源，
         SDL_Delay(10);
     }
+
+    SDL_RenderClear(renderer);
+    SDL_RenderPresent(renderer);
+
+    showMessage("Size: 2 * (3 + ?)");
+
+    flag = false;
+    while (!flag) {
+        while (SDL_PollEvent(&event) != 0) {
+            switch (event.type) {
+                case SDL_KEYDOWN:
+                    switch (event.key.keysym.sym) {
+                        case SDLK_0:
+                        case SDLK_1:
+                        case SDLK_2:
+                        case SDLK_3:
+                        case SDLK_4:
+                        case SDLK_5:
+                        case SDLK_6:
+                        case SDLK_7:
+                        case SDLK_8:
+                        case SDLK_9:
+                            int input = event.key.keysym.sym - '0';
+                            int size = 2 * (3 + input);
+                            presenter->setMapRow(size);
+                            presenter->setMapCol(size);
+                            // 游戏初始化，
+                            presenter->init();
+                            flag = true;
+                            break;
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+        // 休息一下，避免死循环占用太多cpu资源，
+        SDL_Delay(10);
+    }
+}
+
+void SDLView::showMessage(const char *message) const {
+    SDL_Surface *messageSurface = TTF_RenderText_Solid(font, message, textColor);
+    // 消息显示在正中，
+    SDL_Rect messageRect = {400 / 2 - messageSurface->w / 2, 400 / 2 - messageSurface->h / 2, messageSurface->w,
+                            messageSurface->h};
+    SDL_Texture *messageTexture = SDL_CreateTextureFromSurface(renderer, messageSurface);
+    SDL_FreeSurface(messageSurface);
+    SDL_RenderCopy(renderer, messageTexture, nullptr, &messageRect);
+    // 更新，
+    SDL_RenderPresent(renderer);
 }
 
 void SDLView::loop() {
@@ -321,4 +365,5 @@ void SDLView::message(std::string message) {
     msg = message;
     drown = false;
 }
+
 #endif // __WIN32
