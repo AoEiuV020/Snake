@@ -29,7 +29,7 @@ void SnakeView::setPresenter(SnakePresenter *presenter_) {
 }
 
 void SnakeView::init(int, char **) {
-
+    presenter->init();
 }
 
 void SnakeView::start() {
